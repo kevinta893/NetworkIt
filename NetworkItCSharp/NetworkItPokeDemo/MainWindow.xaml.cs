@@ -12,7 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-
+using NetworkIt;
 
 namespace NetworkItPokeDemo
 {
@@ -21,6 +21,9 @@ namespace NetworkItPokeDemo
     /// </summary>
     public partial class MainWindow : Window
     {
+
+        private Client client;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -28,7 +31,13 @@ namespace NetworkItPokeDemo
 
         private void btnPoke_Click(object sender, RoutedEventArgs e)
         {
+            client = new Client(txtUsername.Text, txtURL.Text, 8000);
+            client.Error += Client_Error;
+        }
 
+        private void Client_Error(object sender, EventArgs e)
+        {
+            lblLog.Text += e.ToString() + "\n";
         }
     }
 }
