@@ -1,7 +1,7 @@
 ﻿using System;
 using SocketIOClient;
 
-namespace NetworkItWPF
+namespace NetworkIt
 {
     public class NetworkItMessageEventArgs : EventArgs
     {

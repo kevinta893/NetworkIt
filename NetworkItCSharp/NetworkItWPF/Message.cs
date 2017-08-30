@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace NetworkItWPF
+namespace NetworkIt
 {
     public class Message
     {

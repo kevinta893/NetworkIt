@@ -1,4 +1,4 @@
-﻿namespace NetworkItWPF
+﻿namespace NetworkIt
 {
     public class Field
     {
