@@ -6,6 +6,11 @@ Originally developed by: David Ledo & Brennan Jones
 ## For Students
 Download the appropriate platform release for your project and import. There are instructions on how to import in each release.
 
+Current supported platforms:
+* Windows WPF 
+* Windows 8 & 8.1 Phones
+* Unity (Windows, Mac, Linux)
+
 ## For Instructors
 Request a static IP and server hosting from your IT department.
 
