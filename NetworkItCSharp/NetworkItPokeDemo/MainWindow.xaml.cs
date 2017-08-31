@@ -12,6 +12,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.IO;
+
 using NetworkIt;
 
 namespace NetworkItPokeDemo
@@ -33,11 +35,14 @@ namespace NetworkItPokeDemo
         {
             client = new Client(txtUsername.Text, txtURL.Text, 8000);
             client.Error += Client_Error;
+
+            client.StartConnection();
         }
 
-        private void Client_Error(object sender, EventArgs e)
+        private void Client_Error(object sender, Exception e)
         {
-            lblLog.Text += e.ToString() + "\n";
+            lblLog.Text += e.Message + "\n" + e.StackTrace + "\n";
         }
+
     }
 }

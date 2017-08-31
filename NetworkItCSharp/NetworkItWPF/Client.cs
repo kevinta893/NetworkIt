@@ -27,7 +27,7 @@ namespace NetworkIt
             {
                 return this.ipAddress;
             }
-            set
+            private set
             {
                 this.ipAddress = value;
             }
@@ -39,7 +39,7 @@ namespace NetworkIt
             {
                 return this.port;
             }
-            set
+            private set
             {
                 this.port = value;
             }
@@ -79,6 +79,11 @@ namespace NetworkIt
             this.client.Connect();
         }
 
+        public void CloseConnection()
+        {
+            this.client.Close();
+        }
+
         public void SendMessage(Message message)
         {
             this.client.Emit("message",
@@ -89,7 +94,7 @@ namespace NetworkIt
                     fields = message.Fields
                 });
         }
-
+  
         void OnMessage(object sender, MessageEventArgs e)
         {
             if (e.Message.Event == "message")
@@ -101,10 +106,15 @@ namespace NetworkIt
 
         void OnError(object sender, ErrorEventArgs e)
         {
+            Exception eExtra = new Exception(e.Message, e.Exception);
             Console.WriteLine("ERROR! :(");
-            Console.WriteLine(e.Exception);
-            RaiseError(new EventArgs());
+            Console.WriteLine(eExtra);
+
+
+            RaiseError(eExtra);
         }
+
+
 
         #region Custom Events
 
@@ -118,9 +128,9 @@ namespace NetworkIt
             }
         }
 
-        public event EventHandler<EventArgs> Error;
+        public event EventHandler<Exception> Error;
 
-        private void RaiseError(EventArgs e)
+        private void RaiseError(Exception e)
         {
             if (Error != null)
             {
@@ -143,7 +153,6 @@ namespace NetworkIt
         public Client()
         {
             this.address = "http://" + ipAddress + ":" + port;
-            StartConnection();
         }
 
         public Client(string username, string ipAddress, int port)
@@ -152,8 +161,9 @@ namespace NetworkIt
             this.ipAddress = ipAddress;
             this.port = port;
             this.address = "http://" + ipAddress + ":" + port;
-            StartConnection();
         }
+
+
 
     }
 }
