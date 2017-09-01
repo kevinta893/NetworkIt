@@ -16,11 +16,16 @@ app.get('/', function(req, res)
 //events
 io.on('connection', function(socket)
 {
-	console.log('a user connected');
+	console.log('User connected');
 	socket.on('disconnect', function() 
 	{
 		console.log('User disconnected');
-		clients.splice(clients.indexof(socket), 1);
+		//remove user
+		var clientIndex = clients.indexOf(socket);
+		if (clientIndex >=0)
+		{
+			clients.splice(clientIndex, 1);
+		}
 	});
 	
 	socket.on('message', function(msg)
