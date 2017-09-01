@@ -1,12 +1,6 @@
 ﻿using System;
-using SocketIOClient;
+using Quobject.SocketIoClientDotNet.Client;
 
-using UnityEngine;
-
-/*
- * Unity port of the NetworkIT library
- * For use in CPSC 581, University of Calgary
- */
 namespace NetworkIt
 {
     public class NetworkItMessageEventArgs : EventArgs
@@ -25,7 +19,7 @@ namespace NetworkIt
         private string ipAddress = "581.cpsc.ucalgary.ca";
         private int port = 8000;
         private string address;
-        private SocketIOClient.Client client;
+        private Socket client;
 
         public string IPAddress
         {
@@ -33,7 +27,7 @@ namespace NetworkIt
             {
                 return this.ipAddress;
             }
-            set
+            private set
             {
                 this.ipAddress = value;
             }
@@ -45,7 +39,7 @@ namespace NetworkIt
             {
                 return this.port;
             }
-            set
+            private set
             {
                 this.port = value;
             }
@@ -60,16 +54,32 @@ namespace NetworkIt
             set
             {
                 this.username = value;
-            } 
+            }
         }
 
         public void StartConnection()
         {
-            this.client = new SocketIOClient.Client(this.address);
-            this.client.Error += OnError;
-            this.client.Message += OnMessage;
+            //ensure only one client is open at a time
+            if (this.client != null)
+            {
+                client.Close();
+            }
 
-            this.client.On("connect", (fn) =>
+
+            this.client = IO.Socket("http://localhost:8000");
+
+            this.client.On(Socket.EVENT_ERROR, (e) =>
+            {
+                
+                //RaiseError(new Exception("Oh no something awful"));
+            });
+
+            this.client.On(Socket.EVENT_MESSAGE, (e) =>
+            {
+                RaiseMessageReceived(new NetworkItMessageEventArgs(new Message("HEYYYYY")));
+            });
+
+            this.client.On(Socket.EVENT_CONNECT, (fn) =>
             {
                 System.Diagnostics.Debug.WriteLine("Connection Successful");
 
@@ -81,7 +91,12 @@ namespace NetworkIt
                 RaiseConnected(new EventArgs());
 
             });
-            this.client.Connect();
+
+        }
+
+        public void CloseConnection()
+        {
+            this.client.Close();
         }
 
         public void SendMessage(Message message)
@@ -94,24 +109,29 @@ namespace NetworkIt
                     fields = message.Fields
                 });
         }
+        /*
+              void OnMessage(object sender, MessageEventArgs e)
+              {
+                  if (e.Message.Event == "message")
+                  {
+                      Message myMessage = e.Message.Json.GetFirstArgAs<Message>();
+                      RaiseMessageReceived(new NetworkItMessageEventArgs(myMessage));
+                  }
+              }
 
-        void OnMessage(object sender, MessageEventArgs e)
-        {
-            if (e.Message.Event == "message")
-            {
-                 Message myMessage = e.Message.Json.GetFirstArgAs<Message>();
-                 RaiseMessageReceived(new NetworkItMessageEventArgs(myMessage));
-            }
-        }
+              void OnError(object sender, ErrorEventArgs e)
+              {
+                  Exception eExtra = new Exception(e.Message, e.Exception);
+                  Console.WriteLine("ERROR! :(");
+                  Console.WriteLine(eExtra);
 
-        void OnError(object sender, ErrorEventArgs e)
-        {
-            Debug.LogError("Socket.io ERROR! :(\n" + e.Exception);
-            RaiseError(new EventArgs());
-            
-        }
 
-        #region Custom Events 
+                  RaiseError(eExtra);
+              }
+              */
+
+
+        #region Custom Events
 
         public event EventHandler<EventArgs> Connected;
 
@@ -127,7 +147,7 @@ namespace NetworkIt
 
         private void RaiseError(EventArgs e)
         {
-            if(Error != null)
+            if (Error != null)
             {
                 Error(this, e);
             }
@@ -137,7 +157,7 @@ namespace NetworkIt
 
         private void RaiseMessageReceived(NetworkItMessageEventArgs e)
         {
-            if(MessageReceived != null)
+            if (MessageReceived != null)
             {
                 MessageReceived(this, e);
             }
@@ -148,17 +168,17 @@ namespace NetworkIt
         public Client()
         {
             this.address = "http://" + ipAddress + ":" + port;
-            StartConnection();
         }
 
-        
         public Client(string username, string ipAddress, int port)
         {
             this.username = username;
             this.ipAddress = ipAddress;
             this.port = port;
             this.address = "http://" + ipAddress + ":" + port;
-            StartConnection();
         }
+
+
+
     }
 }

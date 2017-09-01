@@ -7,7 +7,7 @@ using NetworkIt;
 public class NetworkItEvents : MonoBehaviour {
 
     public string urlAddress = "";
-    public int port = 58181;
+    public int port = 8000;
     public string username = "give me a new name";                                    
 
     public GameObject[] messageListeners;
@@ -27,6 +27,7 @@ public class NetworkItEvents : MonoBehaviour {
         }
 
         connection = new Client(username, urlAddress, port);            //create and establish connection to server
+        connection.StartConnection();
 	}
 	
 	// Update is called once per frame
@@ -43,6 +44,11 @@ public class NetworkItEvents : MonoBehaviour {
             g.BroadcastMessage("OnNetworkMessage", recievedMessage);
         }
 
+    }
+
+    private void OnApplicationQuit()
+    {
+        connection.CloseConnection();
     }
 
 }

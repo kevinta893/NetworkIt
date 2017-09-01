@@ -1,5 +1,5 @@
 ﻿using System;
-using SocketIOClient;
+using Quobject.SocketIoClientDotNet.Client;
 
 namespace NetworkIt
 {
@@ -19,7 +19,7 @@ namespace NetworkIt
         private string ipAddress = "581.cpsc.ucalgary.ca";
         private int port = 8000;
         private string address;
-        private SocketIOClient.Client client;
+        private Socket client;
 
         public string IPAddress
         {
@@ -59,11 +59,26 @@ namespace NetworkIt
 
         public void StartConnection()
         {
-            this.client = new SocketIOClient.Client(this.address);
-            this.client.Error += OnError;
-            this.client.Message += OnMessage;
+            //ensure only one client is open at a time
+            if (this.client != null)
+            {
+                client.Close();
+            }
 
-            this.client.On("connect", (fn) =>
+
+            this.client = IO.Socket("http://localhost:8000");
+
+            this.client.On(Socket.EVENT_ERROR, (e) =>
+            {
+                RaiseError(new Exception("Oh no something awful"));
+            });
+
+            this.client.On(Socket.EVENT_MESSAGE, (e) =>
+            {
+                RaiseMessageReceived(new NetworkItMessageEventArgs(new Message("HEYYYYY")));
+            });
+
+            this.client.On(Socket.EVENT_CONNECT, (fn) =>
             {
                 System.Diagnostics.Debug.WriteLine("Connection Successful");
 
@@ -75,8 +90,6 @@ namespace NetworkIt
                 RaiseConnected(new EventArgs());
 
             });
-            
-            this.client.Connect();
         }
 
         public void CloseConnection()
@@ -94,7 +107,7 @@ namespace NetworkIt
                     fields = message.Fields
                 });
         }
-  
+  /*
         void OnMessage(object sender, MessageEventArgs e)
         {
             if (e.Message.Event == "message")
@@ -113,7 +126,7 @@ namespace NetworkIt
 
             RaiseError(eExtra);
         }
-
+        */
 
 
         #region Custom Events

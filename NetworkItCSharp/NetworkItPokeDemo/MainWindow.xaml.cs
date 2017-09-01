@@ -31,18 +31,29 @@ namespace NetworkItPokeDemo
             InitializeComponent();
         }
 
-        private void btnPoke_Click(object sender, RoutedEventArgs e)
+        private void btnSend_Click(object sender, RoutedEventArgs e)
         {
             client = new Client(txtUsername.Text, txtURL.Text, 8000);
             client.Error += Client_Error;
-
+            client.MessageReceived += Client_MessageReceived;
             client.StartConnection();
         }
 
+
         private void Client_Error(object sender, Exception e)
         {
-            lblLog.Text += e.Message + "\n" + e.StackTrace + "\n";
+            WriteLog(e.Message + "\n" + e.StackTrace + "\n");
         }
 
+        private void Client_MessageReceived(object sender, NetworkItMessageEventArgs e)
+        {
+            WriteLog(e.ReceivedMessage.Fields.ToString());
+        }
+
+
+        private void WriteLog(string message)
+        {
+            lblLog.Text += "[" + DateTime.Now + "] " + message + "\n";
+        }
     }
 }
