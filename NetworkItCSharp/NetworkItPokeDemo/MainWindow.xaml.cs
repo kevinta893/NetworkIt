@@ -34,10 +34,18 @@ namespace NetworkItPokeDemo
         private void btnSend_Click(object sender, RoutedEventArgs e)
         {
             client = new Client(txtUsername.Text, txtURL.Text, 8000);
-            client.Error += Client_Error;
+            //client.Error += Client_Error;
             client.MessageReceived += Client_MessageReceived;
             client.StartConnection();
+
+
+            Message m = new Message("Poke!");
+            m.AddField("num1", 3);
+            m.AddField("num2", 4);
+
+            client.SendMessage(m);
         }
+
 
 
         private void Client_Error(object sender, Exception e)

@@ -1,4 +1,5 @@
 ﻿using System;
+using Newtonsoft.Json;
 using Quobject.SocketIoClientDotNet.Client;
 
 namespace NetworkIt
@@ -62,7 +63,7 @@ namespace NetworkIt
             //ensure only one client is open at a time
             if (this.client != null)
             {
-                client.Close();
+                this.client.Close();
             }
 
 
@@ -90,7 +91,13 @@ namespace NetworkIt
                 RaiseConnected(new EventArgs());
 
             });
+
+            this.client.On(Socket.EVENT_DISCONNECT, (fn) =>
+            {
+                RaiseDisconnected();
+            });
         }
+
 
         public void CloseConnection()
         {
@@ -99,13 +106,14 @@ namespace NetworkIt
 
         public void SendMessage(Message message)
         {
-            this.client.Emit("message",
-                new
-                {
-                    username = this.username,
-                    messageName = message.Name,
-                    fields = message.Fields
-                });
+            string objStr = JsonConvert.SerializeObject(new
+            {
+                username = this.username,
+                messageName = message.Name,
+                fields = message.Fields
+            });
+
+            this.client.Emit("message", objStr);
         }
   /*
         void OnMessage(object sender, MessageEventArgs e)
@@ -160,6 +168,15 @@ namespace NetworkIt
                 MessageReceived(this, e);
             }
         }
+
+        public event EventHandler<object> Disconnected;
+
+        private void RaiseDisconnected()
+        {
+            Disconnected(this, null);
+        }
+
+
 
         #endregion
 
