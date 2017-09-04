@@ -1,6 +1,8 @@
 var app = require('express')();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
+var dateFormat = require('dateformat');
+
 
 var PORT = 8000;
 
@@ -16,24 +18,28 @@ app.get('/', function(req, res)
 //events
 io.on('connection', function(socket)
 {
-	console.log('User connected');
+    console.log(timeStamp() + 'User connected' + socket.request.connection.remoteAddress + ":" + socket.request.connection.remotePort);
+	clients.push(socket);
+	
+	
+	//client events
 	socket.on('disconnect', function() 
 	{
-		console.log('User disconnected');
+        console.log(timeStamp() + 'User disconnected');
 		//remove user
 		var clientIndex = clients.indexOf(socket);
 		if (clientIndex >=0)
 		{
 			clients.splice(clientIndex, 1);
 		}
-	});
+    });
+	
 	
 	socket.on('message', function(msg)
 	{
 		relayMessage(msg);				//forward to appropriate user
 	});
 	
-	clients.push(socket);
 	
 });
 
@@ -66,7 +72,7 @@ function relayMessage(msg)
 	}
 }
 
-function getDateString()
+function timeStamp()
 {
-	
+    return '[' + dateFormat(new Date(), 'yyyy-mm-dd HH:MM.ss.l') + '] ';
 }
