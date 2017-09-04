@@ -34,7 +34,7 @@ namespace NetworkItPokeDemo
         private void btnSend_Click(object sender, RoutedEventArgs e)
         {
             client = new Client(txtUsername.Text, txtURL.Text, 8000);
-            //client.Error += Client_Error;
+            client.Error += Client_Error;
             client.MessageReceived += Client_MessageReceived;
             client.StartConnection();
 
@@ -50,18 +50,34 @@ namespace NetworkItPokeDemo
 
         private void Client_Error(object sender, Exception e)
         {
-            WriteLog(e.Message + "\n" + e.StackTrace + "\n");
+            WriteLogLine(e.Message + "\n" + e.StackTrace);
         }
 
         private void Client_MessageReceived(object sender, NetworkItMessageEventArgs e)
         {
-            WriteLog(e.ReceivedMessage.Fields.ToString());
+            WriteLogLine(e.ReceivedMessage.Fields.ToString());
         }
 
 
-        private void WriteLog(string message)
+        private void ScrollLogToBottom()
         {
-            lblLog.Text += "[" + DateTime.Now + "] " + message + "\n";
+            scrLog.UpdateLayout();
+            scrLog.ScrollToVerticalOffset(scrLog.ScrollableHeight);
+        }
+
+        private void WriteLogLine(string message)
+        {
+            Application.Current.Dispatcher.Invoke(new Action(() => {
+                lblLog.Text += "[" + TimeStamp()+ "] " + message + "\n";
+                ScrollLogToBottom();
+            }));
+            
+        }
+
+
+        private string TimeStamp()
+        {
+            return DateTime.Now.ToString("yyyy-MM-dd H:mm.ss");            //24 Hour format
         }
     }
 }
