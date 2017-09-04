@@ -35,9 +35,12 @@ namespace NetworkItPokeDemo
 
         private void btnSend_Click(object sender, RoutedEventArgs e)
         {
+
             int port = -1;
             int.TryParse(txtPort.Text, out port);
             port = port == -1 ? DEFAULT_PORT : port;
+
+            WriteLogLine("Attempting to connect to: " + txtUsername.Text + "@" + txtURL.Text + ":" + port);
 
             client = new Client(txtUsername.Text, txtURL.Text, port);
             client.Error += Client_Error;
