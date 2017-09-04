@@ -1,8 +1,17 @@
-<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.3/socket.io.js"></script>
-<script>
-  var socket = io.connect('http://localhost:8000');
-  socket.on('news', function (data) {
-    console.log(data);
-    socket.emit('my other event', { my: 'data' });
-  });
-</script>
+<html>
+
+	<head>
+		<link rel="stylesheet" href="css/main.css">
+	</head>
+	
+	<body>
+	
+		<img id="status_img" src="images/red_circle.png">
+		<span id="status">
+			Disconnected
+		</span>
+	</body>
+	
+	<script src="js/socket.io.js"></script>  <!-- socket.io 2.0.3 -->
+	<script src="js/networkit.js"></script>
+</html>
