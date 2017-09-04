@@ -15,6 +15,7 @@ using System.Windows.Shapes;
 using System.IO;
 
 using NetworkIt;
+using Microsoft.Win32;
 
 namespace NetworkItPokeDemo
 {
@@ -25,6 +26,7 @@ namespace NetworkItPokeDemo
     {
 
         private Client client;
+        private const int DEFAULT_PORT = 8000;
 
         public MainWindow()
         {
@@ -33,7 +35,11 @@ namespace NetworkItPokeDemo
 
         private void btnSend_Click(object sender, RoutedEventArgs e)
         {
-            client = new Client(txtUsername.Text, txtURL.Text, 8000);
+            int port = -1;
+            int.TryParse(txtPort.Text, out port);
+            port = port == -1 ? DEFAULT_PORT : port;
+
+            client = new Client(txtUsername.Text, txtURL.Text, port);
             client.Error += Client_Error;
             client.MessageReceived += Client_MessageReceived;
             client.StartConnection();
@@ -78,6 +84,16 @@ namespace NetworkItPokeDemo
         private string TimeStamp()
         {
             return DateTime.Now.ToString("yyyy-MM-dd H:mm.ss");            //24 Hour format
+        }
+
+        private void btnSaveLog_Click(object sender, RoutedEventArgs e)
+        {
+            SaveFileDialog saveDialog = new SaveFileDialog();
+            saveDialog.Filter = "Text file (*.txt,*.log)|*.txt;*.log";
+            if (saveDialog.ShowDialog() == true)
+            {
+                File.WriteAllText(saveDialog.FileName, lblLog.Text);
+            }
         }
     }
 }

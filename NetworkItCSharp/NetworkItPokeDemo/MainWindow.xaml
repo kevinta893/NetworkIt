@@ -17,6 +17,7 @@
         <ScrollViewer Name="scrLog" HorizontalAlignment="Left" Height="171" Margin="10,138,0,0" VerticalAlignment="Top" Width="497">
             <TextBlock Name="lblLog" HorizontalAlignment="Left" TextWrapping="Wrap" Text="" VerticalAlignment="Top" FontSize="10" Background="#FFFBFBFB" Width="480"/>
         </ScrollViewer>
+        <Button Name="btnSaveLog" Content="Save log..." HorizontalAlignment="Left" Height="24" Margin="100,109,0,0" VerticalAlignment="Top" Width="78" Click="btnSaveLog_Click"/>
 
     </Grid>
 </Window>
