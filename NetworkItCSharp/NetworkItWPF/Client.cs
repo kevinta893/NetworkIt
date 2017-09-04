@@ -66,12 +66,12 @@ namespace NetworkIt
                 this.client.Close();
             }
 
-
+            
             this.client = IO.Socket("http://localhost:8000");
 
             this.client.On(Socket.EVENT_ERROR, (e) =>
             {
-                RaiseError(new Exception("Oh no something awful"));
+                RaiseError((Exception) e);
             });
 
             this.client.On(Socket.EVENT_MESSAGE, (e) =>
@@ -173,7 +173,10 @@ namespace NetworkIt
 
         private void RaiseDisconnected()
         {
-            Disconnected(this, null);
+            if (Disconnected != null)
+            {
+                Disconnected(this, null);
+            }
         }
 
 
