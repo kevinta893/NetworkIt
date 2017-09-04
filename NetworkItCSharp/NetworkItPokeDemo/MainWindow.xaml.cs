@@ -45,6 +45,8 @@ namespace NetworkItPokeDemo
             client = new Client(txtUsername.Text, txtURL.Text, port);
             client.Error += Client_Error;
             client.MessageReceived += Client_MessageReceived;
+            client.Connected += Client_Connected;
+            client.Disconnected += Client_Disconnected;
             client.StartConnection();
 
 
@@ -57,6 +59,23 @@ namespace NetworkItPokeDemo
 
 
 
+        #region Client Events
+
+        private void Client_Disconnected(object sender, object e)
+        {
+            Application.Current.Dispatcher.Invoke(new Action(() =>
+            {
+                elpStatus.Fill = new SolidColorBrush(Colors.Red);
+            }));
+        }
+
+        private void Client_Connected(object sender, EventArgs e)
+        {
+            Application.Current.Dispatcher.Invoke(new Action(() => {
+                elpStatus.Fill = new SolidColorBrush (Colors.ForestGreen);
+            }));
+        }
+
         private void Client_Error(object sender, Exception e)
         {
             WriteLogLine(e.Message + "\n" + e.StackTrace);
@@ -67,20 +86,18 @@ namespace NetworkItPokeDemo
             WriteLogLine(e.ReceivedMessage.Fields.ToString());
         }
 
+        #endregion
 
-        private void ScrollLogToBottom()
-        {
-            scrLog.UpdateLayout();
-            scrLog.ScrollToVerticalOffset(scrLog.ScrollableHeight);
-        }
+
+
 
         private void WriteLogLine(string message)
         {
             Application.Current.Dispatcher.Invoke(new Action(() => {
-                lblLog.Text += "[" + TimeStamp()+ "] " + message + "\n";
+                lblLog.Text += "[" + TimeStamp() + "] " + message + "\n";
                 ScrollLogToBottom();
             }));
-            
+
         }
 
 
@@ -88,6 +105,18 @@ namespace NetworkItPokeDemo
         {
             return DateTime.Now.ToString("yyyy-MM-dd H:mm.ss");            //24 Hour format
         }
+
+
+
+        private void ScrollLogToBottom()
+        {
+            scrLog.UpdateLayout();
+            scrLog.ScrollToVerticalOffset(scrLog.ScrollableHeight);
+        }
+
+
+
+       
 
         private void btnSaveLog_Click(object sender, RoutedEventArgs e)
         {
