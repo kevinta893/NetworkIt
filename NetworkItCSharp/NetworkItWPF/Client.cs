@@ -17,20 +17,19 @@ namespace NetworkIt
     public class Client
     {
         private string username = "null";
-        private string ipAddress = "581.cpsc.ucalgary.ca";
+        private string url = "581.cpsc.ucalgary.ca";
         private int port = 8000;
-        private string address;
         private Socket client;
 
-        public string IPAddress
+        public string URL
         {
             get
             {
-                return this.ipAddress;
+                return this.url;
             }
             private set
             {
-                this.ipAddress = value;
+                this.URL = value;
             }
         }
 
@@ -67,7 +66,7 @@ namespace NetworkIt
             }
 
             
-            this.client = IO.Socket("http://localhost:8000");
+            this.client = IO.Socket(URL);
 
             this.client.On(Socket.EVENT_ERROR, (e) =>
             {
@@ -109,7 +108,7 @@ namespace NetworkIt
             string objStr = JsonConvert.SerializeObject(new
             {
                 username = this.username,
-                messageName = message.Name,
+                messageName = message.Raw,
                 fields = message.Fields
             });
 
@@ -185,15 +184,14 @@ namespace NetworkIt
 
         public Client()
         {
-            this.address = "http://" + ipAddress + ":" + port;
+            this.URL = "http://" + url + ":" + port;
         }
 
         public Client(string username, string ipAddress, int port)
         {
             this.username = username;
-            this.ipAddress = ipAddress;
             this.port = port;
-            this.address = "http://" + ipAddress + ":" + port;
+            this.url = "http://" + ipAddress + ":" + port;
         }
 
 

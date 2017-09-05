@@ -5,14 +5,14 @@ namespace NetworkIt
 {
     public class Message
     {
-        private string name;
+        private string raw;
         private List<Field> fields = new List<Field>();
 
-        public string Name
+        public string Raw
         {
             get
             {
-                return this.name;
+                return this.raw;
             }
         }
 
@@ -26,7 +26,7 @@ namespace NetworkIt
 
         public Message(string messageName)
         {
-            this.name = messageName;
+            this.raw = messageName;
         }
 
         public void AddField<T>(string name, T value)
@@ -50,5 +50,15 @@ namespace NetworkIt
             return null;
         }
 
+        public override string ToString()
+        {
+            string ret = "{";
+            foreach (Field f in fields)
+            {
+                ret += f.ToString() + ",";
+            }
+
+            return ret + "}";
+        }
     }
 }

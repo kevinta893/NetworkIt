@@ -36,20 +36,6 @@ namespace NetworkItPokeDemo
         private void btnSend_Click(object sender, RoutedEventArgs e)
         {
 
-            int port = -1;
-            int.TryParse(txtPort.Text, out port);
-            port = port == -1 ? DEFAULT_PORT : port;
-
-            WriteLogLine("Attempting to connect to: " + txtUsername.Text + "@" + txtURL.Text + ":" + port);
-
-            client = new Client(txtUsername.Text, txtURL.Text, port);
-            client.Error += Client_Error;
-            client.MessageReceived += Client_MessageReceived;
-            client.Connected += Client_Connected;
-            client.Disconnected += Client_Disconnected;
-            client.StartConnection();
-
-
             Message m = new Message("Poke!");
             m.AddField("num1", 3);
             m.AddField("num2", 4);
@@ -74,6 +60,12 @@ namespace NetworkItPokeDemo
             Application.Current.Dispatcher.Invoke(new Action(() => {
                 elpStatus.Fill = new SolidColorBrush (Colors.ForestGreen);
             }));
+
+            Message m = new Message("Poke!");
+            m.AddField("num1", 3);
+            m.AddField("num2", 4);
+
+            client.SendMessage(m);
         }
 
         private void Client_Error(object sender, Exception e)
@@ -83,7 +75,7 @@ namespace NetworkItPokeDemo
 
         private void Client_MessageReceived(object sender, NetworkItMessageEventArgs e)
         {
-            WriteLogLine(e.ReceivedMessage.Fields.ToString());
+            WriteLogLine(e.ReceivedMessage.Raw);
         }
 
         #endregion
@@ -125,6 +117,34 @@ namespace NetworkItPokeDemo
             if (saveDialog.ShowDialog() == true)
             {
                 File.WriteAllText(saveDialog.FileName, lblLog.Text);
+            }
+        }
+
+        private void btnConnect_Click(object sender, RoutedEventArgs e)
+        {
+            if (btnConnect.Content.Equals("Connect"))
+            {
+                btnConnect.Content = "Disconnect";
+
+                int port = -1;
+                int.TryParse(txtPort.Text, out port);
+                port = port == -1 ? DEFAULT_PORT : port;
+
+                WriteLogLine("Attempting to connect to: " + txtUsername.Text + "@" + txtURL.Text + ":" + port);
+
+                client = new Client(txtUsername.Text, txtURL.Text, port);
+                client.Error += Client_Error;
+                client.MessageReceived += Client_MessageReceived;
+                client.Connected += Client_Connected;
+                client.Disconnected += Client_Disconnected;
+                client.StartConnection();
+
+            }
+            else if (btnConnect.Content.Equals("Disconnect"))
+            {
+                btnConnect.Content = "Connect";
+
+                client.CloseConnection();
             }
         }
     }

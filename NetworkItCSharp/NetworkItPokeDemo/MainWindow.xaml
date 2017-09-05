@@ -10,9 +10,9 @@
         <Button Name="btnSend" Content="Send Poke!" HorizontalAlignment="Left" Height="81" Margin="10,10,0,0" VerticalAlignment="Top" Width="226" FontSize="24" Click="btnSend_Click"/>
         <TextBox Name="txtURL" HorizontalAlignment="Left" Height="23" Margin="327,10,0,0" TextWrapping="Wrap" Text="127.0.0.1" VerticalAlignment="Top" Width="180"/>
         <TextBox Name="txtPort" HorizontalAlignment="Left" Height="23" Margin="327,38,0,0" TextWrapping="Wrap" Text="8000" VerticalAlignment="Top" Width="180"/>
-        <TextBox x:Name="txtUsername" HorizontalAlignment="Left" Height="23" Margin="327,68,0,0" TextWrapping="Wrap" Text="demo_test_username" VerticalAlignment="Top" Width="180"/>
+        <TextBox Name="txtUsername" HorizontalAlignment="Left" Height="23" Margin="327,68,0,0" TextWrapping="Wrap" Text="demo_test_username" VerticalAlignment="Top" Width="180"/>
+        <Button Name="btnConnect" Content="Connect" HorizontalAlignment="Left" Height="25" Margin="366,96,0,0" VerticalAlignment="Top" Width="141" Click="btnConnect_Click"/>
         <Ellipse Name="elpStatus" Fill="#FFE20000" HorizontalAlignment="Left" Height="25" Margin="327,96,0,0" VerticalAlignment="Top" Width="25"/>
-        <Label Name="lblStatus" Content="Not Connected" HorizontalAlignment="Left" Height="25" Margin="357,96,0,0" VerticalAlignment="Top" Width="135"/>
         <Label Content="Log:" HorizontalAlignment="Left" Height="29" Margin="10,109,0,0" VerticalAlignment="Top" Width="85" FontWeight="Bold"/>
         <ScrollViewer Name="scrLog" HorizontalAlignment="Left" Height="171" Margin="10,138,0,0" VerticalAlignment="Top" Width="497">
             <TextBlock Name="lblLog" HorizontalAlignment="Left" TextWrapping="Wrap" Text="" VerticalAlignment="Top" FontSize="10" Background="#FFFBFBFB" Width="480"/>
