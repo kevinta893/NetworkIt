@@ -37,7 +37,7 @@ namespace NetworkItPokeDemo
         {
 
             Message m = new Message("Poke!");
-            m.SelfDeliver = true;
+            m.DeliverToSelf = false;
             m.AddField("num1", 3);
             m.AddField("num2", 4);
 
@@ -53,6 +53,10 @@ namespace NetworkItPokeDemo
             Application.Current.Dispatcher.Invoke(new Action(() =>
             {
                 elpStatus.Fill = new SolidColorBrush(Colors.Red);
+                btnConnect.Content = "Connect";
+
+                WriteLogLine("Client Disconnected");
+                client.CloseConnection();
             }));
         }
 
@@ -142,6 +146,7 @@ namespace NetworkItPokeDemo
             {
                 btnConnect.Content = "Connect";
 
+                WriteLogLine("Client Disconnected");
                 client.CloseConnection();
             }
         }

@@ -18,19 +18,18 @@ express.get('/', function(req, res)
 //eventsio
 io.on('connection', function(socket)
 {
-    writeLog('Connection Recieved' + socket.request.connection.remoteAddress + ":" + socket.request.connection.remotePort + "?id=" + socket.id);
+    writeLog('Connection recieved. ' + socket.request.connection.remoteAddress + ":" + socket.request.connection.remotePort + "?id=" + socket.id);
 	
 	//all clients are required to identify themselves with a username
 	socket.on("client_connect", function(data) 
-	{
+    {
 		var user = {};
 		user.socket = socket;
 		user.socketId = socket.id;
-		user.username = data.username;
+        user.username = data.username;
 		clients.push(user);
 		writeLog('Client registered. ' + user.username + "@" + user.socketId);
 	});
-	
 	
 	//client events
 	socket.on('disconnect', function() 
@@ -56,8 +55,36 @@ io.on('connection', function(socket)
 
 	//message from client
 	socket.on('message', function(msg)
-	{
-		relayMessage(msg);				//forward to appropriate user
+    {
+
+        writeLog('Message recieved: ' + JSON.stringify(msg));
+
+
+        var username = msg.username;
+        var subject = msg.subject;
+        var selfDeliver = msg.selfDeliver;
+        var fields = msg.fields;
+
+        //send to self
+        if (selfDeliver == true)
+        {
+            socket.emit('message', msg);
+        }
+
+
+        //forward to appropriate users
+        for (var i = 0; i < clients.length; i++)
+        {
+            var user = clients[i];
+
+            //send to other devices of same username but not to self
+            if (user.username == username && user.socketId != socket.id)
+            {
+                console.log('socket.id = ' + user.socketId);
+                user.socket.emit('message', data);
+            }
+        }
+
 	});
 	
 	
@@ -70,31 +97,6 @@ http.listen(PORT, function()
 {
 	console.log('listening on *:' + PORT);
 });
-
-
-
-
-function relayMessage(msg)
-{
-
-    writeLog('message recieved:' + msg);
-	
-    var username = msg.username;
-    var messageName = msg.messageName;
-	var fields = msg.fields;
-	
-
-    for (var i = 0; i < clients.length; i++)
-    {
-        var user = clients[i];
-
-        if (user.username == username)
-        {
-            console.log('socket.id = ' + user.socketId);
-            io.sockets.to(user.socketId).emit('message', msg);
-		}
-	}
-}
 
 
 //===============================

@@ -72,10 +72,10 @@ namespace NetworkIt
                 return;
             }
 
-            
+
             this.client = IO.Socket(URL);
 
-            this.client.On(Socket.EVENT_CONNECT, (fn) =>
+            this.client.On(Socket.EVENT_CONNECT, () =>
             {
                 Debug.WriteLine("Connection Successful");
 
@@ -88,21 +88,25 @@ namespace NetworkIt
 
             });
 
-            this.client.On("message", (e) =>
+            this.client.On("message", (data) =>
             {
-                Debug.WriteLine("Message Recieved" + e.ToString());
-                RaiseMessageReceived(new NetworkItMessageEventArgs(new Message("HEYYYYY")));
+
+                Message recv = ((JObject)data).ToObject<Message>();
+                Debug.WriteLine("Message Recieved" + data.ToString());
+                RaiseMessageReceived(new NetworkItMessageEventArgs(recv));
             });
 
             this.client.On(Socket.EVENT_ERROR, (e) =>
             {
-                RaiseError((Exception) e);
+                RaiseError((Exception)e);
             });
 
             this.client.On(Socket.EVENT_DISCONNECT, (fn) =>
             {
                 RaiseDisconnected();
             });
+
+
         }
 
 
@@ -112,15 +116,14 @@ namespace NetworkIt
         }
 
         public void SendMessage(Message message)
-        {
-            string objStr = JsonConvert.SerializeObject(new
+        { 
+            this.client.Emit("message", JObject.FromObject(new
             {
                 username = this.username,
+                selfDeliver = message.DeliverToSelf,
                 subject = message.Subject,
                 fields = message.Fields
-            });
-
-            this.client.Emit("message", objStr);
+            }));
         }
 
 

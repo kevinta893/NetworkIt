@@ -6,7 +6,7 @@ namespace NetworkIt
     public class Message
     {
         private string subject;
-        private bool selfDeliver = false;
+        private bool deliverToSelf = false;
         private List<Field> fields = new List<Field>();
 
         public string Subject
@@ -26,15 +26,15 @@ namespace NetworkIt
         /// When true, allows the sender to also recieve the same message activating the same message event
         /// Default is false
         /// </summary>
-        public bool SelfDeliver
+        public bool DeliverToSelf
         {
             get
             {
-                return this.selfDeliver;
+                return this.deliverToSelf;
             }
             set
             {
-                this.selfDeliver = value;
+                this.deliverToSelf = value;
             }
         }
 
