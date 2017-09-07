@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Diagnostics;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Quobject.SocketIoClientDotNet.Client;
 
 namespace NetworkIt
@@ -51,9 +53,17 @@ namespace NetworkIt
             {
                 return this.username;
             }
-            set
+            private set
             {
                 this.username = value;
+            }
+        }
+
+        public bool IsConnected
+        {
+            get
+            {
+                return client != null;
             }
         }
 
@@ -68,27 +78,29 @@ namespace NetworkIt
             
             this.client = IO.Socket(URL);
 
-            this.client.On(Socket.EVENT_ERROR, (e) =>
-            {
-                RaiseError((Exception) e);
-            });
-
-            this.client.On(Socket.EVENT_MESSAGE, (e) =>
-            {
-                RaiseMessageReceived(new NetworkItMessageEventArgs(new Message("HEYYYYY")));
-            });
-
             this.client.On(Socket.EVENT_CONNECT, (fn) =>
             {
-                System.Diagnostics.Debug.WriteLine("Connection Successful");
+                Debug.WriteLine("Connection Successful");
 
-                this.client.Emit("ClientConnect", new
+                this.client.Emit("client_connect", JObject.FromObject(new
                 {
                     this.username
-                });
+                }));
 
                 RaiseConnected(new EventArgs());
 
+            });
+
+            this.client.On("message", (e) =>
+            {
+                Debug.WriteLine("Message Recieved" + e.ToString());
+                RaiseMessageReceived(new NetworkItMessageEventArgs(new Message("HEYYYYY")));
+            });
+
+            this.client.On(Socket.EVENT_ERROR, (e) =>
+            {
+
+                RaiseError((Exception)e);
             });
 
             this.client.On(Socket.EVENT_DISCONNECT, (fn) =>

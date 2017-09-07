@@ -40,7 +40,8 @@ namespace NetworkItPokeDemo
             m.AddField("num1", 3);
             m.AddField("num2", 4);
 
-            client.SendMessage(m);
+            if (client.IsConnected)
+                client.SendMessage(m);
         }
 
 
@@ -60,12 +61,7 @@ namespace NetworkItPokeDemo
             Application.Current.Dispatcher.Invoke(new Action(() => {
                 elpStatus.Fill = new SolidColorBrush (Colors.ForestGreen);
             }));
-
-            Message m = new Message("Poke!");
-            m.AddField("num1", 3);
-            m.AddField("num2", 4);
-
-            client.SendMessage(m);
+            WriteLogLine("Connection Successful");
         }
 
         private void Client_Error(object sender, Exception e)
