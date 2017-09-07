@@ -18,11 +18,12 @@ namespace NetworkIt
 
     public class Client
     {
-        private string username = "null";
-        private string url = "581.cpsc.ucalgary.ca";
+        private string username = "choose_a_username_please";
+        private string url = "http://581.cpsc.ucalgary.ca";
         private int port = 8000;
         private Socket client;
 
+        #region Fields
         public string URL
         {
             get
@@ -59,20 +60,16 @@ namespace NetworkIt
             }
         }
 
-        public bool IsConnected
-        {
-            get
-            {
-                return client != null;
-            }
-        }
+        #endregion
+
 
         public void StartConnection()
         {
             //ensure only one client is open at a time
             if (this.client != null)
             {
-                this.client.Close();
+                Debug.WriteLine("Already connected!");
+                return;
             }
 
             
@@ -99,8 +96,7 @@ namespace NetworkIt
 
             this.client.On(Socket.EVENT_ERROR, (e) =>
             {
-
-                RaiseError((Exception)e);
+                RaiseError((Exception) e);
             });
 
             this.client.On(Socket.EVENT_DISCONNECT, (fn) =>
@@ -120,32 +116,12 @@ namespace NetworkIt
             string objStr = JsonConvert.SerializeObject(new
             {
                 username = this.username,
-                messageName = message.Raw,
+                subject = message.Subject,
                 fields = message.Fields
             });
 
             this.client.Emit("message", objStr);
         }
-  /*
-        void OnMessage(object sender, MessageEventArgs e)
-        {
-            if (e.Message.Event == "message")
-            {
-                Message myMessage = e.Message.Json.GetFirstArgAs<Message>();
-                RaiseMessageReceived(new NetworkItMessageEventArgs(myMessage));
-            }
-        }
-
-        void OnError(object sender, ErrorEventArgs e)
-        {
-            Exception eExtra = new Exception(e.Message, e.Exception);
-            Console.WriteLine("ERROR! :(");
-            Console.WriteLine(eExtra);
-
-
-            RaiseError(eExtra);
-        }
-        */
 
 
         #region Custom Events
@@ -164,6 +140,9 @@ namespace NetworkIt
 
         private void RaiseError(Exception e)
         {
+            Debug.WriteLine("Error! :(");
+            Debug.WriteLine(e.StackTrace);
+
             if (Error != null)
             {
                 Error(this, e);
@@ -194,19 +173,36 @@ namespace NetworkIt
 
         #endregion
 
+
+        /// <summary>
+        /// Use the default client settings
+        /// </summary>
         public Client()
         {
-            this.URL = "http://" + url + ":" + port;
+            this.Initialize(this.username, this.url, this.port);
         }
 
+        /// <summary>
+        /// Connect client to the server using specified settings
+        /// </summary>
+        /// <param name="username"></param>
+        /// <param name="ipAddress">Must include the http protocol "http://"</param>
+        /// <param name="port"></param>
         public Client(string username, string ipAddress, int port)
+        {
+            this.Initialize(username, ipAddress, port);
+        }
+
+        private void Initialize(string username, string ipAddress, int port)
         {
             this.username = username;
             this.port = port;
-            this.url = "http://" + ipAddress + ":" + port;
+
+            if (ipAddress.IndexOf("http://") != 0)
+                throw new ArgumentException("URL must start with http://");
+
+            this.url = ipAddress + ":" + port;
         }
-
-
 
     }
 }

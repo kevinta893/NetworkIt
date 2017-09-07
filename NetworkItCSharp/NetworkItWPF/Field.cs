@@ -2,21 +2,20 @@
 {
     public class Field
     {
-        private string name;
+        private string key;
         private string value;
-        //   private string typeName;
 
         #region Instance Variables
 
-        public string Name
+        public string Key
         {
             get
             {
-                return this.name;
+                return this.key;
             }
             set
             {
-                this.name = value;
+                this.key = value;
             }
         }
 
@@ -28,37 +27,18 @@
             }
         }
 
-        /*   public string TypeName
-            {
-                get
-                {
-                    return this.typeName;
-                }
-            }    */
-
-
         #endregion
-
-        /*public Field(string name, string value, Type type)
-       {
-           this.name = name;
-           this.fieldType = type;
-           this.value = value;
-           System.Diagnostics.Debug.WriteLine("TYPE IS " + this.fieldType);
-       }*/
 
         public Field(string name, string value)
         {
-            this.name = name;
-            // this.typeName = typeName;
+            this.key = name;
             this.value = value;
-            //    System.Diagnostics.Debug.WriteLine("TYPE IS " + this.typeName);
         }
 
 
         public override string ToString()
         {
-            return this.name + " :: " + this.value.ToString();
+            return this.key + " : " + this.value.ToString();
         }
     }
 }

@@ -37,16 +37,16 @@ namespace NetworkItPokeDemo
         {
 
             Message m = new Message("Poke!");
+            m.SelfDeliver = true;
             m.AddField("num1", 3);
             m.AddField("num2", 4);
 
-            if (client.IsConnected)
-                client.SendMessage(m);
+            client.SendMessage(m);
         }
 
 
 
-        #region Client Events
+        #region Network Events
 
         private void Client_Disconnected(object sender, object e)
         {
@@ -60,6 +60,8 @@ namespace NetworkItPokeDemo
         {
             Application.Current.Dispatcher.Invoke(new Action(() => {
                 elpStatus.Fill = new SolidColorBrush (Colors.ForestGreen);
+                btnConnect.Content = "Disconnect";
+                btnConnect.IsEnabled = true;
             }));
             WriteLogLine("Connection Successful");
         }
@@ -71,7 +73,7 @@ namespace NetworkItPokeDemo
 
         private void Client_MessageReceived(object sender, NetworkItMessageEventArgs e)
         {
-            WriteLogLine(e.ReceivedMessage.Raw);
+            WriteLogLine(e.ReceivedMessage.ToString());
         }
 
         #endregion
@@ -143,5 +145,6 @@ namespace NetworkItPokeDemo
                 client.CloseConnection();
             }
         }
+
     }
 }

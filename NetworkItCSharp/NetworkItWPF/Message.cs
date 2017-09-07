@@ -5,14 +5,36 @@ namespace NetworkIt
 {
     public class Message
     {
-        private string raw;
+        private string subject;
+        private bool selfDeliver = false;
         private List<Field> fields = new List<Field>();
 
-        public string Raw
+        public string Subject
         {
             get
             {
-                return this.raw;
+                return this.subject;
+            }
+            set
+            {
+                this.subject = value;
+            }
+        }
+
+
+        /// <summary>
+        /// When true, allows the sender to also recieve the same message activating the same message event
+        /// Default is false
+        /// </summary>
+        public bool SelfDeliver
+        {
+            get
+            {
+                return this.selfDeliver;
+            }
+            set
+            {
+                this.selfDeliver = value;
             }
         }
 
@@ -24,29 +46,35 @@ namespace NetworkIt
             }
         }
 
-        public Message(string messageName)
+        public Message(string subject)
         {
-            this.raw = messageName;
+            this.subject = subject;
         }
 
-        public void AddField<T>(string name, T value)
+        public void AddField<T>(string key, T value)
         {
             Type type = value.GetType();
-            //  Field f = new Field(name, value.ToString(), type.ToString());
-            Field f = new Field(name, value.ToString());
+            Field f = new Field(key, value.ToString());
 
             this.fields.Add(f);
         }
 
-        public string GetField(string name)
+        /// <summary>
+        /// Gets the value of a field given the key
+        /// 
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns>Returns null if there is no value associated with the key</returns>
+        public string GetField(string key)
         {
             foreach (Field f in this.fields)
             {
-                if (f.Name == name)
+                if (f.Key == key)
                 {
                     return f.Value;
                 }
             }
+
             return null;
         }
 
