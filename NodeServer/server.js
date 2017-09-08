@@ -81,7 +81,7 @@ io.on('connection', function(socket)
             if (user.username == username && user.socketId != socket.id)
             {
                 console.log('socket.id = ' + user.socketId);
-                user.socket.emit('message', data);
+                user.socket.emit('message', msg);
             }
         }
 
