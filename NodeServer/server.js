@@ -62,11 +62,11 @@ io.on('connection', function(socket)
 
         var username = msg.username;
         var subject = msg.subject;
-        var selfDeliver = msg.selfDeliver;
+        var deliverToSelf = msg.deliverToSelf;
         var fields = msg.fields;
 
         //send to self
-        if (selfDeliver == true)
+        if (deliverToSelf == true)
         {
             socket.emit('message', msg);
         }

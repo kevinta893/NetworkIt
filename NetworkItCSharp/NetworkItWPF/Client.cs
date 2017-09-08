@@ -120,7 +120,7 @@ namespace NetworkIt
             this.client.Emit("message", JObject.FromObject(new
             {
                 username = this.username,
-                selfDeliver = message.DeliverToSelf,
+                deliverToSelf = message.DeliverToSelf,
                 subject = message.Subject,
                 fields = message.Fields
             }));
