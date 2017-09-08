@@ -37,7 +37,7 @@ namespace NetworkItPokeDemo
         {
 
             Message m = new Message("Poke!");
-            m.DeliverToSelf = false;
+            m.DeliverToSelf = chkDeliverToSelf.IsChecked ?? false;
             m.AddField("num1", 3);
             m.AddField("num2", 4);
 
