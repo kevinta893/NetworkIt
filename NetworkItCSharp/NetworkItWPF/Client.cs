@@ -18,7 +18,7 @@ namespace NetworkIt
 
     public class Client
     {
-        private string username = "choose_a_username_please";
+        private string username = "demo_test_username";
         private string url = "http://581.cpsc.ucalgary.ca";
         private int port = 8000;
         private Socket client;
