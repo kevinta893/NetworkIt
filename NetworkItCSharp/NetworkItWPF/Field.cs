@@ -29,9 +29,9 @@
 
         #endregion
 
-        public Field(string name, string value)
+        public Field(string key, string value)
         {
-            this.key = name;
+            this.key = key;
             this.value = value;
         }
 
