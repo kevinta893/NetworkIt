@@ -15,6 +15,8 @@ class Message
 	
 	getField (key)
 	{
+		var fields = this.fields;
+		
 		for (var i = 0 ; i < fields.length ; i++)
 		{
 			if (fields[i].key == key)
@@ -22,6 +24,8 @@ class Message
 				return fields[i];
 			}
 		}
+		
+		return null;
 	}
 	
 	toString(){
