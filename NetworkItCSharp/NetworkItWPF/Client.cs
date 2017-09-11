@@ -90,7 +90,7 @@ namespace NetworkIt
 
             this.client.On("message", (data) =>
             {
-
+                Debug.WriteLine("Message Recieved");
                 Message recv = ((JObject)data).ToObject<Message>();
                 Debug.WriteLine("Message Recieved" + data.ToString());
                 RaiseMessageReceived(new NetworkItMessageEventArgs(recv));
@@ -98,11 +98,13 @@ namespace NetworkIt
 
             this.client.On(Socket.EVENT_ERROR, (e) =>
             {
+                Debug.WriteLine("Error!");
                 RaiseError((Exception)e);
             });
 
             this.client.On(Socket.EVENT_DISCONNECT, (fn) =>
             {
+                Debug.WriteLine("Client Disconnected");
                 RaiseDisconnected();
             });
 
