@@ -31,6 +31,7 @@ namespace NetworkItPokeDemo
         public MainWindow()
         {
             InitializeComponent();
+            enableConnectButton(true);
         }
 
         private void btnSend_Click(object sender, RoutedEventArgs e)
@@ -53,7 +54,7 @@ namespace NetworkItPokeDemo
             Application.Current.Dispatcher.Invoke(new Action(() =>
             {
                 elpStatus.Fill = new SolidColorBrush(Colors.Red);
-                btnConnect.Content = "Connect";
+                enableConnectButton(true);
 
                 WriteLogLine("Client Disconnected");
                 client.CloseConnection();
@@ -64,8 +65,7 @@ namespace NetworkItPokeDemo
         {
             Application.Current.Dispatcher.Invoke(new Action(() => {
                 elpStatus.Fill = new SolidColorBrush (Colors.ForestGreen);
-                btnConnect.Content = "Disconnect";
-                btnConnect.IsEnabled = true;
+                enableConnectButton(false);
             }));
             WriteLogLine("Connection Successful");
         }
@@ -126,8 +126,7 @@ namespace NetworkItPokeDemo
         {
             if (btnConnect.Content.Equals("Connect"))
             {
-                btnConnect.Content = "Disconnect";
-
+                
                 int port = -1;
                 int.TryParse(txtPort.Text, out port);
                 port = port == -1 ? DEFAULT_PORT : port;
@@ -141,15 +140,30 @@ namespace NetworkItPokeDemo
                 client.Disconnected += Client_Disconnected;
                 client.StartConnection();
 
+                enableConnectButton(true);
             }
             else if (btnConnect.Content.Equals("Disconnect"))
             {
-                btnConnect.Content = "Connect";
-
-                WriteLogLine("Client Disconnected");
+                enableConnectButton(false);
                 client.CloseConnection();
             }
         }
 
+        //changes interface for when connected or not
+        private void enableConnectButton(bool enabled)
+        {
+            if (enabled == true)
+            {
+                btnConnect.Content = "Connect";
+                btnSend.ToolTip = "Please connect to a server first";
+                btnSend.IsEnabled = false;
+            }
+            else
+            {
+                btnConnect.Content = "Disconnect";
+                btnSend.ToolTip = "";
+                btnSend.IsEnabled = true;
+            }
+        }
     }
 }
