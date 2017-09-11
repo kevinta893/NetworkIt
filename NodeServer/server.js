@@ -80,7 +80,7 @@ io.on('connection', function(socket)
             //send to other devices of same username but not to self
             if (user.username == username && user.socketId != socket.id)
             {
-                console.log('socket.id = ' + user.socketId);
+                //writelog('Forwarding to socket.id = ' + user.socketId);
                 user.socket.emit('message', msg);
             }
         }
