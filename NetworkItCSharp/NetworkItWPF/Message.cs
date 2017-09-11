@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-
+using Newtonsoft.Json;
 namespace NetworkIt
 {
     public class Message
@@ -80,13 +80,13 @@ namespace NetworkIt
 
         public override string ToString()
         {
-            string ret = "{";
-            foreach (Field f in fields)
+            string ret = JsonConvert.SerializeObject(new
             {
-                ret += f.ToString() + ",";
-            }
+                subject = this.subject,
+                fields = this.fields
+            });
 
-            return ret + "}";
+            return ret;
         }
     }
 }
