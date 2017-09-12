@@ -51,11 +51,9 @@ namespace NetworkIt
             this.subject = subject;
         }
 
-        public void AddField<T>(string key, T value)
+        public void AddField(string key, string value)
         {
-            Type type = value.GetType();
-            Field f = new Field(key, value.ToString());
-
+            Field f = new Field(key, value);
             this.fields.Add(f);
         }
 

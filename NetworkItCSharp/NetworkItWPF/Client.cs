@@ -193,20 +193,20 @@ namespace NetworkIt
         /// <param name="username"></param>
         /// <param name="ipAddress">Must include the http protocol "http://"</param>
         /// <param name="port"></param>
-        public Client(string username, string ipAddress, int port)
+        public Client(string username, string url, int port)
         {
             this.Initialize(username, ipAddress, port);
         }
 
-        private void Initialize(string username, string ipAddress, int port)
+        private void Initialize(string username, string url, int port)
         {
             this.username = username;
             this.port = port;
 
-            if (ipAddress.IndexOf("http://") != 0)
+            if (url.IndexOf("http://") != 0)
                 throw new ArgumentException("URL must start with http://");
 
-            this.url = ipAddress + ":" + port;
+            this.url = url + ":" + port;
         }
 
     }
