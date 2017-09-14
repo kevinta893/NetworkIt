@@ -195,7 +195,7 @@ namespace NetworkIt
         /// <param name="port"></param>
         public Client(string username, string url, int port)
         {
-            this.Initialize(username, ipAddress, port);
+            this.Initialize(username, url, port);
         }
 
         private void Initialize(string username, string url, int port)
