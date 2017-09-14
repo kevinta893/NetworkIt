@@ -8,7 +8,7 @@ public class NetworkItEvents : MonoBehaviour {
 
     public string urlAddress = "";
     public int port = 8000;
-    public string username = "give me a new name";                                    
+    public string username = "demo_test_username";                                    
 
     public GameObject[] messageListeners;
 
@@ -28,10 +28,24 @@ public class NetworkItEvents : MonoBehaviour {
 
         connection = new Client(username, urlAddress, port);            //create and establish connection to server
         connection.StartConnection();
+        connection.MessageReceived += Connection_MessageReceived;
+        connection.Connected += Connection_Connected;
 	}
-	
-	// Update is called once per frame
-	void Update () {
+
+    private void Connection_Connected(object sender, System.EventArgs e)
+    {
+        Message m = new Message("hyppppppe");
+        m.AddField<string>("nameness", "null");
+        connection.SendMessage(m);
+    }
+
+    private void Connection_MessageReceived(object sender, NetworkItMessageEventArgs e)
+    {
+        Debug.Log("Message Recieved");
+    }
+
+    // Update is called once per frame
+    void Update () {
 		
 	}
 

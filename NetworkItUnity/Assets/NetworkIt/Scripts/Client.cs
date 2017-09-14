@@ -1,4 +1,7 @@
 ﻿using System;
+
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Quobject.SocketIoClientDotNet.Client;
 
 namespace NetworkIt
@@ -15,8 +18,8 @@ namespace NetworkIt
 
     public class Client
     {
-        private string username = "null";
-        private string ipAddress = "581.cpsc.ucalgary.ca";
+        private string username = "demo_test_username";
+        private string url = "581.cpsc.ucalgary.ca";
         private int port = 8000;
         private string address;
         private Socket client;
@@ -25,11 +28,7 @@ namespace NetworkIt
         {
             get
             {
-                return this.ipAddress;
-            }
-            private set
-            {
-                this.ipAddress = value;
+                return this.url;
             }
         }
 
@@ -39,10 +38,6 @@ namespace NetworkIt
             {
                 return this.port;
             }
-            private set
-            {
-                this.port = value;
-            }
         }
 
         public string Username
@@ -50,10 +45,6 @@ namespace NetworkIt
             get
             {
                 return this.username;
-            }
-            set
-            {
-                this.username = value;
             }
         }
 
@@ -66,31 +57,37 @@ namespace NetworkIt
             }
 
 
-            this.client = IO.Socket("http://localhost:8000");
-
-            this.client.On(Socket.EVENT_ERROR, (e) =>
-            {
-                
-                //RaiseError(new Exception("Oh no something awful"));
-            });
-
-            this.client.On(Socket.EVENT_MESSAGE, (e) =>
-            {
-                RaiseMessageReceived(new NetworkItMessageEventArgs(new Message("HEYYYYY")));
-            });
+            this.client = IO.Socket(url + ":" + port);
 
             this.client.On(Socket.EVENT_CONNECT, (fn) =>
             {
                 System.Diagnostics.Debug.WriteLine("Connection Successful");
 
-                this.client.Emit("ClientConnect", new
-                {
-                    this.username
-                });
+                JObject connectJson = new JObject();
+                connectJson.Add("username", username);
+                this.client.Emit("client_connect", connectJson);
 
                 RaiseConnected(new EventArgs());
 
             });
+
+            this.client.On("disconnect", (data) =>
+            {
+                RaiseDisconnected(new EventArgs());
+            });
+
+            this.client.On(Socket.EVENT_ERROR, (e) =>
+            {
+                //RaiseError(new Exception("Oh no something awful"));
+            });
+
+            this.client.On(Socket.EVENT_MESSAGE, (e) =>
+            {
+                
+                RaiseMessageReceived(new NetworkItMessageEventArgs(new Message("HEYYYYY")));
+            });
+
+            
 
         }
 
@@ -109,26 +106,6 @@ namespace NetworkIt
                     fields = message.Fields
                 });
         }
-        /*
-              void OnMessage(object sender, MessageEventArgs e)
-              {
-                  if (e.Message.Event == "message")
-                  {
-                      Message myMessage = e.Message.Json.GetFirstArgAs<Message>();
-                      RaiseMessageReceived(new NetworkItMessageEventArgs(myMessage));
-                  }
-              }
-
-              void OnError(object sender, ErrorEventArgs e)
-              {
-                  Exception eExtra = new Exception(e.Message, e.Exception);
-                  Console.WriteLine("ERROR! :(");
-                  Console.WriteLine(eExtra);
-
-
-                  RaiseError(eExtra);
-              }
-              */
 
 
         #region Custom Events
@@ -140,6 +117,16 @@ namespace NetworkIt
             if (Connected != null)
             {
                 Connected(this, e);
+            }
+        }
+
+        public event EventHandler<EventArgs> Disconnected;
+
+        private void RaiseDisconnected(EventArgs e)
+        {
+            if (Connected != null)
+            {
+                Disconnected(this, e);
             }
         }
 
@@ -165,17 +152,36 @@ namespace NetworkIt
 
         #endregion
 
+
+        /// <summary>
+        /// Use the default client settings
+        /// </summary>
         public Client()
         {
-            this.address = "http://" + ipAddress + ":" + port;
+            this.Initialize(this.username, this.url, this.port);
         }
 
-        public Client(string username, string ipAddress, int port)
+
+        /// <summary>
+        /// Connect client to the server using specified settings
+        /// </summary>
+        /// <param name="username"></param>
+        /// <param name="ipAddress">Must include the http protocol "http://"</param>
+        /// <param name="port"></param>
+        public Client(string username, string url, int port)
+        {
+            this.Initialize(username, url, port);
+        }
+
+        private void Initialize(string username, string url, int port)
         {
             this.username = username;
-            this.ipAddress = ipAddress;
             this.port = port;
-            this.address = "http://" + ipAddress + ":" + port;
+
+            if (url.IndexOf("http://") != 0)
+                throw new ArgumentException("URL must start with http://");
+
+            this.url = url;
         }
 
 

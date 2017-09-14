@@ -30,10 +30,6 @@ namespace NetworkIt
             {
                 return this.url;
             }
-            private set
-            {
-                this.URL = value;
-            }
         }
 
         public int Port
@@ -42,10 +38,6 @@ namespace NetworkIt
             {
                 return this.port;
             }
-            private set
-            {
-                this.port = value;
-            }
         }
 
         public string Username
@@ -53,10 +45,6 @@ namespace NetworkIt
             get
             {
                 return this.username;
-            }
-            private set
-            {
-                this.username = value;
             }
         }
 
