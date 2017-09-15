@@ -1,27 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace NetworkIt
+﻿namespace NetworkIt
 {
     public class Field
     {
-        private string name;
+        private string key;
         private string value;
-     //   private string typeName;
 
         #region Instance Variables
 
-        public string Name
+        public string Key
         {
             get
             {
-                return this.name;
+                return this.key;
             }
             set
             {
-                this.name = value;
+                this.key = value;
             }
         }
 
@@ -33,37 +27,18 @@ namespace NetworkIt
             }
         }
 
-    /*   public string TypeName
-        {
-            get
-            {
-                return this.typeName;
-            }
-        }    */ 
-      
-
         #endregion
 
-       /*public Field(string name, string value, Type type)
-       {
-           this.name = name;
-           this.fieldType = type;
-           this.value = value;
-           System.Diagnostics.Debug.WriteLine("TYPE IS " + this.fieldType);
-       }*/
-
-       public Field(string name, string value)
-       {
-           this.name = name;
-          // this.typeName = typeName;
-           this.value = value;
-       //    System.Diagnostics.Debug.WriteLine("TYPE IS " + this.typeName);
-       }
+        public Field(string key, string value)
+        {
+            this.key = key;
+            this.value = value;
+        }
 
 
         public override string ToString()
         {
-            return this.name + " :: " + this.value.ToString();
+            return this.key + " : " + this.value.ToString();
         }
     }
 }

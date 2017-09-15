@@ -1,11 +1,14 @@
 ﻿using System;
 
+using UnityEngine;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Quobject.SocketIoClientDotNet.Client;
+using System.IO;
 
 namespace NetworkIt
 {
+
     public class NetworkItMessageEventArgs : EventArgs
     {
         public Message ReceivedMessage { get; set; }
@@ -19,9 +22,8 @@ namespace NetworkIt
     public class Client
     {
         private string username = "demo_test_username";
-        private string url = "581.cpsc.ucalgary.ca";
+        private string url = "http://581.cpsc.ucalgary.ca";
         private int port = 8000;
-        private string address;
         private Socket client;
 
         public string IPAddress
@@ -56,12 +58,12 @@ namespace NetworkIt
                 client.Close();
             }
 
-
+            //connect
             this.client = IO.Socket(url + ":" + port);
 
             this.client.On(Socket.EVENT_CONNECT, (fn) =>
             {
-                System.Diagnostics.Debug.WriteLine("Connection Successful");
+                Debug.Log("Connection Successful");
 
                 JObject connectJson = new JObject();
                 connectJson.Add("username", username);
@@ -71,20 +73,24 @@ namespace NetworkIt
 
             });
 
-            this.client.On("disconnect", (data) =>
+            this.client.On(Socket.EVENT_DISCONNECT, (data) =>
             {
-                RaiseDisconnected(new EventArgs());
+                Debug.Log("Client Disconnected");
+                RaiseDisconnected();
             });
 
             this.client.On(Socket.EVENT_ERROR, (e) =>
             {
-                //RaiseError(new Exception("Oh no something awful"));
+                Exception ex = (Exception) e;
+                Debug.LogError("Error!" + ex.Message);
+                RaiseError(ex);
             });
 
-            this.client.On(Socket.EVENT_MESSAGE, (e) =>
+            this.client.On(Socket.EVENT_MESSAGE, (data) =>
             {
-                
-                RaiseMessageReceived(new NetworkItMessageEventArgs(new Message("HEYYYYY")));
+                Message recv = ((JObject)data).ToObject<Message>();
+                Debug.Log("Message Recieved: " + data.ToString());
+                RaiseMessageReceived(new NetworkItMessageEventArgs(recv));
             });
 
             
@@ -98,13 +104,13 @@ namespace NetworkIt
 
         public void SendMessage(Message message)
         {
-            this.client.Emit("message",
-                new
-                {
-                    username = this.username,
-                    messageName = message.Name,
-                    fields = message.Fields
-                });
+            this.client.Emit("message", JObject.FromObject(new
+            {
+                username = this.username,
+                deliverToSelf = message.DeliverToSelf,
+                subject = message.Subject,
+                fields = message.Fields
+            }));
         }
 
 
@@ -120,23 +126,13 @@ namespace NetworkIt
             }
         }
 
-        public event EventHandler<EventArgs> Disconnected;
+        public event EventHandler<ErrorEventArgs> Error;
 
-        private void RaiseDisconnected(EventArgs e)
-        {
-            if (Connected != null)
-            {
-                Disconnected(this, e);
-            }
-        }
-
-        public event EventHandler<EventArgs> Error;
-
-        private void RaiseError(EventArgs e)
+        private void RaiseError(Exception e)
         {
             if (Error != null)
             {
-                Error(this, e);
+                Error(this, new ErrorEventArgs(e));
             }
         }
 
@@ -149,6 +145,17 @@ namespace NetworkIt
                 MessageReceived(this, e);
             }
         }
+
+        public event EventHandler<EventArgs> Disconnected;
+
+        private void RaiseDisconnected()
+        {
+            if (Disconnected != null)
+            {
+                Disconnected(this, null);
+            }
+        }
+
 
         #endregion
 

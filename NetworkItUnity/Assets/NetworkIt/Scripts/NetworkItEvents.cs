@@ -28,21 +28,32 @@ public class NetworkItEvents : MonoBehaviour {
 
         connection = new Client(username, urlAddress, port);            //create and establish connection to server
         connection.StartConnection();
-        connection.MessageReceived += Connection_MessageReceived;
         connection.Connected += Connection_Connected;
+        connection.Disconnected += Connection_Disconnected;
+        connection.MessageReceived += Connection_MessageReceived;
+        connection.Error += Connection_Error;
 	}
-
-    private void Connection_Connected(object sender, System.EventArgs e)
-    {
-        Message m = new Message("hyppppppe");
-        m.AddField<string>("nameness", "null");
-        connection.SendMessage(m);
-    }
 
     private void Connection_MessageReceived(object sender, NetworkItMessageEventArgs e)
     {
-        Debug.Log("Message Recieved");
+
     }
+
+    private void Connection_Error(object sender, System.IO.ErrorEventArgs e)
+    {
+
+    }
+
+    private void Connection_Disconnected(object sender, System.EventArgs e)
+    {
+
+    }
+
+    private void Connection_Connected(object sender, System.EventArgs e)
+    {
+
+    }
+
 
     // Update is called once per frame
     void Update () {
