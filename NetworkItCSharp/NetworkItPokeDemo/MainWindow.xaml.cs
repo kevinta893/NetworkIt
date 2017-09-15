@@ -28,6 +28,8 @@ namespace NetworkItPokeDemo
         private Client client;
         private const int DEFAULT_PORT = 8000;
 
+        private int messageCount = 0;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -39,9 +41,9 @@ namespace NetworkItPokeDemo
 
             Message m = new Message("Poke!");
             m.DeliverToSelf = chkDeliverToSelf.IsChecked ?? false;
-            m.AddField("num1", 3);
-            m.AddField("num2", 4);
-
+            m.AddField("num1", 3 + "");
+            m.AddField("num2", 4 + "");
+            m.AddField("count", messageCount++ + "");
             client.SendMessage(m);
         }
 

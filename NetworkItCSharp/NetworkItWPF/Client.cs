@@ -78,9 +78,8 @@ namespace NetworkIt
 
             this.client.On("message", (data) =>
             {
-                Debug.WriteLine("Message Recieved");
                 Message recv = ((JObject)data).ToObject<Message>();
-                Debug.WriteLine("Message Recieved" + data.ToString());
+                Debug.WriteLine("Message Recieved: " + data.ToString());
                 RaiseMessageReceived(new NetworkItMessageEventArgs(recv));
             });
 
