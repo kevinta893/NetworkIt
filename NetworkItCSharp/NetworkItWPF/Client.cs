@@ -69,7 +69,9 @@ namespace NetworkIt
 
                 this.client.Emit("client_connect", JObject.FromObject(new
                 {
-                    this.username
+                    username = this.username,
+                    platform = "WPF .NET"
+
                 }));
 
                 RaiseConnected(new EventArgs());

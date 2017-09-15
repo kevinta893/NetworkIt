@@ -61,6 +61,7 @@ public class Client {
 				{
 					JSONObject connectMsg = new JSONObject();
 					connectMsg.put("username", username);
+					connectMsg.put("platform", "Java");
 					
 					client.emit("client_connect", connectMsg);
 					

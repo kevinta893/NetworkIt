@@ -27,8 +27,10 @@ io.on('connection', function(socket)
 		user.socket = socket;
 		user.socketId = socket.id;
         user.username = data['username'];
+		user.platform = data['platform'];
 		clients.push(user);
-		writeLog('Client registered. ' + user.username + "@" + user.socketId);
+		
+		writeLog('Client registered. ' + user.username + "@" + user.socketId + "?platform=" + user.platform);
 	});
 	
 	//client events

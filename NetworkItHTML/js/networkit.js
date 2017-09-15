@@ -78,7 +78,8 @@ class Client
 			console.log('Connected to Server. ' + socket.id);			
 			socket.emit('client_connect', 
 			{ 
-				username: username 
+				username: username,
+				platform : 'HTML-Javascript'
 			});
 		
 			parent.emitEvent('connect', data);

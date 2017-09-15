@@ -67,6 +67,7 @@ namespace NetworkIt
 
                 JObject connectJson = new JObject();
                 connectJson.Add("username", username);
+                connectJson.Add("platform", "Unity");
                 this.client.Emit("client_connect", connectJson);
 
                 RaiseConnected(new EventArgs());
