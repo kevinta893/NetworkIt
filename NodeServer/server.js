@@ -26,7 +26,7 @@ io.on('connection', function(socket)
 		var user = {};
 		user.socket = socket;
 		user.socketId = socket.id;
-        user.username = data.username;
+        user.username = data['username'];
 		clients.push(user);
 		writeLog('Client registered. ' + user.username + "@" + user.socketId);
 	});
@@ -60,10 +60,10 @@ io.on('connection', function(socket)
         writeLog('Message recieved: ' + JSON.stringify(msg));
 
 
-        var username = msg.username;
-        var subject = msg.subject;
-        var deliverToSelf = msg.deliverToSelf;
-        var fields = msg.fields;
+        var username = msg['username'];
+        var subject = msg['subject'];
+        var deliverToSelf = msg['deliverToSelf'];
+        var fields = msg['fields'];
 
         //send to self
         if (deliverToSelf == true)
