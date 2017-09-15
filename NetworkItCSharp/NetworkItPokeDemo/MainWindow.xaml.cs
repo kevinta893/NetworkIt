@@ -112,7 +112,7 @@ namespace NetworkItPokeDemo
                 btnSend.ToolTip = "";
                 btnSend.IsEnabled = true;
                 elpStatus.Fill = new SolidColorBrush(Colors.ForestGreen);
-                elpStatus.ToolTip = "Connected to" + client.URL + ":" + client.Port + "@" + client.Username;
+                elpStatus.ToolTip = "Connected to: " + client.URL + ":" + client.Port + "@" + client.Username;
             }
         }
 
