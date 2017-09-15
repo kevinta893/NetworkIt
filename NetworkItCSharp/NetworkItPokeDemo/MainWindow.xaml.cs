@@ -41,10 +41,11 @@ namespace NetworkItPokeDemo
 
             Message m = new Message("Poke!");
             m.DeliverToSelf = chkDeliverToSelf.IsChecked ?? false;
-            m.AddField("num1", 3 + "");
-            m.AddField("num2", 4 + "");
-            m.AddField("count", messageCount++ + "");
+            m.AddField("num1", 3);
+            m.AddField("num2", 4);
+            m.AddField("count", messageCount++);
             client.SendMessage(m);
+
         }
 
 
