@@ -15,7 +15,7 @@ public class NetworkItEvents : MonoBehaviour {
     private volatile LinkedList<Message> messageEvents = new LinkedList<Message>();
 
 
-    private Client connection;
+    private Client client;
 
     void Start() {
 
@@ -29,12 +29,12 @@ public class NetworkItEvents : MonoBehaviour {
             return;
         }
 
-        connection = new Client(username, urlAddress, port);            //create and establish connection to server
-        connection.StartConnection();
-        connection.Connected += Connection_Connected;
-        connection.Disconnected += Connection_Disconnected;
-        connection.MessageReceived += Connection_MessageReceived;
-        connection.Error += Connection_Error;
+        client = new Client(username, urlAddress, port);            //create and establish connection to server
+        client.StartConnection();
+        client.Connected += Connection_Connected;
+        client.Disconnected += Connection_Disconnected;
+        client.MessageReceived += Connection_MessageReceived;
+        client.Error += Connection_Error;
 	}
 
     void Update()
@@ -64,7 +64,6 @@ public class NetworkItEvents : MonoBehaviour {
         }
 
     }
-
     private void Connection_MessageReceived(object sender, NetworkItMessageEventArgs e)
     {
         NotifyMessageListeners(e.ReceivedMessage);
@@ -95,7 +94,7 @@ public class NetworkItEvents : MonoBehaviour {
 
     private void OnApplicationQuit()
     {
-        connection.CloseConnection();
+        client.CloseConnection();
     }
 
 }
