@@ -184,4 +184,21 @@ public class Client {
 	public interface EventListener{
 		public void call(Object sender, Object... args);
 	}
+	
+	
+	
+	
+	
+	
+	public String getUsername() {
+		return username;
+	}
+
+	public String getURL() {
+		return url;
+	}
+
+	public int getPort() {
+		return port;
+	}
 }
