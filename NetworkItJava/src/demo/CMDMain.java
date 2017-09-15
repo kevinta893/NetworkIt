@@ -1,10 +1,15 @@
-import org.json.JSONObject;
+package demo;
 
 import networkit.Client;
 import networkit.Client.EventListener;
 import networkit.Message;
 
-public class Main {
+
+/**
+ * Command line demo for NetworkIt Java
+ * @author kta
+ */
+public class CMDMain {
 
 	public static void main(String[] args)
 	{
