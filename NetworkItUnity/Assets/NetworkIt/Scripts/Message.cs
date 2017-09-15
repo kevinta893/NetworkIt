@@ -78,9 +78,9 @@ namespace NetworkIt
         {
             foreach (Field f in this.fields)
             {
-                if (f.Key == key)
+                if (f.key == key)
                 {
-                    return JsonConvert.DeserializeObject<T>(f.Value);
+                    return JsonConvert.DeserializeObject<T>(f.value);
                 }
             }
 
