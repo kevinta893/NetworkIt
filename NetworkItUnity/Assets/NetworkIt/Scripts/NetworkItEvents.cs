@@ -84,6 +84,10 @@ public class NetworkItEvents : MonoBehaviour {
 
     }
 
+    public void SendMessage(Message m)
+    {
+        client.SendMessage(m);
+    }
 
     //consumer producer pattern for threads
     private void NotifyMessageListeners(Message recievedMessage)
