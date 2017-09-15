@@ -61,7 +61,7 @@ namespace NetworkIt
             }
 
 
-            this.client = IO.Socket(URL);
+            this.client = IO.Socket(URL + ":" + port);
 
             this.client.On(Socket.EVENT_CONNECT, () =>
             {
@@ -195,7 +195,7 @@ namespace NetworkIt
             if (url.IndexOf("http://") != 0)
                 throw new ArgumentException("URL must start with http://");
 
-            this.url = url + ":" + port;
+            this.url = url;
         }
 
     }
