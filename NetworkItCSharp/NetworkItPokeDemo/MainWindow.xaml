@@ -21,7 +21,7 @@
         <ScrollViewer x:Name="scrLog" Grid.Row="1" Canvas.Left="10" Canvas.Top="188" HorizontalContentAlignment="Stretch" Height="271" Width="572" HorizontalAlignment="Left">
             <TextBlock x:Name="lblLog" HorizontalAlignment="Left" TextWrapping="Wrap" Text="" VerticalAlignment="Top" FontSize="10" Background="#FFFBFBFB" Width="480"/>
         </ScrollViewer>
-        <Canvas Margin="0,100,0,0">
+        <Canvas Margin="0,120,0,0">
             <Label Content="Log:" HorizontalAlignment="Left" Height="29" VerticalAlignment="Top" Width="85" FontWeight="Bold" RenderTransformOrigin="0.765,1.552" Canvas.Left="10" Canvas.Top="24"/>
             <Button x:Name="btnSaveLog" Content="Save log..." HorizontalAlignment="Left" Height="24" VerticalAlignment="Top" Width="78" Click="btnSaveLog_Click" Canvas.Left="100" Canvas.Top="25"/>
             <Button x:Name="btnClear" Content="Clear Log" HorizontalAlignment="Left" Height="24" VerticalAlignment="Top" Width="73" Canvas.Left="214" Canvas.Top="24" Click="btnClear_Click"/>

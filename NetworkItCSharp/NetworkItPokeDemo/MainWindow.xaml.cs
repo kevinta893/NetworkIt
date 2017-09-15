@@ -102,12 +102,14 @@ namespace NetworkItPokeDemo
                 btnConnect.Content = "Connect";
                 btnSend.ToolTip = "Please connect to a server first";
                 btnSend.IsEnabled = false;
+                elpStatus.ToolTip = "Disconnected";
             }
             else
             {
                 btnConnect.Content = "Disconnect";
                 btnSend.ToolTip = "";
                 btnSend.IsEnabled = true;
+                elpStatus.ToolTip = "Connected to" + client.URL + ":" + client.Port + "@" + client.Username;
             }
         }
 
