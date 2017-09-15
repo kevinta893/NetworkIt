@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 using NetworkIt;
+using System;
 
 public class NetworkItEvents : MonoBehaviour {
 
@@ -11,6 +12,8 @@ public class NetworkItEvents : MonoBehaviour {
     public string username = "demo_test_username";                                    
 
     public GameObject[] messageListeners;
+    private volatile LinkedList<Message> messageEvents = new LinkedList<Message>();
+
 
     private Client connection;
 
@@ -34,9 +37,37 @@ public class NetworkItEvents : MonoBehaviour {
         connection.Error += Connection_Error;
 	}
 
+    void Update()
+    {
+        ConsumeNetworkMessages();
+    }
+
+
+    //consume messages as they come in
+    private void ConsumeNetworkMessages()
+    {
+        if (messageEvents.Count <= 0)
+        {
+            return;
+        }
+
+        while (messageEvents.Count > 0)
+        {
+            Message m = messageEvents.First.Value;
+
+            foreach (GameObject g in messageListeners)
+            {
+                g.SendMessage("MessageReceived", m);
+            }
+
+            messageEvents.RemoveFirst();
+        }
+
+    }
+
     private void Connection_MessageReceived(object sender, NetworkItMessageEventArgs e)
     {
-
+        NotifyMessageListeners(e.ReceivedMessage);
     }
 
     private void Connection_Error(object sender, System.IO.ErrorEventArgs e)
@@ -55,19 +86,10 @@ public class NetworkItEvents : MonoBehaviour {
     }
 
 
-    // Update is called once per frame
-    void Update () {
-		
-	}
-
+    //consumer producer pattern for threads
     private void NotifyMessageListeners(Message recievedMessage)
     {
-        Debug.Log("Message recieved:\n" + recievedMessage);
-
-        foreach (GameObject g in messageListeners)
-        {
-            g.BroadcastMessage("OnNetworkMessage", recievedMessage);
-        }
+        messageEvents.AddLast(recievedMessage);
 
     }
 
