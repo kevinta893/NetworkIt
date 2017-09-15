@@ -5,20 +5,25 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:NetworkItPokeDemo"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
-    <Grid>
-        <Button Name="btnSend" Content="Send Poke!" HorizontalAlignment="Left" Height="63" Margin="10,10,0,0" VerticalAlignment="Top" Width="156" FontSize="24" Click="btnSend_Click"/>
-        <TextBox Name="txtURL" HorizontalAlignment="Left" Height="23" Margin="327,10,0,0" TextWrapping="Wrap" Text="http://127.0.0.1" VerticalAlignment="Top" Width="180"/>
-        <TextBox Name="txtPort" HorizontalAlignment="Left" Height="23" Margin="327,38,0,0" TextWrapping="Wrap" Text="8000" VerticalAlignment="Top" Width="180"/>
-        <TextBox Name="txtUsername" HorizontalAlignment="Left" Height="23" Margin="327,68,0,0" TextWrapping="Wrap" Text="demo_test_username" VerticalAlignment="Top" Width="180"/>
-        <Button Name="btnConnect" Content="Connect" HorizontalAlignment="Left" Height="25" Margin="366,96,0,0" VerticalAlignment="Top" Width="141" Click="btnConnect_Click"/>
-        <Ellipse Name="elpStatus" Fill="#FFE20000" HorizontalAlignment="Left" Height="25" Margin="327,96,0,0" VerticalAlignment="Top" Width="25"/>
-        <Label Content="Log:" HorizontalAlignment="Left" Height="29" Margin="10,109,0,0" VerticalAlignment="Top" Width="85" FontWeight="Bold"/>
-        <ScrollViewer Name="scrLog" HorizontalAlignment="Left" Height="171" Margin="10,138,0,0" VerticalAlignment="Top" Width="497">
+        Title="Network Demo" Height="500" Width="600">
+    <Canvas>
+        <Button Name="btnSend" Content="Send Poke!" HorizontalAlignment="Left" Height="63" Margin="10,10,0,0" VerticalAlignment="Top" Width="156" FontSize="24" Click="btnSend_Click" Grid.RowSpan="2"/>
+        <Canvas Margin="400,10,10,198" HorizontalAlignment="Right" Width="180" Grid.RowSpan="2" VerticalAlignment="Top">
+            <TextBox x:Name="txtURL" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="http://127.0.0.1" VerticalAlignment="Top" Width="180"/>
+            <TextBox x:Name="txtPort" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="8000" VerticalAlignment="Top" Width="180" Canvas.Top="28"/>
+            <TextBox x:Name="txtUsername" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="demo_test_username" VerticalAlignment="Top" Width="180" Canvas.Top="58"/>
+            <Button x:Name="btnConnect" Content="Connect" HorizontalAlignment="Left" Height="25" VerticalAlignment="Top" Width="141" Click="btnConnect_Click" Canvas.Left="39" Canvas.Top="86"/>
+            <Ellipse x:Name="elpStatus" Fill="#FFE20000" HorizontalAlignment="Left" Height="25" VerticalAlignment="Top" Width="25" Canvas.Top="86"/>
+        </Canvas>
+        <ScrollViewer Name="scrLog" Grid.Row="1" Canvas.Left="10" Canvas.Top="188" HorizontalContentAlignment="Stretch" Height="271" Width="572" HorizontalAlignment="Left">
             <TextBlock Name="lblLog" HorizontalAlignment="Left" TextWrapping="Wrap" Text="" VerticalAlignment="Top" FontSize="10" Background="#FFFBFBFB" Width="480"/>
         </ScrollViewer>
-        <Button Name="btnSaveLog" Content="Save log..." HorizontalAlignment="Left" Height="24" Margin="100,109,0,0" VerticalAlignment="Top" Width="78" Click="btnSaveLog_Click"/>
-        <CheckBox Name="chkDeliverToSelf" Content="Deliver to Self?" HorizontalAlignment="Left" Margin="171,12,0,0" VerticalAlignment="Top"/>
+        <CheckBox Name="chkDeliverToSelf" Content="Deliver to Self?" HorizontalAlignment="Left" Margin="183,40,0,0" VerticalAlignment="Top"/>
+        <Canvas Margin="0,100,0,0">
+            <Label Content="Log:" HorizontalAlignment="Left" Height="29" VerticalAlignment="Top" Width="85" FontWeight="Bold" RenderTransformOrigin="0.765,1.552" Canvas.Left="10" Canvas.Top="24"/>
+            <Button x:Name="btnSaveLog" Content="Save log..." HorizontalAlignment="Left" Height="24" VerticalAlignment="Top" Width="78" Click="btnSaveLog_Click" Canvas.Left="100" Canvas.Top="25"/>
+            <Button x:Name="btnClear" Content="Clear Log" HorizontalAlignment="Left" Height="24" VerticalAlignment="Top" Width="73" Canvas.Left="214" Canvas.Top="24" Click="btnClear_Click"/>
+        </Canvas>
 
-    </Grid>
+    </Canvas>
 </Window>

@@ -50,73 +50,15 @@ namespace NetworkItPokeDemo
 
 
 
-        #region Network Events
-
-        private void Client_Disconnected(object sender, object e)
-        {
-            Application.Current.Dispatcher.Invoke(new Action(() =>
-            {
-                elpStatus.Fill = new SolidColorBrush(Colors.Red);
-                enableConnectButton(true);
-
-                WriteLogLine("Client Disconnected");
-                client.CloseConnection();
-            }));
-        }
-
-        private void Client_Connected(object sender, EventArgs e)
-        {
-            Application.Current.Dispatcher.Invoke(new Action(() => {
-                elpStatus.Fill = new SolidColorBrush (Colors.ForestGreen);
-                enableConnectButton(false);
-            }));
-            WriteLogLine("Connection Successful");
-        }
-
-        private void Client_Error(object sender, Exception e)
-        {
-            WriteLogLine(e.Message + "\n" + e.StackTrace);
-        }
-
-        private void Client_MessageReceived(object sender, NetworkItMessageEventArgs e)
-        {
-            WriteLogLine(e.ReceivedMessage.ToString());
-        }
-
-        #endregion
-
-
-
-
-        private void WriteLogLine(string message)
-        {
-            Application.Current.Dispatcher.Invoke(new Action(() => {
-                lblLog.Text += "[" + TimeStamp() + "] " + message + "\n";
-                ScrollLogToBottom();
-            }));
-
-        }
-
-
-        private string TimeStamp()
-        {
-            return DateTime.Now.ToString("yyyy-MM-dd H:mm.ss");            //24 Hour format
-        }
-
-
-
-        private void ScrollLogToBottom()
-        {
-            scrLog.UpdateLayout();
-            scrLog.ScrollToVerticalOffset(scrLog.ScrollableHeight);
-        }
-
-
-
-       
 
         private void btnSaveLog_Click(object sender, RoutedEventArgs e)
         {
+            if (lblLog.Text.Length <= 0)
+            {
+                MessageBox.Show("No log to save!", "Information", MessageBoxButton.OK);
+                return;
+            }
+
             SaveFileDialog saveDialog = new SaveFileDialog();
             saveDialog.Filter = "Text file (*.txt,*.log)|*.txt;*.log";
             if (saveDialog.ShowDialog() == true)
@@ -129,7 +71,7 @@ namespace NetworkItPokeDemo
         {
             if (btnConnect.Content.Equals("Connect"))
             {
-                
+
                 int port = -1;
                 int.TryParse(txtPort.Text, out port);
                 port = port == -1 ? DEFAULT_PORT : port;
@@ -168,5 +110,81 @@ namespace NetworkItPokeDemo
                 btnSend.IsEnabled = true;
             }
         }
+
+        private void btnClear_Click(object sender, RoutedEventArgs e)
+        {
+            if (MessageBox.Show("Clear the log?","Confirm", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+            {
+                //clear log
+                lblLog.Text = "";
+            }
+        }
+
+        #region Network Events
+
+        private void Client_Disconnected(object sender, object e)
+        {
+            Application.Current.Dispatcher.Invoke(new Action(() =>
+            {
+                elpStatus.Fill = new SolidColorBrush(Colors.Red);
+                enableConnectButton(true);
+
+                WriteLogLine("Client Disconnected");
+                client.CloseConnection();
+            }));
+        }
+
+        private void Client_Connected(object sender, EventArgs e)
+        {
+            Application.Current.Dispatcher.Invoke(new Action(() => {
+                elpStatus.Fill = new SolidColorBrush (Colors.ForestGreen);
+                enableConnectButton(false);
+            }));
+            WriteLogLine("Connection Successful");
+        }
+
+        private void Client_Error(object sender, Exception e)
+        {
+            WriteLogLine(e.Message + "\n" + e.StackTrace);
+        }
+
+        private void Client_MessageReceived(object sender, NetworkItMessageEventArgs e)
+        {
+            WriteLogLine(e.ReceivedMessage.ToString());
+        }
+
+        #endregion
+
+
+
+
+
+        #region Utility Functions
+
+        private void WriteLogLine(string message)
+        {
+            Application.Current.Dispatcher.Invoke(new Action(() => {
+                lblLog.Text += "[" + TimeStamp() + "] " + message + "\n";
+                ScrollLogToBottom();
+            }));
+
+        }
+
+
+        private string TimeStamp()
+        {
+            return DateTime.Now.ToString("yyyy-MM-dd H:mm.ss");            //24 Hour format
+        }
+
+
+
+        private void ScrollLogToBottom()
+        {
+            scrLog.UpdateLayout();
+            scrLog.ScrollToVerticalOffset(scrLog.ScrollableHeight);
+        }
+
+        #endregion
+
     }
 }
