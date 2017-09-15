@@ -102,13 +102,16 @@ namespace NetworkItPokeDemo
                 btnConnect.Content = "Connect";
                 btnSend.ToolTip = "Please connect to a server first";
                 btnSend.IsEnabled = false;
+                elpStatus.Fill = new SolidColorBrush(Colors.Red);
                 elpStatus.ToolTip = "Disconnected";
+
             }
             else
             {
                 btnConnect.Content = "Disconnect";
                 btnSend.ToolTip = "";
                 btnSend.IsEnabled = true;
+                elpStatus.Fill = new SolidColorBrush(Colors.ForestGreen);
                 elpStatus.ToolTip = "Connected to" + client.URL + ":" + client.Port + "@" + client.Username;
             }
         }
@@ -128,7 +131,6 @@ namespace NetworkItPokeDemo
         {
             Application.Current.Dispatcher.Invoke(new Action(() =>
             {
-                elpStatus.Fill = new SolidColorBrush(Colors.Red);
                 enableConnectButton(true);
 
                 WriteLogLine("Client Disconnected");
@@ -139,7 +141,6 @@ namespace NetworkItPokeDemo
         private void Client_Connected(object sender, EventArgs e)
         {
             Application.Current.Dispatcher.Invoke(new Action(() => {
-                elpStatus.Fill = new SolidColorBrush (Colors.ForestGreen);
                 enableConnectButton(false);
             }));
             WriteLogLine("Connection Successful");
