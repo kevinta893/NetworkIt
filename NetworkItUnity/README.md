@@ -1,4 +1,4 @@
-# NetworkIt for Unity
+# NetworkIt Unity
 
 You will need to setup the following for Unity 5.6.3f1 in the player settings:
 
