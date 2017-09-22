@@ -1,5 +1,7 @@
 
 #include "libraries/ArduinoJson.h"
+#include "libraries/Message.h"
+
 
 int ledPin = 2;
 
@@ -23,22 +25,54 @@ void loop()
 }
 
 
-void messageRecieved(JsonObject& message)
+void messageEvent(Message& message)
 {
+  //your code here
 
-  const char* subject = message["subject"];
-  Serial.println(subject);
-  if (strcmp(subject, "Poke!") == 0)
+
+  //demo, blinks some number of times depending on the message sent
+  if (message.subject->equals("Poke!"))
   {
-    digitalWrite(ledPin, HIGH);
-    delay(500);
-    digitalWrite(ledPin, LOW);
+    int num1 = -1;
+    num1 = message.getField("count")->toInt();
+    num1 = (num1 % 4) + 1;
+    
+    while(num1 > 0)
+    {
+      digitalWrite(ledPin, HIGH);
+      delay(100);
+      digitalWrite(ledPin, LOW);
+      delay(100);
+      num1--;
+    }
+    
   }
 }
 
 
-//===============================================
+void connectEvent()
+{
+  //your code here
+  
+}
+
+void disconnectEvent()
+{
+  //your code here
+}
+
+void errorEvent(JsonObject& message)
+{
+  //your code here
+}
+
+
+
+
+//=====================================================================================
 //networkit library
+//Arduino Uno 2K RAM
+//Arduino Mega 2560 8K Ram
 
 
 String inString;
@@ -83,13 +117,46 @@ void parseCommand(String cmd)
   const char* eventName = eventJson["event_name"];
   JsonObject& args = eventJson["args"];
 
-  messageRecieved(args);
+  emitEvent(eventName, args);
 
-  jsonBuffer.clear();
+  //messageRecieved(args);
+
+  jsonBuffer.clear();     //clear buffer so we're ready for the next command
 }
 
 void emitEvent(const char* eventName, JsonObject& args)
 {
-  
+  if (strcmp(eventName, "message") == 0)
+  {
+    //message got
+
+    //convert to message object
+    String subject = args["subject"];
+    Message& m = *new Message(subject);
+
+    JsonArray& fields = args["fields"];
+    for (int i =0 ; i < fields.size() ; i++)
+    {
+
+      JsonObject& fieldObj = fields[i];
+      String key = fieldObj["key"];
+      String value = fieldObj["value"];
+      m.addField(key, value);
+    }
+    
+    messageEvent(m);
+  }
+  else if (strcmp(eventName, "connect") == 0)
+  {
+    connectEvent();
+  }
+  else if (strcmp(eventName, "disconnect") == 0)
+  {
+    disconnectEvent();
+  }
+  else if (strcmp(eventName, "error") == 0)
+  {
+    errorEvent(args);
+  }
 }
 

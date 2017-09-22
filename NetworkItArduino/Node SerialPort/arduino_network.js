@@ -9,7 +9,7 @@ var arduinoPort;
 
 var serialBuffer = '';
 
-//=========
+//=================================
 //Serialport connection to Arduino
 serialport.list(function(err, ports)
 {
@@ -20,7 +20,6 @@ serialport.list(function(err, ports)
 			var port = new serialport(p['comName'], 
 			{
 				baudRate: 115200, 
-				//parser: serialport.parsers.readline("\n")
 			});
 
 			port.on('open', function(data)
@@ -61,7 +60,7 @@ serialport.list(function(err, ports)
 
 
 
-//================================
+//=================================
 //Socket.io
 
 socket = socket(url + ':' + port);
