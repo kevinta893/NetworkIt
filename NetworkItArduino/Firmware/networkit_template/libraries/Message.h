@@ -24,13 +24,11 @@ Message::Message(String& subject)
 {
   this->subject = &subject;
   this->deliverToSelf = false;
-  //this->_fields;
   this->_fieldCount = 0;
 }
 
 Message::~Message()
 {
-  //delete this->_fields;
   delete this->subject;
 }
 
