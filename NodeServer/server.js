@@ -30,14 +30,13 @@ io.on('connection', function(socket)
 		user.platform = data['platform'];
 		clients.push(user);
 		
-		writeLog('Client registered. ' + user.username + "@" + user.socketId + "?platform=" + user.platform);
+		writeLog('Client registered. ' + user.username + '@' + socket.request.connection.remoteAddress + ":" + socket.request.connection.remotePort + "?id=" + socket.id + '?platform=' + user.platform);
 	});
 	
 	//client events
 	socket.on('disconnect', function() 
     {
 
-        writeLog('Client disconnected. id=' + socket.id);
 
         //remove user
         for (var i = 0; i < clients.length; i++)
@@ -45,6 +44,8 @@ io.on('connection', function(socket)
 
 			if (clients[i].socketId === socket.id)
             {
+				var user =  clients[i];
+				writeLog('Client disconnected. ' + user.username + '@' + socket.request.connection.remoteAddress + ":" + socket.request.connection.remotePort + "?id=" + socket.id + '?platform=' + user.platform);
 				clients.splice(i, 1);
 				return;
 			}
@@ -103,7 +104,6 @@ http.listen(PORT, function()
 
 //===============================
 //Utility Functions
-
 
 function writeLog(msg) {
     console.log('[' + timeStamp() + '] ' + msg);
