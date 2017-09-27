@@ -5,13 +5,20 @@ class Message{
     String* subject;
     bool deliverToSelf;
   
+	Message(const char* subject);
     Message(String& subject);
     ~Message();
     String* getField(String& key);
 	String* getField(const char* key);
     void addField(String& key, String& value);
+	void addField(const char* key, const char* value);
+	void addField(const char* key, String& value);
+	void addField(String& key, const char* value);
     String* toString();
-    
+    int getFieldCount();
+	String* getKey(int i);
+	String* getValue(int i);
+	
   private:
     static const int MAX_FIELDS = 10;            //maximum number of fields per message. Increase if needed
     String _fieldsKeys[MAX_FIELDS];
@@ -23,6 +30,14 @@ class Message{
 Message::Message(String& subject)
 {
   this->subject = &subject;
+  this->deliverToSelf = false;
+  this->_fieldCount = 0;
+}
+
+Message::Message(const char* subject)
+{
+	String subjectConvert = subject;
+  this->subject = &subjectConvert;
   this->deliverToSelf = false;
   this->_fieldCount = 0;
 }
@@ -62,13 +77,51 @@ void Message::addField(String& key, String& value)
   this->_fieldsKeys[_fieldCount] = key;
   this->_fieldsValues[_fieldCount] = value;
   this->_fieldCount++;
+}
 
-  //Serial.println(key + "," + value);
-  //Serial.println(*f.key + "^&&^&^&," + *f.value);
-	
+void Message::addField(const char* key, const char* value)
+{
+	String keyString = key;
+	String valueString = value;
+	addField(keyString, valueString);
+}
+
+void Message::addField(const char* key, String& value)
+{
+	String keyString = key;
+	addField(keyString, value);
+}
+
+void Message::addField(String& key, const char* value)
+{
+	String valueString = value;
+	addField(key, valueString);
 }
 
 String* Message::toString()
 {
   return subject;
+}
+
+int Message::getFieldCount()
+{
+	return _fieldCount;
+}
+
+String* Message::getKey(int i)
+{
+	if (i >= this->_fieldCount)
+	{
+		return NULL;
+	}
+	return &this->_fieldsKeys[i];
+}
+
+String* Message::getValue(int i)
+{
+	if (i >= this->_fieldCount)
+	{
+		return NULL;
+	}
+	return &this->_fieldsValues[i];
 }

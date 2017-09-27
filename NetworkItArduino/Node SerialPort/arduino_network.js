@@ -9,6 +9,9 @@ var arduinoPort;
 
 var serialBuffer = '';
 
+var NETWORK_SEND_HEADER = 'send_networkit_message=';
+var NETWORK_SEND_END_HEADER = '=send_end';
+
 //=================================
 //Serialport connection to Arduino
 serialport.list(function(err, ports)
@@ -31,10 +34,29 @@ serialport.list(function(err, ports)
 			port.on('data', function(data)
 			{
 				serialBuffer += data.toString();
-				if (serialBuffer[serialBuffer.length-1] == '\n'){
-					serialBuffer = serialBuffer.substring(0, serialBuffer.length-2);		//strip out the new line
-					console.log(serialBuffer);
-					serialBuffer = '';
+				var splitBuffer = serialBuffer.split(/\r?\n/g);				//arduino outputs \r\n per new line
+				serialBuffer = splitBuffer.pop();							//retain incomplete lines by buffer
+				
+				if (splitBuffer != null && splitBuffer.length > 0)
+				{
+					for (var i = 0 ; i < splitBuffer.length ; i++)
+					{
+						var bufferLine = splitBuffer[i];
+					
+						//if equals the header, this is a send request
+						if (bufferLine.indexOf(NETWORK_SEND_HEADER) >= 0)
+						{
+							//strip out header and send message string
+							var messageStripped = bufferLine.substring(
+								bufferLine.indexOf(NETWORK_SEND_HEADER) + NETWORK_SEND_HEADER.length, 
+								bufferLine.indexOf(NETWORK_SEND_END_HEADER)
+							);
+							sendNetworkMessage(messageStripped);
+						} else {
+							console.log(bufferLine);				//not a network message, probably debug message
+						}
+					}
+					
 				}
 			});
 
@@ -109,11 +131,21 @@ function emitEvent(eventName, args)
 }
 
 
-function sendMessageArduino(msg){
+function sendMessageArduino(msg)
+{
 		
 	arduinoPort.write(msg + '\n' ,function(){
 		console.log("Serial message sent=" + msg);
 	});
 	
 	arduinoPort.flush();
+}
+
+function sendNetworkMessage(msgStr)
+{
+	console.log("Sending network message=" + msgStr);
+	var msgSend = JSON.parse(msgStr);
+	msgSend.username = username;			//add username and send
+	socket.emit("message", msgSend);
+	
 }

@@ -4,7 +4,9 @@
 
 
 int ledPin = 2;
-
+int buttonPin = 4;
+bool pressed = false;
+int messageCount = 0;
 
 void setup() 
 {
@@ -12,8 +14,9 @@ void setup()
 
   //Your code here
   pinMode(ledPin, OUTPUT);
-
+  pinMode(buttonPin, INPUT_PULLUP);
 }
+
 
 
 void loop() 
@@ -21,7 +24,22 @@ void loop()
   networkit_loop();       //please leave here
 
   //Your code here
-  
+
+  //send message demo
+  if ((digitalRead(buttonPin) == HIGH) && (pressed == false))
+  {
+    pressed = true;
+    Serial.println("Button pressed");
+
+    Message& m = *new Message("Poke!");
+    m.deliverToSelf = false;
+    m.addField("num1", 13 + "");
+    m.addField("num2", 5 + "");
+    m.addField("count", messageCount++ + "");
+    sendMessage(m);
+  } else if ((digitalRead(buttonPin) == LOW) && (pressed == true)){
+    pressed = false;
+  }
 }
 
 
@@ -53,7 +71,6 @@ void messageEvent(Message& message)
 void connectEvent()
 {
   //your code here
-  
 }
 
 void disconnectEvent()
@@ -105,24 +122,52 @@ void networkit_loop()
 
 
 
+//Sending
+const char* NETWORK_SEND_HEADER = "send_networkit_message=";
+const char* NETWORK_SEND_END_HEADER = "=send_end";
+//if your message isnt being written properly, increase this buffer, see calculator: https://bblanchon.github.io/ArduinoJson/assistant/
+StaticJsonBuffer<600> jsonWriteBuffer;
+void sendMessage(Message& m)
+{
+  //create message object
+  JsonObject& messJson = jsonWriteBuffer.createObject();
+  messJson["subject"] = m.subject;
+  messJson["deliverToSelf"] = m.deliverToSelf;
+  
+  JsonArray& fieldsJson = messJson.createNestedArray("fields");
+  for (int i = 0; i < m.getFieldCount() ;i++)
+  {
+    //add each field object
+    JsonObject& f = jsonWriteBuffer.createObject();
+    f["key"] = *m.getKey(i);
+    f["value"] = *m.getValue(i);
+    Serial.println(*m.getKey(i) + ", " + *m.getValue(i));
+    fieldsJson.add(f);
+  }
 
+  //send message to serial to send on socket.io
+  Serial.print(NETWORK_SEND_HEADER);
+  messJson.printTo(Serial);
+  Serial.println(NETWORK_SEND_END_HEADER);
+  
+  jsonWriteBuffer.clear();
+}
+
+
+//Reading
 //if your message isnt being read properly, increase this buffer, see calculator: https://bblanchon.github.io/ArduinoJson/assistant/
-StaticJsonBuffer<600> jsonBuffer;
-
+StaticJsonBuffer<600> jsonReadBuffer;
 void parseCommand(String cmd)
 {
-  //Serial.println("Recv=" + inString);
-  JsonObject& eventJson = jsonBuffer.parseObject(cmd);
+  JsonObject& eventJson = jsonReadBuffer.parseObject(cmd);
 
   const char* eventName = eventJson["event_name"];
   JsonObject& args = eventJson["args"];
-
   emitEvent(eventName, args);
 
-  //messageRecieved(args);
-
-  jsonBuffer.clear();     //clear buffer so we're ready for the next command
+  jsonReadBuffer.clear();     //clear buffer so we're ready for the next command
 }
+
 
 void emitEvent(const char* eventName, JsonObject& args)
 {
@@ -145,6 +190,7 @@ void emitEvent(const char* eventName, JsonObject& args)
     }
     
     messageEvent(m);
+
   }
   else if (strcmp(eventName, "connect") == 0)
   {
