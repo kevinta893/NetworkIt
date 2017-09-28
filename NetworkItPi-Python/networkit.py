@@ -23,6 +23,16 @@ class Client:
     EVENT_DISCONNECT = "disconnect"
     EVENT_ERROR = "error"
 
+    def __init__(self):
+        # client uses default settings for connection
+
+        # Setup events
+        self.subscribers = {}
+        self.subscribers[self.EVENT_MESSAGE] = []
+        self.subscribers[self.EVENT_CONNECT] = []
+        self.subscribers[self.EVENT_DISCONNECT] = []
+        self.subscribers[self.EVENT_ERROR] = []
+
 
     def __init__(self, username, url, port):
 
@@ -78,11 +88,16 @@ class Client:
         print "SocketIO client thread terminated"
 
     def send_message(self, message):
-        sendMessage = {
+
+        sendFields = []
+        for i in range(0, len(message.fields)):
+            sendFields.append({'key': message.fields[i].key, 'value' : message.fields[i].value})
+
+        sendMessage = {                                      #Must be here, problem with library being beta.
             'username' : self.username,
             'deliverToSelf' : message.deliverToSelf,
-            'subject' : message.subject
-            #'fields' : message.fields
+            'subject' : message.subject,
+            'fields' : sendFields
         }
         self.socket.emit('message', sendMessage)
 
@@ -91,17 +106,17 @@ class Client:
 
     def on_connect(self, args):
         print "Connection Sucessful"
-        self.socket.emit('client_connect', {
-            'username': self.username,
-            'platform': "Python 2.7"
-        })
+        #self.socket.emit('client_connect', {
+        #    'username': self.username,
+        #    'platform': "Python 2.7"
+        #})
         self.emit_event(self.EVENT_CONNECT, None)
 
 
 
     def on_disconnect(self, args):
-        self.emit_event(self.EVENT_DISCONNECT, None)
         print "Client Disconnected"
+        self.emit_event(self.EVENT_DISCONNECT, None)
 
     def on_socket_error(self, err):
         print "Error!"
@@ -133,18 +148,20 @@ class Client:
 
 class Message:
 
+    fields = []
+
     def __init__(self, subject):
         self.subject = subject
         self.deliverToSelf = False
         self.fields = []
 
     def add_field(self, key, value):
-        self.fields = Field(key, value)
+        self.fields.append(Field(key, value))
 
     def get_field(self, key):
-        for i in range(0, len(fields)):
+        for i in range(0, len(self.fields)):
             if (self.fields[i].key == key):
-                return fields[i].value
+                return self.fields[i].value
 
         return None
 
@@ -160,4 +177,4 @@ class Field:
         self.value = value
 
     def to_string(self):
-        self.key + " : " + str(self.value);
+        return self.key + " : " + str(self.value);

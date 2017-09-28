@@ -34,7 +34,7 @@ class MainWindow(Frame):
     def connect_button(self):
 
         # setup network
-        self.server = Client("demo_test_username", "192.168.1.104", 8000)
+        self.server = Client("demo_test_username", "localhost", 8000)
         self.server.register_listener(Client.EVENT_MESSAGE, self.on_message)
         self.server.register_listener(Client.EVENT_CONNECT, self.on_connect)
         self.server.register_listener(Client.EVENT_DISCONNECT, self.on_disconnect)
@@ -43,21 +43,23 @@ class MainWindow(Frame):
 
 
     def send_poke(self):
+        #send a message
         message = Message("Poke!")
         message.add_field("num1", str(1))
         message.add_field("num2", str(4))
         self.count += 1
         message.add_field("count", str(self.count))
+        message.deliverToSelf = False
         self.server.send_message(message)
 
 
     def on_message(self, args):
         print "Message recieved" + str(args)
 
-    def on_connect(self):
+    def on_connect(self, args):
         print "Client Connected"
 
-    def on_disconnect(self):
+    def on_disconnect(self, args):
         print "Client Disconnected"
 
     def on_error(self, args):
