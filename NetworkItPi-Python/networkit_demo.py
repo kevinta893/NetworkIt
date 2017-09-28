@@ -53,8 +53,8 @@ class MainWindow(Frame):
         self.server.send_message(message)
 
 
-    def on_message(self, args):
-        print "Message recieved" + str(args)
+    def on_message(self, message):
+        print "Message recieved, count=" + message.get_field("count")
 
     def on_connect(self, args):
         print "Client Connected"

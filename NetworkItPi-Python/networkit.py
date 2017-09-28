@@ -126,7 +126,29 @@ class Client:
 
 
     def on_message(self, data):
-        self.emit_event(self.EVENT_MESSAGE, data)
+
+        #For some reason JSON data looks like: '2["message",{"username":"demo_test_username","deliverToSelf":true,"subject":"Poke!","fields":[{"key":"num1","value":"3"},{"key":"num2","value":"4"},{"key":"count","value":"6"}]}]'
+        #Only accept this message as an object
+        messageStr = str(data)
+
+        #invalid message
+        if (messageStr.find("2[") != 0):
+            return
+
+
+        messageStr = messageStr[1:]
+        messageObj = json.loads(messageStr)[1]
+
+        #convert to message object
+        message = Message(messageObj['subject'])
+        message.deliverToSelf = messageObj['deliverToSelf']
+
+        #Transfer all fields
+        fieldsDict = messageObj['fields']
+        for i in range(0, len(messageObj['fields'])):
+            message.add_field(fieldsDict[i]['key'], fieldsDict[i]['value'])
+
+        self.emit_event(self.EVENT_MESSAGE, message)
 
 
 
