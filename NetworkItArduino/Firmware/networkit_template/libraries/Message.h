@@ -20,31 +20,34 @@ class Message{
 	String* getValue(int i);
 	
   private:
-    static const int MAX_FIELDS = 10;            //maximum number of fields per message. Increase if needed
-    String _fieldsKeys[MAX_FIELDS];
-    String _fieldsValues[MAX_FIELDS];
+    static const int MAX_FIELDS = 5;            //maximum number of fields per message. Increase if needed
+    String* _fieldsKeys;
+    String* _fieldsValues;
     int _fieldCount = 0;
     
 };
 
 Message::Message(String& subject)
 {
-  this->subject = &subject;
-  this->deliverToSelf = false;
-  this->_fieldCount = 0;
+	this->subject = new String(subject);
+	this->deliverToSelf = false;
+	this->_fieldCount = 0;
+	this->_fieldsKeys = new String[MAX_FIELDS];
+	this->_fieldsValues = new String[MAX_FIELDS];
 }
 
 Message::Message(const char* subject)
 {
-	String subjectConvert = subject;
-  this->subject = &subjectConvert;
-  this->deliverToSelf = false;
-  this->_fieldCount = 0;
+	this->subject = new String(subject);
+	this->deliverToSelf = false;
+	this->_fieldCount = 0;
+	this->_fieldsKeys = new String[MAX_FIELDS];
+	this->_fieldsValues = new String[MAX_FIELDS];
 }
 
 Message::~Message()
 {
-  delete this->subject;
+	delete this->subject;
 }
 
 String* Message::getField(String& key)

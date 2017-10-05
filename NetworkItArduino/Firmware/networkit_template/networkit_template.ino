@@ -31,12 +31,17 @@ void loop()
     pressed = true;
     Serial.println("Button pressed");
 
-    Message& m = *new Message("Poke!");
-    m.deliverToSelf = false;
-    m.addField("num1", 13 + "");
-    m.addField("num2", 5 + "");
-    m.addField("count", messageCount++ + "");
-    sendMessage(m);
+    Message* m = new Message("Poke!");
+    m->deliverToSelf = true;
+    m->addField("num1", *new String(13));
+    m->addField("num2", *new String(5));
+    messageCount++;
+    m->addField("count", *new String(messageCount));
+    m->addField("message", "hello world");
+
+    sendMessage(*m);
+
+    delete m;
   } else if ((digitalRead(buttonPin) == LOW) && (pressed == true)){
     pressed = false;
   }
@@ -53,6 +58,7 @@ void messageEvent(Message& message)
   {
     int num1 = -1;
     num1 = message.getField("count")->toInt();
+    Serial.println("Got Count=" + num1);
     num1 = (num1 % 4) + 1;
     
     while(num1 > 0)
@@ -131,7 +137,7 @@ void sendMessage(Message& m)
 {
   //create message object
   JsonObject& messJson = jsonWriteBuffer.createObject();
-  messJson["subject"] = m.subject;
+  messJson["subject"] = *m.subject;
   messJson["deliverToSelf"] = m.deliverToSelf;
   
   JsonArray& fieldsJson = messJson.createNestedArray("fields");
@@ -141,7 +147,6 @@ void sendMessage(Message& m)
     JsonObject& f = jsonWriteBuffer.createObject();
     f["key"] = *m.getKey(i);
     f["value"] = *m.getValue(i);
-    Serial.println(*m.getKey(i) + ", " + *m.getValue(i));
     fieldsJson.add(f);
   }
 
