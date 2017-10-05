@@ -4,7 +4,7 @@
 
 
 int ledPin = 2;
-int buttonPin = 4;
+int buttonPin = 5;
 bool pressed = false;
 int messageCount = 0;
 
@@ -25,24 +25,26 @@ void loop()
 
   //Your code here
 
+  
   //send message demo
-  if ((digitalRead(buttonPin) == HIGH) && (pressed == false))
+  if ((digitalRead(buttonPin) == LOW) && (pressed == false))
   {
+    //pressed down
     pressed = true;
     Serial.println("Button pressed");
 
-    Message* m = new Message("Poke!");
-    m->deliverToSelf = true;
-    m->addField("num1", *new String(13));
-    m->addField("num2", *new String(5));
+    Message m = *new Message("Poke!");
+    m.deliverToSelf = true;
+    m.addField("num1", *new String(13));
+    m.addField("num2", *new String(5));
     messageCount++;
-    m->addField("count", *new String(messageCount));
-    m->addField("message", "hello world");
+    m.addField("count", *new String(messageCount));
+    m.addField("message", "hello world");
 
-    sendMessage(*m);
+    sendMessage(m);
 
-    delete m;
-  } else if ((digitalRead(buttonPin) == LOW) && (pressed == true)){
+  } else if ((digitalRead(buttonPin) == HIGH) && (pressed == true)){
+    //pressed up
     pressed = false;
   }
 }
