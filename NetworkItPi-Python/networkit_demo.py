@@ -32,7 +32,6 @@ class MainWindow(Frame):
 
 
     def connect_button(self):
-
         # setup network
         self.server = Client("demo_test_username", "localhost", 8000)
         self.server.register_listener(Client.EVENT_MESSAGE, self.on_message)

@@ -1,7 +1,8 @@
 import json
 import logging
 from threading import Thread
-#Uses socket.io v0.7.5- Nexus (i.e. a beta for Socket.io 2.0 servers)
+#To use this library, you need to use it with a Socket.io server v1.7.3
+#For Socket.io v2+ use the python library: socket.io v0.7.5- Nexus (i.e. a beta for Socket.io 2.0 servers)
 #https://github.com/invisibleroads/socketIO-client
 #https://github.com/nexus-devs/socketIO-client      (beta branch)
 
@@ -62,7 +63,7 @@ class Client:
         logging.basicConfig()
 
         # setup networking
-        from socketIO_client_nexus import SocketIO, LoggingNamespace, BaseNamespace
+        from socketIO_client import SocketIO, LoggingNamespace, BaseNamespace
         self.socket = SocketIO(self.url, self.port, BaseNamespace, wait_for_connection=False)
 
 
@@ -72,10 +73,7 @@ class Client:
         self.socket.on('error', self.on_socket_error)
         self.socket.on('message', self.on_message)
 
-        self.socket.emit('client_connect', {
-            'username': self.username,
-            'platform': "Python 2.7"
-        })
+
         self.socket_thread = Thread(target = self.wait_on_socket)
         self.socket_thread.start()
 
@@ -104,12 +102,12 @@ class Client:
     #==========================
     #Events
 
-    def on_connect(self, args):
+    def on_connect(self):
         print "Connection Sucessful"
-        #self.socket.emit('client_connect', {
-        #    'username': self.username,
-        #    'platform': "Python 2.7"
-        #})
+        self.socket.emit('client_connect', {
+            'username': self.username,
+            'platform': "Python 2.7"
+        })
         self.emit_event(self.EVENT_CONNECT, None)
 
 
