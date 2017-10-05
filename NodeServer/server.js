@@ -1,5 +1,4 @@
-var express = require('express')();
-var http = require('http').Server(express);
+var http = require('http').createServer(handler)
 var io = require('socket.io')(http);
 var dateFormat = require('dateformat');
 
@@ -8,11 +7,20 @@ var PORT = 8000;
 
 var clients = [];
 
-//express http server 
-express.get('/', function(req, res)
-{
-	res.sendFile(__dirname + '/index.html');
-});
+
+//redirect html server
+function handler (req, res) {
+  fs.readFile(__dirname + '/index.html',
+  function (err, data) {
+    if (err) {
+      res.writeHead(500);
+      return res.end('Error loading index.html');
+    }
+
+    res.writeHead(200);
+    res.end(data);
+  });
+}
 
 
 //eventsio
