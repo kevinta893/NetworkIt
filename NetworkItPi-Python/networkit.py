@@ -197,4 +197,4 @@ class Field:
         self.value = value
 
     def to_string(self):
-        return self.key + " : " + str(self.value);
+        return self.key + " : " + str(self.value)
