@@ -112,7 +112,7 @@ class Client:
 
 
 
-    def on_disconnect(self, args):
+    def on_disconnect(self):
         print "Client Disconnected"
         self.emit_event(self.EVENT_DISCONNECT, None)
 
