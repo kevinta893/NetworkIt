@@ -184,20 +184,23 @@ void emitEvent(const char* eventName, JsonObject& args)
 
     //convert to message object
     String subject = args["subject"];
-    Message m = *new Message(subject);
+    Message* m = new Message(subject);
 
     JsonArray& fields = args["fields"];
+    const char* key;
+    const char* value;
     for (int i =0 ; i < fields.size() ; i++)
     {
 
       JsonObject& fieldObj = fields[i];
-      String key = fieldObj["key"];
-      String value = fieldObj["value"];
-      m.addField(&key, &value);
+      key = fieldObj["key"];
+      value = fieldObj["value"];
+      m->addField(key, value);
     }
     
-    messageEvent(m);
+    messageEvent(*m);
 
+    delete m;
   }
   else if (strcmp(eventName, "connect") == 0)
   {

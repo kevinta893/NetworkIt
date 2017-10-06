@@ -8,7 +8,7 @@ class Message{
 	Message(const char* subject);
     Message(String& subject);
     ~Message();
-    String* getField(String& key);
+    String* getField(String* key);
 	String* getField(const char* key);
 	
     void addField(String* key, String* value);
@@ -60,23 +60,27 @@ Message::~Message()
 	delete this->_fieldsValues;
 }
 
-String* Message::getField(String& key)
+String* Message::getField(String* key)
 {
-  for (int i = 0 ; i < _fieldCount ; i++)
-  {
-     if (key.equals(*this->_fieldsKeys[i]) == 1 )
-     {
-         return this->_fieldsValues[i];
-     }
-  }
-  Serial.println("Field not found=" + key);
-  return NULL;
+	String** keyArray = this->_fieldsKeys;
+	String** valueArray = this->_fieldsValues;
+	
+	for (int i = 0 ; i < _fieldCount ; i++)
+	{
+		String k = *keyArray[i];
+		if (k.equals(*key) == 1 )
+		{
+			return valueArray[i];
+		}
+	}
+	Serial.println("Field not found=" + *key);
+	return NULL;
 }
 
 String* Message::getField(const char* key)
 {
   String keyCompare = key;
-  return this->getField(keyCompare);
+  return this->getField(&keyCompare);
 }
 
 void Message::addField(String* key, String* value)
