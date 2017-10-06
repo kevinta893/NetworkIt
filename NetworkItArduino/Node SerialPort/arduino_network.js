@@ -144,8 +144,11 @@ function sendMessageArduino(msg)
 function sendNetworkMessage(msgStr)
 {
 	console.log("Sending network message=" + msgStr);
-	var msgSend = JSON.parse(msgStr);
-	msgSend.username = username;			//add username and send
-	socket.emit("message", msgSend);
-	
+	try{
+		var msgSend = JSON.parse(msgStr);
+		msgSend.username = username;			//add username and send
+		socket.emit("message", msgSend);
+	} catch (e) {
+		console.log(e);
+	}
 }
