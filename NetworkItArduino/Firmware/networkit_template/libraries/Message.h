@@ -10,10 +10,12 @@ class Message{
     ~Message();
     String* getField(String& key);
 	String* getField(const char* key);
-    void addField(String& key, String& value);
+	
+    void addField(String* key, String* value);
 	void addField(const char* key, const char* value);
-	void addField(const char* key, String& value);
-	void addField(String& key, const char* value);
+	void addField(const char* key, String* value);
+	void addField(String* key, const char* value);
+	
     String* toString();
     int getFieldCount();
 	String* getKey(int i);
@@ -21,8 +23,8 @@ class Message{
 	
   private:
     static const int MAX_FIELDS = 5;            //maximum number of fields per message. Increase if needed
-    String* _fieldsKeys;
-    String* _fieldsValues;
+    String** _fieldsKeys;
+    String** _fieldsValues;
     int _fieldCount = 0;
     
 };
@@ -32,8 +34,8 @@ Message::Message(String& subject)
 	this->subject = new String(subject);
 	this->deliverToSelf = false;
 	this->_fieldCount = 0;
-	this->_fieldsKeys = new String[MAX_FIELDS];
-	this->_fieldsValues = new String[MAX_FIELDS];
+	this->_fieldsKeys = new String*[MAX_FIELDS];
+	this->_fieldsValues = new String*[MAX_FIELDS];
 }
 
 Message::Message(const char* subject)
@@ -41,22 +43,30 @@ Message::Message(const char* subject)
 	this->subject = new String(subject);
 	this->deliverToSelf = false;
 	this->_fieldCount = 0;
-	this->_fieldsKeys = new String[MAX_FIELDS];
-	this->_fieldsValues = new String[MAX_FIELDS];
+	this->_fieldsKeys = new String*[MAX_FIELDS];
+	this->_fieldsValues = new String*[MAX_FIELDS];
 }
 
 Message::~Message()
 {
 	delete this->subject;
+	//clear all items in arrays
+	for (int i = 0 ; i < _fieldCount ; i++)
+	{
+		delete this->_fieldsKeys[i];
+		delete this->_fieldsValues[i];
+	}
+	delete this->_fieldsKeys;
+	delete this->_fieldsValues;
 }
 
 String* Message::getField(String& key)
 {
   for (int i = 0 ; i < _fieldCount ; i++)
   {
-     if (key.equals(this->_fieldsKeys[i]) == 1 )
+     if (key.equals(*this->_fieldsKeys[i]) == 1 )
      {
-         return &this->_fieldsValues[i];
+         return this->_fieldsValues[i];
      }
   }
   Serial.println("Field not found=" + key);
@@ -69,7 +79,7 @@ String* Message::getField(const char* key)
   return this->getField(keyCompare);
 }
 
-void Message::addField(String& key, String& value)
+void Message::addField(String* key, String* value)
 {
   if (_fieldCount >= MAX_FIELDS)
   {
@@ -84,20 +94,20 @@ void Message::addField(String& key, String& value)
 
 void Message::addField(const char* key, const char* value)
 {
-	String keyString = key;
-	String valueString = value;
+	String* keyString = new String(key);
+	String* valueString = new String(value);
 	addField(keyString, valueString);
 }
 
-void Message::addField(const char* key, String& value)
+void Message::addField(const char* key, String* value)
 {
-	String keyString = key;
+	String* keyString = new String(key);
 	addField(keyString, value);
 }
 
-void Message::addField(String& key, const char* value)
+void Message::addField(String* key, const char* value)
 {
-	String valueString = value;
+	String* valueString = new String(value);
 	addField(key, valueString);
 }
 
@@ -117,7 +127,7 @@ String* Message::getKey(int i)
 	{
 		return NULL;
 	}
-	return &this->_fieldsKeys[i];
+	return this->_fieldsKeys[i];
 }
 
 String* Message::getValue(int i)
@@ -126,5 +136,5 @@ String* Message::getValue(int i)
 	{
 		return NULL;
 	}
-	return &this->_fieldsValues[i];
+	return this->_fieldsValues[i];
 }

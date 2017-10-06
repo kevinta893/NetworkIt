@@ -35,10 +35,10 @@ void loop()
 
     Message m = *new Message("Poke!");
     m.deliverToSelf = true;
-    m.addField("num1", *new String(13));
-    m.addField("num2", *new String(5));
+    m.addField("num1", new String(13));
+    m.addField("num2", new String(5));
     messageCount++;
-    m.addField("count", *new String(messageCount));
+    m.addField("count", new String(messageCount));
     m.addField("message", "hello world");
 
     sendMessage(m);
@@ -184,7 +184,7 @@ void emitEvent(const char* eventName, JsonObject& args)
 
     //convert to message object
     String subject = args["subject"];
-    Message& m = *new Message(subject);
+    Message m = *new Message(subject);
 
     JsonArray& fields = args["fields"];
     for (int i =0 ; i < fields.size() ; i++)
@@ -193,7 +193,7 @@ void emitEvent(const char* eventName, JsonObject& args)
       JsonObject& fieldObj = fields[i];
       String key = fieldObj["key"];
       String value = fieldObj["value"];
-      m.addField(key, value);
+      m.addField(&key, &value);
     }
     
     messageEvent(m);
