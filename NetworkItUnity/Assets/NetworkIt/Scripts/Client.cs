@@ -187,7 +187,13 @@ namespace NetworkIt
             this.port = port;
 
             if (url.IndexOf("http://") != 0)
-                throw new ArgumentException("URL must start with http://");
+            {
+                this.url = "http://" + url;
+            }
+            else
+            {
+                this.url = url;
+            }
 
             this.url = url;
         }
