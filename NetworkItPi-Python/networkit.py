@@ -176,7 +176,7 @@ class Message:
         self.fields = []
 
     def add_field(self, key, value):
-        self.fields.append(Field(key, value))
+        self.fields.append(Field(str(key), str(value)))
 
     def get_field(self, key):
         for i in range(0, len(self.fields)):
