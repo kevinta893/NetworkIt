@@ -33,10 +33,15 @@ public class Client {
 	public Client(String username, String url, int port)
 	{
 		if (url.indexOf("http://") != 0)
-             throw new IllegalArgumentException("URL must start with http://");
+        {
+            this.url = "http://" + url;
+        }
+        else
+        {
+        	this.url = url;
+        }
 
 		this.username = username;
-		this.url = url;
 		this.port = port;
 		
 		eventListeners.put("connect", new LinkedList<EventListener>());
