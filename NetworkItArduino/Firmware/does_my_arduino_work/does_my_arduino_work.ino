@@ -6,7 +6,7 @@
 
 
 int ledPin = 2;
-int buttonPin = 4;
+int buttonPin = 5;
 
 
 void setup() {
