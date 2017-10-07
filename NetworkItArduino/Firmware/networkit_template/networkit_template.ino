@@ -41,9 +41,10 @@ void loop()
     m->addField("count", new String(messageCount));
     m->addField("message", "hello world");
 
-    sendMessage(*m);
 
+    sendMessage(*m);
     delete m;
+    
   } else if ((digitalRead(buttonPin) == HIGH) && (pressed == true)){
     //pressed up
     pressed = false;
@@ -106,7 +107,7 @@ String inString;
 
 void networkit_setup()
 {
-  Serial.begin(115200);
+  Serial.begin(115200);       //Uses Baud rate of 115200, set in serial monitor for debugging
 }
 
 void networkit_loop()
