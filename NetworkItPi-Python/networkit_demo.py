@@ -1,4 +1,4 @@
-from networkit import Client, Message, Field
+from networkit import *
 
 from Tkinter import Tk, Label, Button, Frame
 import tkMessageBox
