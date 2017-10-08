@@ -12,7 +12,7 @@ void setup()
 {
   networkit_setup();      //please leave here
 
-  //Your code here
+  //TODO Your code here
   pinMode(ledPin, OUTPUT);
   pinMode(buttonPin, INPUT_PULLUP);
 }
@@ -23,7 +23,7 @@ void loop()
 {
   networkit_loop();       //please leave here
 
-  //Your code here
+  //TODO Your code here
 
   
   //send message demo
@@ -54,7 +54,7 @@ void loop()
 
 void messageEvent(Message& message)
 {
-  //your code here
+  //TODO your code here
 
 
   //demo, blinks some number of times depending on the message sent
@@ -80,17 +80,17 @@ void messageEvent(Message& message)
 
 void connectEvent()
 {
-  //your code here
+  //TODO your code here
 }
 
 void disconnectEvent()
 {
-  //your code here
+  //TODO your code here
 }
 
 void errorEvent(JsonObject& message)
 {
-  //your code here
+  //TODO your code here
 }
 
 
