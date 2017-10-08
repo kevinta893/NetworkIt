@@ -170,7 +170,7 @@ public class DemoMain extends JFrame {
 	                client = new Client(txtUsername.getText(), txtURL.getText(), port);
 	                client.addConnectListener(new EventListener() {
 	        			@Override
-	        			public void call(Object sender, Object... args) {
+	        			public void call(Object sender, final Object... args) {
 	        				SwingUtilities.invokeLater(new Runnable() {
 								@Override
 								public void run() {
@@ -182,7 +182,7 @@ public class DemoMain extends JFrame {
 	        		});
 	                client.addDisconnectListener(new EventListener() {
 	        			@Override
-	        			public void call(Object sender, Object... args) {
+	        			public void call(Object sender, final Object... args) {
 	        				SwingUtilities.invokeLater(new Runnable() {
 								@Override
 								public void run() {
@@ -194,7 +194,7 @@ public class DemoMain extends JFrame {
 	        		});
 	                client.addMessageListener(new EventListener() {
 	        			@Override
-	        			public void call(Object sender, Object... args) {
+	        			public void call(Object sender, final Object... args) {
 	        				SwingUtilities.invokeLater(new Runnable() {
 								@Override
 								public void run() {
@@ -206,7 +206,7 @@ public class DemoMain extends JFrame {
 	        		});
 	                client.addErrorListener(new EventListener() {
 	        			@Override
-	        			public void call(Object sender, Object... args) {
+	        			public void call(Object sender, final Object... args) {
 	        				SwingUtilities.invokeLater(new Runnable() {
 								@Override
 								public void run() {
