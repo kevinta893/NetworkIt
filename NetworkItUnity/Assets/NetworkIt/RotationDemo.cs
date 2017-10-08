@@ -23,7 +23,7 @@ public class RotationDemo : MonoBehaviour
 
     public void NetworkIt_Message(object m)
     {
-
+        //TODO your code here
         Message message = (Message) m;
 
         int count = 0;
@@ -38,8 +38,9 @@ public class RotationDemo : MonoBehaviour
         mesh.material.color = new Color(0.0f, 1.0f, 0.0f);
     }
 
-    public void NetworkIt_Disconnect()
+    public void NetworkIt_Disconnect(object args)
     {
+        EventArgs eventArgs = (EventArgs)args;
         mesh.material.color = new Color(1.0f, 0.0f, 0.0f);
     }
 
