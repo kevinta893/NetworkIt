@@ -22,7 +22,7 @@ namespace NetworkIt
     public class Client
     {
         private string username = "demo_test_username";
-        private string url = "http://581.cpsc.ucalgary.ca";
+        private string url = "localhost";
         private int port = 8000;
         private Socket client;
 
@@ -121,9 +121,10 @@ namespace NetworkIt
 
         private void RaiseConnected(EventArgs e)
         {
+            //event args e is usually empty
             if (Connected != null)
             {
-                Connected(this, e);
+                Connected(this, new EventArgs());
             }
         }
 
@@ -150,10 +151,11 @@ namespace NetworkIt
         public event EventHandler<EventArgs> Disconnected;
 
         private void RaiseDisconnected()
-        {
+        {            
+            //event args e is usually empty
             if (Disconnected != null)
             {
-                Disconnected(this, null);
+                Disconnected(this, new EventArgs());
             }
         }
 
@@ -195,7 +197,6 @@ namespace NetworkIt
                 this.url = url;
             }
 
-            this.url = url;
         }
 
 

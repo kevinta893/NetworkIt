@@ -6,7 +6,7 @@ using NetworkIt;
 
 public class SendPoke : MonoBehaviour {
 
-    public NetworkItEvents networkInterface;
+    public NetworkItClient networkInterface;
     public bool deliverToSelf = false;
 
     private int messageCount = 0;
