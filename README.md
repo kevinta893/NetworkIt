@@ -92,3 +92,7 @@ node server.js
 
 ## Developers
 Refer to the WPF version which defines the protocol. Use the latest version to structure how the library should operate when porting to other platforms. Prioritize building quick connect and easy to use object serialization through JSON.
+
+## Contributors
+Credit to the following Githubbers who helped improve/develop the library:
+* (your face here)
