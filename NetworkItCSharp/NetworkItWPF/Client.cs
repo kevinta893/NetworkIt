@@ -124,9 +124,10 @@ namespace NetworkIt
 
         private void RaiseConnected(EventArgs e)
         {
+            //event args e is usually empty
             if (Connected != null)
             {
-                Connected(this, e);
+                Connected(this, new EventArgs());
             }
         }
 
@@ -153,13 +154,14 @@ namespace NetworkIt
             }
         }
 
-        public event EventHandler<object> Disconnected;
+        public event EventHandler<EventArgs> Disconnected;
 
         private void RaiseDisconnected()
         {
+            //event args e is usually empty
             if (Disconnected != null)
             {
-                Disconnected(this, null);
+                Disconnected(this, new EventArgs());
             }
         }
 

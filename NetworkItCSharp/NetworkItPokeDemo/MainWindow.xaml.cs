@@ -127,7 +127,7 @@ namespace NetworkItPokeDemo
 
         #region Network Events
 
-        private void Client_Disconnected(object sender, object e)
+        private void Client_Disconnected(object sender, EventArgs e)
         {
             Application.Current.Dispatcher.Invoke(new Action(() =>
             {
