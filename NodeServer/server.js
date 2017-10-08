@@ -1,5 +1,6 @@
 var http = require('http').createServer(handler)
 var io = require('socket.io')(http);
+var fs = require('fs');
 var dateFormat = require('dateformat');
 
 
