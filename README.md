@@ -95,4 +95,4 @@ Refer to the WPF version which defines the protocol. Use the latest version to s
 
 ## Contributors
 Credit to the following Githubbers who helped improve/develop the library:
-* (your face here)
+* (your name here)
