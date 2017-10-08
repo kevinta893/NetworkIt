@@ -39,6 +39,8 @@ io.on('connection', function(socket)
 		clients.push(user);
 		
 		writeLog('Client registered. ' + user.username + '@' + socket.request.connection.remoteAddress + ":" + socket.request.connection.remotePort + "?id=" + socket.id + '?platform=' + user.platform);
+		console.log("Client Count=" + clients.length);
+
 	});
 	
 	//client events
@@ -55,12 +57,14 @@ io.on('connection', function(socket)
 				var user =  clients[i];
 				writeLog('Client disconnected. ' + user.username + '@' + socket.request.connection.remoteAddress + ":" + socket.request.connection.remotePort + "?id=" + socket.id + '?platform=' + user.platform);
 				clients.splice(i, 1);
+				console.log("Client Count=" + clients.length);
 				return;
 			}
 		}
 
         //should never be here if client registered
 		writeLog("Warning, could not find disconnected user. id=" + socket.id);
+		console.log("Client Count=" + clients.length);
     });
 
 
