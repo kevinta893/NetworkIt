@@ -22,7 +22,7 @@ node arduino_network.js
 
 You will have to terminate this client server every time you upload code however. It is recommended that you use the Serial Monitor until you need to use the networking functionality. Remember to use the appropriate **Baud Rate**.
 
-Refer to **Firmware/networkit_template** for the template firmware. Simply refer to the marked TODOs to insert your code as you please. The template also has sample code to show you how to work with the message class and events.
+Refer to **Firmware/networkit_template** for the template firmware. Simply refer to the marked **TODOs** and insert your code as you please. The template also has sample code to show you how to work with the Message class and events.
 
 ### Running the demo
 A wiring diagram has been provided for you. Then upload the Template firmware and start the node connector program to start using the demo. When pushing the push button, it should send a network message which gets delivered back to the Arduino blinking the light (it blinks on any demo message from the other platforms)
