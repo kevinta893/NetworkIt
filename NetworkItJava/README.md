@@ -68,6 +68,10 @@ client.sendMessage(m);
 ```
 
 
+## Making Releases
+Note for compatiablity, please compile for Java 7. This is to ensure the library is also compatiable with Android.
+
+
 ## Libraries Used
 * [okhttp-3.9.0](https://github.com/square/okhttp)
 * [okio-1.13.0](https://github.com/square/okio)
