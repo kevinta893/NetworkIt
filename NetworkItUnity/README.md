@@ -5,9 +5,9 @@ The unity port of the Networkit Library. Additional classes have been added in U
 The unity package contains the usual libraries for Socket.io support and the NetworkIt package. The difference is that we have a NetworkItClient class which can be used as a MonoBehaviour.
 
 1. Add an empty game object with the NetworkItClient script
-2. Configure the network properties
+2. Configure the network properties in the inspector
 3. For any game object that needs to listen to network events, add them to the list of **Event Listeners** in NetworkItClient
-4. Override any of the message signatures in those gameobject's scripts to react to those events.
+4. Override any of the message signatures in those gameobject's scripts to react to network events
 
 Below are the override method signatures you would need to add to your gameobject's scripts (See RotationDemo.cs for example):
 ```C#
