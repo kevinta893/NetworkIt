@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using NetworkIt;
 using System;
+using System.IO;
 
 public class RotationDemo : MonoBehaviour
 {
@@ -46,7 +47,7 @@ public class RotationDemo : MonoBehaviour
 
     public void NetworkIt_Error(object err)
     {
-        System.IO.ErrorEventArgs error = (System.IO.ErrorEventArgs) err;
+        ErrorEventArgs error = (ErrorEventArgs) err;
         Debug.LogError(error);
     }
 }
