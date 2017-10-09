@@ -10,7 +10,7 @@ client.addMessageListener(function(msg)
 client.addConnectListener(function(args)
 {
 	//TODO Your code here!
-	//message recieved
+	//connection established
 	console.log('Client Connected.');
 	document.getElementById("status").innerHTML = 'Connected to Server.';
 	document.getElementById("status_img").src = 'images/green_circle.png';
@@ -19,7 +19,7 @@ client.addConnectListener(function(args)
 client.addDisconnectListener(function(args)
 {
 	//TODO Your code here!
-	//message recieved
+	//Disconnected event
 	console.log('Client Disconnected.');
 	document.getElementById("status").innerHTML = 'Disconnected.';
 	document.getElementById("status_img").src = 'images/red_circle.png';
@@ -28,7 +28,7 @@ client.addDisconnectListener(function(args)
 client.addErrorListener(function(err)
 {
 	//TODO Your code here!
-	//message recieved
+	//Error recieved
 	console.log('Error!' + err);
 });
 
