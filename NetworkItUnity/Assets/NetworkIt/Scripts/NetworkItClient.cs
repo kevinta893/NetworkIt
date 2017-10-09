@@ -8,11 +8,16 @@ using System;
 
 public class NetworkItClient : MonoBehaviour {
 
+    [Header("Network Configuration")]
     public string urlAddress = "localhost";
     public int port = 8000;
-    public string username = "demo_test_username";                                    
+    public string username = "demo_test_username";
 
+    [Header("Network Event Listeners")]
+    [Tooltip("Add game objects here to listen for network events")]
     public GameObject[] eventListeners = new GameObject[0];
+
+
     private volatile LinkedList<Message> messageEvents = new LinkedList<Message>();
     private volatile LinkedList<ErrorEventArgs> errorEvents = new LinkedList<ErrorEventArgs>();
     private volatile LinkedList<EventArgs> connectEvents = new LinkedList<EventArgs>();
