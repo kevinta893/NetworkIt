@@ -9,7 +9,7 @@ class Message
 	
 	addField (key, value)
 	{
-		var f = new Field (key,value)
+		var f = new Field (key.toString(),value.toString())
 		this.fields.push(f);
 	}
 	
@@ -25,6 +25,7 @@ class Message
 			}
 		}
 		
+		console.log("Warning, could not find field with key=" + key);
 		return null;
 	}
 	
