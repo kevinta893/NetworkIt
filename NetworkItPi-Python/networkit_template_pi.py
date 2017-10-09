@@ -85,8 +85,8 @@ def on_connect(args):
 def on_disconnect(args):
     print "Client Disconnected"
 
-def on_error(args):
-    print "Error!" + str(args)
+def on_error(err):
+    print "Error!" + str(err)
 
 
 
