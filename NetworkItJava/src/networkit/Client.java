@@ -27,7 +27,7 @@ public class Client {
 	public Client()
 	{
 		//default settings
-		this("demo_test_username", "http://581.cpsc.ucalgary.ca", 8000);
+		this("demo_test_username", "http://localhost", 8000);
 	}
 	
 	public Client(String username, String url, int port)
