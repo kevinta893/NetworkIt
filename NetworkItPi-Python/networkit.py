@@ -13,7 +13,7 @@ from threading import Thread
 class Client:
 
     username = "demo_test_username"
-    url = "581.cpsc.ucalgary.ca"
+    url = "localhost"
     port = 8000
 
     socket = None

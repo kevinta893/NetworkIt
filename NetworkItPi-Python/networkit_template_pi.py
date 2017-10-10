@@ -18,12 +18,6 @@ count = 0
 network_client = None
 
 def setup():
-    #setup Pins
-    GPIO.setmode(GPIO.BOARD)       # Numbers GPIOs by physical location
-    GPIO.setup(ledPin, GPIO.OUT)   # Set LedPin's mode is output
-    GPIO.setup(buttonPin, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
-    GPIO.output(ledPin, GPIO.LOW) # Set LedPin high(+3.3V) to turn on led
-
     #setup network
     print "Connecting to network..."
     global network_client
@@ -35,10 +29,21 @@ def setup():
     network_client.start_connection()
 
 
+    # TODO your code here
+    #setup Pins
+    GPIO.setmode(GPIO.BOARD)       # Numbers GPIOs by physical location
+    GPIO.setup(ledPin, GPIO.OUT)   # Set LedPin's mode is output
+    GPIO.setup(buttonPin, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+    GPIO.output(ledPin, GPIO.LOW) # Set LedPin high(+3.3V) to turn on led
+
+
+
+
 
 
 def loop():
     while True:
+        # TODO your code here
         global pressed
         if((GPIO.input(buttonPin) == False) and (pressed == False)):
             #on button down
@@ -67,6 +72,7 @@ def loop():
 #Network Events
 
 def on_message(message):
+    # TODO your code here
     print "Message recieved, count=" + message.get_field("count")
 
     blinkCount = int(message.get_field("count")) % 4
@@ -80,12 +86,15 @@ def on_message(message):
 
 
 def on_connect(args):
+    # TODO your code here
     print "Client Connected"
 
 def on_disconnect(args):
+    # TODO your code here
     print "Client Disconnected"
 
 def on_error(err):
+    # TODO your code here
     print "Error!" + str(err)
 
 

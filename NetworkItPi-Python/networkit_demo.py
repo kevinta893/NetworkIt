@@ -43,6 +43,8 @@ class MainWindow(Frame):
 
     def send_poke(self):
         #send a message
+
+        #TODO your code here
         message = Message("Poke!")
         message.add_field("num1", str(1))
         message.add_field("num2", str(4))
@@ -53,15 +55,19 @@ class MainWindow(Frame):
 
 
     def on_message(self, message):
+        # TODO your code here
         print "Message recieved, count=" + message.get_field("count")
 
     def on_connect(self, args):
+        # TODO your code here
         print "Client Connected"
 
     def on_disconnect(self, args):
+        # TODO your code here
         print "Client Disconnected"
 
     def on_error(self, args):
+        # TODO your code here
         print "Error!" + str(args)
 
 
