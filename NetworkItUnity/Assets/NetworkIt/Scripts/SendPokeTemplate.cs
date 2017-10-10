@@ -22,9 +22,9 @@ public class SendPokeTemplate : MonoBehaviour {
         //TODO your code here
         Message m = new Message("Poke!");
         m.DeliverToSelf = deliverToSelf;
-        m.AddField("num1", 3);
-        m.AddField("num2", 4);
-        m.AddField("count", messageCount++);
+        m.AddField("num1", "" + 3);
+        m.AddField("num2", "" + 4);
+        m.AddField("count", "" +  messageCount++);
         networkInterface.SendMessage(m);
     }
 
