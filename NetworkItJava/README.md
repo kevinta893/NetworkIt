@@ -3,7 +3,11 @@
 Java implementation of NetworkIt. Compiles for Java 7 or above. Simply import the Jar and use. Jar also includes a Demo Poke Tester much like the one in WPF. This is useful for non Windows users.
 
 ## How to use
-Simply import the precompiled Jar into your project and import the networkit package. See **demo/CMDMain.java** for an example on how to use.
+Simply import the precompiled Jar into your project and import the networkit package. See **demo/CMDMain.java** for an example on how to use. You may also run the jar through the commandline to get the Poke Demo debug tool:
+
+```bash
+java -jar NetworkItJava.jar
+```
 
 ### Connecting
 Create a Client object and configure it with the appropriate networking information. Setup the appropriate listeners for network events.
