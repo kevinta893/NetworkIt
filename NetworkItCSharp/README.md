@@ -39,9 +39,9 @@ To send a message through the API, create a Message object, and some fields, and
 ```C#
 Message m = new Message("Poke!");
 m.DeliverToSelf = false;
-m.AddField("num1", 3);
-m.AddField("num2", 4);
-m.AddField("count", messageCount++);
+m.AddField("num1", "" + 3);
+m.AddField("num2", "" + 4);
+m.AddField("count", "" + messageCount++);
 
 client.SendMessage(e.ReceivedMessage.ToString());
 ```
