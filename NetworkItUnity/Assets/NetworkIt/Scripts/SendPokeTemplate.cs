@@ -4,7 +4,13 @@ using UnityEngine;
 
 using NetworkIt;
 
-public class SendPoke : MonoBehaviour {
+/// <summary>
+/// This is another template for sending events via game objects or the UI
+/// Need not to use another game object for this purpose. This is to illustrate
+/// how to use the system with say a UI object like a checkbox to activate some 
+/// functionality
+/// </summary>
+public class SendPokeTemplate : MonoBehaviour {
 
     public NetworkItClient networkInterface;
     public bool deliverToSelf = false;
@@ -13,6 +19,7 @@ public class SendPoke : MonoBehaviour {
 
     public void SendPokeMessage()
     {
+        //TODO your code here
         Message m = new Message("Poke!");
         m.DeliverToSelf = deliverToSelf;
         m.AddField("num1", 3);
@@ -23,6 +30,7 @@ public class SendPoke : MonoBehaviour {
 
     public void SetDeliverToSelf(bool b)
     {
+        //TODO your code here
         deliverToSelf = b;
     }
 }
