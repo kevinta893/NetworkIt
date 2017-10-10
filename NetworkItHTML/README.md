@@ -6,7 +6,7 @@ The HTML-Javascript implementation of NetworkIt. Useful for utilizing web APIs s
 Download the entire NetworkItHTML folder which includes a basic HTML index template, CSS file, and javascripts. Refer to **js/main.js** to insert your code.
 
 ### Installation
-You need not to host the HTML on XAMPP or simular hosting software unless you need the other services such as MySQL, PHP, and etc.
+You need not to host the HTML on XAMPP or simular hosting software unless you need the other services such as MySQL, PHP, and etc. To see messages, see your browser's javascript console. (hit F12)
 
 Simply include the scripts in your **index.html** page:
 ```HTML
