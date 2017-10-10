@@ -8,6 +8,7 @@ Download the appropriate releases for your project and import. There are instruc
 
 Current supported platforms:
 * Windows WPF 
+* Java 7+
 * ~~Windows 8 & 8.1 Phones~~
 * Unity (Windows, Mac, Linux), (Android)
 * Python 2.7 (Raspberry Pi Compatiable)
