@@ -13,6 +13,7 @@ Current supported platforms:
 * Unity (Windows, Mac, Linux), (Android)
 * Python 2.7 (Raspberry Pi Compatiable)
 * Arduino (with node.js v7.5.0)
+* Android w/Android Studio
 
 
 ### Using the Library
