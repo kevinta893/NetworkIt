@@ -4,6 +4,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
 import networkit.Client;
@@ -13,6 +14,7 @@ public class MainActivity extends AppCompatActivity {
     private Button btnSendPoke;
     private TextView lblCount;
     private TextView lblConnectionStatus;
+    private CheckBox chkDeliverToSelf;
 
     private Client connection;
 
@@ -26,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
         btnSendPoke = (Button) findViewById(R.id.btnSend);
         lblCount = (TextView) findViewById(R.id.lblCount);
         lblConnectionStatus = (TextView) findViewById(R.id.lblConnectStatus);
+        chkDeliverToSelf = (CheckBox) findViewById(R.id.chkDeliverToSelf);
 
         btnSendPoke.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -40,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
                 m.addField("num1", Integer.toString(9));
                 m.addField("count", Integer.toString(count++));
 
+                m.deliverToSelf = chkDeliverToSelf.isChecked();
 
                 connection.sendMessage(m);
             }
