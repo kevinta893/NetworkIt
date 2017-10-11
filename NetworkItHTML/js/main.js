@@ -2,21 +2,24 @@
 var client = new Client("demo_test_username", 'http://localhost', 8000);
 client.addMessageListener(function(msg)
 {
+	//TODO Your code here!
 	//message recieved
 	console.log(JSON.stringify(msg));
 });
 
-client.addConnectListener(function(msg)
+client.addConnectListener(function(args)
 {
-	//message recieved
+	//TODO Your code here!
+	//connection established
 	console.log('Client Connected.');
 	document.getElementById("status").innerHTML = 'Connected to Server.';
 	document.getElementById("status_img").src = 'images/green_circle.png';
 });
 
-client.addDisconnectListener(function(msg)
+client.addDisconnectListener(function(args)
 {
-	//message recieved
+	//TODO Your code here!
+	//Disconnected event
 	console.log('Client Disconnected.');
 	document.getElementById("status").innerHTML = 'Disconnected.';
 	document.getElementById("status_img").src = 'images/red_circle.png';
@@ -24,14 +27,15 @@ client.addDisconnectListener(function(msg)
 
 client.addErrorListener(function(err)
 {
-	//message recieved
+	//TODO Your code here!
+	//Error recieved
 	console.log('Error!' + err);
 });
 
 
 
 
-//Your code here!
+//TODO Your code here!
 
 //send a message demo
 var message = new Message("hello");

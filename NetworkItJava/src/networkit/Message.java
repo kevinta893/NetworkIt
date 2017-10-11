@@ -4,6 +4,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 
@@ -44,17 +45,22 @@ public class Message {
 	public String toString()
 	{
 		JSONObject convert = new JSONObject();
-		convert.put("subject", this.subject);
-		convert.put("deliverToSelf", this.deliverToSelf);
-		
-		JSONArray jsonFields = new JSONArray();
-		for (Field f : fields)
-		{
-			jsonFields.put(f.toJSONObject());
+		try{
+			convert.put("subject", this.subject);
+			convert.put("deliverToSelf", this.deliverToSelf);
+			
+			JSONArray jsonFields = new JSONArray();
+			for (Field f : fields)
+			{
+				jsonFields.put(f.toJSONObject());
+			}
+			
+			convert.put("fields", jsonFields);
+			
+			
+		} catch (JSONException e) {
+			e.printStackTrace();
 		}
-		
-		convert.put("fields", jsonFields);
-		
 		return convert.toString();
 	}
 	

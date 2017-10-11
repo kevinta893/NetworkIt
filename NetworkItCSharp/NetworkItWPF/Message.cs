@@ -51,16 +51,6 @@ namespace NetworkIt
             this.subject = subject;
         }
 
-        /// <summary>
-        /// Adds a field to the message. Use this to automatically serialize your object to JSON and store it as a string
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="key"></param>
-        /// <param name="value"> Accepts all primitive types, and some classes. Classes are automatically converted into JSON</param>
-        public void AddField<T>(string key, T value)
-        {
-            AddField(key, JsonConvert.SerializeObject(value));
-        }
 
         public void AddField(string key, string value)
         {
@@ -68,28 +58,18 @@ namespace NetworkIt
             this.fields.Add(f);
         }
 
-        /// <summary>
-        /// Gets the value of a field given the key
-        /// 
-        /// </summary>
-        /// <param name="key"></param>
-        /// <returns>Returns default(T) if there is no value associated with the key</returns>
-        public T GetField<T>(string key)
-        {
-            foreach (Field f in this.fields)
-            {
-                if (f.key == key)
-                {
-                    return JsonConvert.DeserializeObject<T>(f.value);
-                }
-            }
-
-            return default(T);
-        }
 
         public string GetField(string key)
         {
-            return GetField<string>(key);
+            foreach (Field f in this.fields)
+            {
+                if (f.key.Equals(key))
+                {
+                    return f.value;
+                }
+            }
+
+            return null;
         }
 
         public override string ToString()

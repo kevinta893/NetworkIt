@@ -1,5 +1,6 @@
 package networkit;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 public class Field {
@@ -20,8 +21,12 @@ public class Field {
 	protected JSONObject toJSONObject()
 	{
 		JSONObject ret = new JSONObject();
-		ret.put("put", key);
-		ret.put("value", value);
+		try{
+			ret.put("put", key);
+			ret.put("value", value);
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
 		return ret;
 	}
 }
