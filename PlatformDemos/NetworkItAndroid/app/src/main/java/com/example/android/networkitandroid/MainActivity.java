@@ -33,11 +33,11 @@ public class MainActivity extends AppCompatActivity {
         btnSendPoke.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 if (connection == null){
                     return;
                 }
 
+                //TODO button clicked
                 networkit.Message m = new networkit.Message("Poke!");
                 m.addField("num1", Integer.toString(1));
                 m.addField("num1", Integer.toString(9));
@@ -49,13 +49,18 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        connection = new Client("demo_test_username", "162.246.156.110", 8000);
+
+
+
+        //Networking
+        connection = new Client("demo_test_username", "localhost", 8000);
         connection.addConnectListener(new Client.EventListener() {
             @Override
             public void call(Object o, final Object... objects) {
                 MainActivity.super.runOnUiThread(new Runnable() {               //needs to run on GUI thread
                     @Override
                     public void run() {
+                        //TODO your code here
                         lblConnectionStatus.setText("Connected!");
                     }
                 });
@@ -68,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
                 MainActivity.super.runOnUiThread(new Runnable() {               //needs to run on GUI thread
                     @Override
                     public void run() {
+                        //TODO your code here
                         networkit.Message m = (networkit.Message) objects[0];
                         lblCount.setText("Count="+ Integer.parseInt(m.getField("count")));
                     }
@@ -81,6 +87,7 @@ public class MainActivity extends AppCompatActivity {
                 MainActivity.super.runOnUiThread(new Runnable() {               //needs to run on GUI thread
                     @Override
                     public void run() {
+                        //TODO your code here
                         lblConnectionStatus.setText("Disconnected");
                     }
                 });
@@ -93,6 +100,7 @@ public class MainActivity extends AppCompatActivity {
                 MainActivity.super.runOnUiThread(new Runnable() {               //needs to run on GUI thread
                     @Override
                     public void run() {
+                        //TODO your code here
                         lblConnectionStatus.setText("Error!" + objects[0].toString());
                     }
                 });
