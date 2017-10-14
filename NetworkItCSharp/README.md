@@ -6,7 +6,7 @@ This project also includes a debugging tool called the NetworkItPokeDemo. It is 
 
 ### How to use
 
-You will need to import the DLLs into your project. Do this by right clicking right-clicking on your project in Visual Studio and go to *Add > Reference*. Recommended to create a folder inside your project to store the DLLs to ensure your project can find them on other computers.
+You will need to import all the DLLs from the [release](https://github.com/kevinta893/NetworkIt/releases) into your Visual Studio Project. Do this by right-clicking on your project in Visual Studio and go to *Add > Reference...*. Recommended to create a local library folder inside your project folder to store the DLLs to ensure your project can find them on other computers.
 
 
 #### 1. Connecting
