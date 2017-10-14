@@ -15,12 +15,12 @@ npm install socket.io@2.0.3
 npm install serialport@5.0.0
 ```
 
-Then, everytime you upload changes your program to Arduino, you must start the node server:
+Then, everytime you need to use networking you must start the node server:
 ```bash
 node arduino_network.js
 ```
 
-You will have to terminate this client server every time you upload code however. It is recommended that you use the Serial Monitor until you need to use the networking functionality. Remember to use the appropriate **Baud Rate**.
+You will have to terminate this client server every time you upload code to your arduino or you will get a "Port in use" error from the Arduino IDE. It is recommended that you use the Serial Monitor until you need to use the networking functionality. Remember to use the appropriate **Baud Rate**.
 
 Refer to **Firmware/networkit_template** for the template firmware. Simply refer to the marked **TODOs** and insert your code as you please. The template also has sample code to show you how to work with the Message class and events.
 
