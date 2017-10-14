@@ -6,7 +6,7 @@ Originally developed by: David Ledo & Brennan Jones
 The predecessor to the Original NetworkIt was [iNetwork](http://grouplab.cpsc.ucalgary.ca/cookbook/index.php/Toolkits/INetwork) by Sebastian Boring
 
 ## For Students
-Download the appropriate releases for your project and import. There are instructions on how to import in each platform release. There is also a demo program in each platform that shows how to use the API on the platform
+Download the latest [release](https://github.com/kevinta893/NetworkIt/releases) for your project and import. There are instructions on how to import in each platform release. There is also a demo program in each platform that shows how to use the API on the platform
 
 Current supported platforms:
 * Windows WPF 
