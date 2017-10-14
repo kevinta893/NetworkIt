@@ -9,7 +9,7 @@ There is a template code to use called **networkit_template_pi.py**. To use this
 The template code is meant to look like what you would expect from Arduino's interface. You need not to follow this convention when using this library. See **networkit_demo.py** for a object-oriented version.
 
 ### Installation
-To install the required socket.io library package, use PIP on the package:
+To install the required socket.io library package, use PIP on the package (internet required):
 ```bash
 pip install socketIO-client-0.7.2.tar.gz
 ```
