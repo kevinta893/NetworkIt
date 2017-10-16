@@ -31,7 +31,7 @@ A wiring diagram has been provided for you. Then upload the Template firmware an
 The Arduino has a limited SDRAM space (the Uno Rev3 having only 2k RAM total). Thus there have been memory optimizations from ArduinoJSON and the NetworkIt Library itself. Some points of the code if memory optimization is a must:
 * See variables *jsonWriteBuffer* and *jsonReadBuffer*, these can affect how much data can be read from a single string message. You may want to trim your message keys and values down if you find that messages are not reading.
 * See constant *MAX_FIELDS* in libraries/Message.h, this is the limit of how many fields that can exist in a message at one time. Change as necessary.
-* Do not use the `delay()` function as this will hang up the processor and not allow messages to be received in that time window. Instead, use the  `unsigned long currentMillis = millis()` function if you need to delay anything in your program. See Adafruit's article on how to ditch the delay() function: https://learn.adafruit.com/multi-tasking-the-arduino-part-1/ditch-the-delay
+* **Do not use the `delay()`** function as this will hang up the processor and not allow messages to be received in that time window. Instead, use the  `unsigned long currentMillis = millis()` function if you need to delay anything in your program. See Adafruit's article on how to ditch the delay() function: https://learn.adafruit.com/multi-tasking-the-arduino-part-1/ditch-the-delay
 
 ## Libraries Used:
 * socket.io-client@2.0.3
