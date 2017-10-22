@@ -24,7 +24,7 @@ Use the following Prefabs to add 360+Cardboard functionality to your projects
 ### NetworkItUnity
 The library for NetworkItUnity is the same. Refer to the [NetworkItUnity](https://github.com/kevinta893/NetworkIt/tree/master/NetworkItUnity) folder for more information on how to use.
 
-### Libraries Used
+## Libraries Used
 * [googlevr/gvr-unity-sdk (v1.100.1)](https://github.com/googlevr/gvr-unity-sdk)
 * [Unity-Technologies/SkyboxPanoramicShader](https://github.com/Unity-Technologies/SkyboxPanoramicShader)
 * [kevinta893/Unity360Video](https://github.com/kevinta893/Unity360Video)
