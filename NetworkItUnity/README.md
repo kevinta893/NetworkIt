@@ -1,5 +1,5 @@
 # NetworkIt Unity
-The unity port of the Networkit Library. Additional classes have been added in Unity to support the program paradigm there. The supported Unity version for this library is Unity 5.6.3f1.
+The unity port of the Networkit Library. Additional classes have been added in Unity to support the program paradigm there. The supported Unity version for this library is Unity 2017. The libraries used are .NET 3.5.
 
 ## How to use
 The unity package contains the usual libraries for Socket.io support and the NetworkIt package. The difference is that we have a NetworkItClient class which can be used as a MonoBehaviour.
@@ -63,5 +63,4 @@ Player settings:
 ## Libraries used
 
 * Newtonsoft JSON 10.0.3 (.NET 2.0)
-* [socket.io-unity](https://github.com/floatinghotpot/socket.io-unity)
-    * WebSocket4Net (precompiled from floating hotspot), see [official repo](https://github.com/kerryjiang/WebSocket4Net)
+* [Quobject/SocketIoClientDotNet](https://github.com/Quobject/SocketIoClientDotNet)
