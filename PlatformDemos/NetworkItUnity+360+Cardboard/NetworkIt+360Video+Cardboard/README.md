@@ -11,11 +11,12 @@ To change the 360 video, see notes from: [kevinta893/Unity360Video](https://gith
 To run all three pieces together, you will need to setup your *Player Settings* (PC, Android, iOS):
 * All platforms:
   * Other Settings > Api Compatibility Level = **.NET 2.0**
-  * XR Settings > Virtual Reality Supported = **Checked**, and add Cardboard to the list
+  * XR Settings > Virtual Reality Supported = **true**, and add **Cardboard** to the list
 
 * Android:
   * Other Settings > Minimum API Level = **Android 4.4 (API level 19)**
-
+  * Resolution and Presentation > Multithreaded Rendering = **false** (If you are experiencing 360 video stuttering, turn off)
+  
 ### Prefabs
 Use the following Prefabs to add 360+Cardboard functionality to your projects
 * **Cardboard360Camera** - A prefab that adds a 360 Video player and GVR reticle. You can change your video here.
