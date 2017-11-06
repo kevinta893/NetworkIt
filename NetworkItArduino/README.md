@@ -11,7 +11,7 @@ var port = 8000;
 
 Now install the required node libraries (or use extract node_modules.zip in the same folder)
 ```bash
-npm install socket.io@2.0.3
+npm install socket.io-client@2.0.3
 npm install serialport@5.0.0
 ```
 
