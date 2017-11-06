@@ -1,5 +1,5 @@
 var username = 'demo_test_username';			//defaults
-var url = 'http://581.cpsc.ucalgary.ca';
+var url = 'http://localhost';
 var port = 8000;
 
 var SERIAL_BAUD_RATE = 115200;					//make sure this is the same in Arduino and Serial Monitor
