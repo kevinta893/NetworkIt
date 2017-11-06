@@ -20,6 +20,12 @@ Then, everytime you need to use networking you must start the node server:
 node arduino_network.js
 ```
 
+Altneratively, you can specify a serial port to connect to using the com-name:
+```bash
+node arduino_network.js COM5
+```
+The connector also support multiple Arduinos connected simultaneously. Simply start a new instance for each Arduino (autoconnect when only one Arduino detected).
+
 You will have to terminate this client server every time you upload code to your arduino or you will get a "Port in use" error from the Arduino IDE. It is recommended that you use the Serial Monitor until you need to use the networking functionality. Remember to use the appropriate **Baud Rate**.
 
 Refer to **Firmware/networkit_template** for the template firmware. Simply refer to the marked **TODOs** and insert your code as you please. The template also has sample code to show you how to work with the Message class and events.
