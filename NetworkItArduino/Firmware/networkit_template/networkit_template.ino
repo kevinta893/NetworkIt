@@ -10,7 +10,7 @@ int messageCount = 0;
 
 void setup() 
 {
-  networkit_setup();      //please leave here
+  networkit_setup();      //please leave here, Serial.begin(115200) has been called for you
 
   //TODO Your code here
   pinMode(ledPin, OUTPUT);
