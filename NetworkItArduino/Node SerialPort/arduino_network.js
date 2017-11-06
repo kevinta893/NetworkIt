@@ -3,6 +3,7 @@ var url = 'http://581.cpsc.ucalgary.ca';
 var port = 8000;
 
 var SERIAL_BAUD_RATE = 115200;					//make sure this is the same in Arduino and Serial Monitor
+var LINE_TERMINATOR = '\n';
 
 var socket = require('socket.io-client');
 var serialport = require('serialport');
@@ -15,7 +16,7 @@ var NETWORK_SEND_HEADER = 'send_networkit_message=';
 var NETWORK_SEND_END_HEADER = '=send_end';
 
 //=================================
-//Serialport connection to Arduino
+//Stage 1: get serial port COM name from user
 
 //get args if any
 var argv = process.argv.slice(2);
@@ -108,7 +109,8 @@ else{
 
 
 
-
+//============================================
+// Stage 2: Open a serial port to arduino
 
 
 //opens a serial port connection with the COM name, starts socket.io connection when done
@@ -124,7 +126,6 @@ function initSerialPort(comName)
 		console.log("Arduino serialport connected.");
 		
 		//serial port is ready, now start network connection
-		console.log("Connecting to NetworkIt server: " + username + "@" + url + ":" + port.toString());
 		initSocketIO();
 		
 	});
@@ -177,21 +178,22 @@ function initSerialPort(comName)
 
 
 //=================================
-//Socket.io
+//Stage 3: Establish connection to NetworkIt
 
 function initSocketIO()
 {
+	console.log("Connecting to NetworkIt server: " + username + "@" + url + ":" + port.toString());
 	socket = socket(url + ':' + port);
 
 	socket.on('connect', function (data) 
 	{
-		console.log('Connected to Server. ' + socket.id);			
 		socket.emit('client_connect', 
 		{ 
 			username: username,
 			platform : 'Arduino'
 		});
-
+		console.log('Connected to NetworkItServer. ' + socket.id);			
+		console.log('NetworkIt is ready and is listening for messages.');
 		emitEvent('connect', data);
 	});
 
@@ -214,7 +216,8 @@ function initSocketIO()
 	});
 }
 
-
+//=======================================
+//NetworkIt-serial functions
 
 //sends event to arduino
 function emitEvent(eventName, args)
@@ -232,7 +235,7 @@ function emitEvent(eventName, args)
 function sendMessageArduino(msg)
 {
 		
-	arduinoPort.write(msg + '\n' ,function(){
+	arduinoPort.write(msg + LINE_TERMINATOR ,function(){
 		console.log("Serial message sent=" + msg);
 	});
 	
