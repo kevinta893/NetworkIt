@@ -7,7 +7,8 @@ public class BodySourceView : MonoBehaviour
 {
     public Material BoneMaterial;
     public GameObject BodySourceManager;
-    
+    public GameObject[] bodyEventListeners;
+
     private Dictionary<ulong, GameObject> _Bodies = new Dictionary<ulong, GameObject>();
     private BodySourceManager _BodyManager;
     
@@ -85,6 +86,7 @@ public class BodySourceView : MonoBehaviour
             {
                 Destroy(_Bodies[trackingId]);
                 _Bodies.Remove(trackingId);
+                EmitEventBodyDeleted(trackingId);
             }
         }
 
@@ -99,7 +101,9 @@ public class BodySourceView : MonoBehaviour
             {
                 if(!_Bodies.ContainsKey(body.TrackingId))
                 {
-                    _Bodies[body.TrackingId] = CreateBodyObject(body.TrackingId);
+                    GameObject parentBody = CreateBodyObject(body.TrackingId);
+                    _Bodies[body.TrackingId] = parentBody;
+                    EmitEventNewBody(parentBody, body.TrackingId);
                 }
                 
                 RefreshBodyObject(body, _Bodies[body.TrackingId]);
@@ -110,7 +114,7 @@ public class BodySourceView : MonoBehaviour
     private GameObject CreateBodyObject(ulong id)
     {
         GameObject body = new GameObject("Body:" + id);
-        
+
         for (Kinect.JointType jt = Kinect.JointType.SpineBase; jt <= Kinect.JointType.ThumbRight; jt++)
         {
             GameObject jointObj = GameObject.CreatePrimitive(PrimitiveType.Cube);
@@ -123,7 +127,7 @@ public class BodySourceView : MonoBehaviour
             jointObj.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f);
             jointObj.name = jt.ToString();
             jointObj.transform.parent = body.transform;
-            jointObj.tag = "KinectBody_Joint";
+
         }
 
         return body;
@@ -158,6 +162,30 @@ public class BodySourceView : MonoBehaviour
         }
     }
     
+    public GameObject[] GetBodies()
+    {
+        GameObject[] ret = new GameObject[_Bodies.Values.Count];
+        _Bodies.Values.CopyTo(ret, 0);
+        return ret;
+    }
+
+
+    private void EmitEventNewBody(GameObject bodyParent, ulong id)
+    {
+        foreach (GameObject g in bodyEventListeners)
+        {
+            g.SendMessage("Kinect_BodyFound", new BodyGameObject(bodyParent, id), SendMessageOptions.RequireReceiver);
+        }
+    }
+
+    private void EmitEventBodyDeleted(ulong id)
+    {
+        foreach (GameObject g in bodyEventListeners)
+        {
+            g.SendMessage("Kinect_BodyDeleted", id, SendMessageOptions.RequireReceiver);
+        }
+    }
+
     private static Color GetColorForState(Kinect.TrackingState state)
     {
         switch (state)
@@ -177,4 +205,5 @@ public class BodySourceView : MonoBehaviour
     {
         return new Vector3(joint.Position.X * 10, joint.Position.Y * 10, joint.Position.Z * 10);
     }
+
 }
