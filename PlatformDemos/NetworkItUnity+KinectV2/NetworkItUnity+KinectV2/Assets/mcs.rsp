@@ -1,0 +1,1 @@
+-reference:SocketIoClientDotNet=Assets\NetworkIt\Plugins\SocketIoClientDotNet.dll -reference:WebSocket4Net=Assets\NetworkIt\Plugins\WebSocket4Net.dll
