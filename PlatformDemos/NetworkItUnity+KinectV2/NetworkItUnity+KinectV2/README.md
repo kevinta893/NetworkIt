@@ -32,6 +32,10 @@ GameObject thumbRight = bodyFound.GetJoint(Windows.Kinect.JointType.ThumbRight);
 Vector3 thumbPosition = thumbRight.transform.localPosition;
 ```
 
+### NetworkItUnity
+The main functionality and features of NetworkItUnity has not changed. Refer to the [NetworkItUnity](https://github.com/kevinta893/NetworkIt/tree/master/NetworkItUnity) folder for more information on how to use.
+
+
 ### Troubleshooting
 
 Some potential errors:
@@ -40,8 +44,7 @@ Some potential errors:
 
 
 
-### NetworkItUnity
-The main functionality and features of NetworkItUnity has not changed. Refer to the [NetworkItUnity](https://github.com/kevinta893/NetworkIt/tree/master/NetworkItUnity) folder for more information on how to use.
+
 
 ## Libraries Used
 * Microsoft's KinectForWindows_UnityPro_2.0.1410
