@@ -14,9 +14,11 @@ public class BodyNetworkTemplate : MonoBehaviour {
 
 	void Start () {
         mesh = GetComponent<MeshRenderer>();
-	}
-	
-	void Update () {
+        mesh.material.color = new Color(1.0f, 0.0f, 0.0f);
+
+    }
+
+    void Update () {
         //TODO Your code here
         if (bodies.Count > 0)
         {
@@ -26,9 +28,9 @@ public class BodyNetworkTemplate : MonoBehaviour {
             GameObject handTipRight = bodies[0].GetJoint(Windows.Kinect.JointType.HandTipRight);
 
             float wristRotation = VerticalWristRotation(
-                thumbRight.transform.position,
-                handRight.transform.position,
-                handTipRight.transform.position
+                thumbRight.transform.localPosition,
+                handRight.transform.localPosition,
+                handTipRight.transform.localPosition
                 );
 
             //send the rotation
@@ -67,7 +69,7 @@ public class BodyNetworkTemplate : MonoBehaviour {
         bodies.Add(bodyFound);
     }
 
-    void Kinect_BodyDeleted(object args)
+    void Kinect_BodyLost(object args)
     {
         ulong bodyDeletedId = (ulong) args;
 
@@ -83,7 +85,8 @@ public class BodyNetworkTemplate : MonoBehaviour {
         }
     }
 
-
+    //===================================
+    //network messages
 
     public void NetworkIt_Message(object m)
     {

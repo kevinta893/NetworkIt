@@ -10,6 +10,7 @@ public class BodySourceView : MonoBehaviour
     public GameObject[] bodyEventListeners;
 
     private Dictionary<ulong, GameObject> _Bodies = new Dictionary<ulong, GameObject>();
+    private Dictionary<ulong, BodyGameObject> bodiesGameObjects = new Dictionary<ulong, BodyGameObject>();
     private BodySourceManager _BodyManager;
     
     private Dictionary<Kinect.JointType, Kinect.JointType> _BoneMap = new Dictionary<Kinect.JointType, Kinect.JointType>()
@@ -84,9 +85,11 @@ public class BodySourceView : MonoBehaviour
         {
             if(!trackedIds.Contains(trackingId))
             {
+                //body lost
                 Destroy(_Bodies[trackingId]);
                 _Bodies.Remove(trackingId);
-                EmitEventBodyDeleted(trackingId);
+                bodiesGameObjects.Remove(trackingId);
+                EmitEventBodyLost(trackingId);
             }
         }
 
@@ -101,9 +104,12 @@ public class BodySourceView : MonoBehaviour
             {
                 if(!_Bodies.ContainsKey(body.TrackingId))
                 {
+                    //new body found
                     GameObject parentBody = CreateBodyObject(body.TrackingId);
                     _Bodies[body.TrackingId] = parentBody;
-                    EmitEventNewBody(parentBody, body.TrackingId);
+                    BodyGameObject gameBodyObject = new BodyGameObject(parentBody, body.TrackingId);
+                    bodiesGameObjects.Add(gameBodyObject.ID, gameBodyObject);
+                    EmitEventNewBody(gameBodyObject);
                 }
                 
                 RefreshBodyObject(body, _Bodies[body.TrackingId]);
@@ -162,27 +168,32 @@ public class BodySourceView : MonoBehaviour
         }
     }
     
-    public GameObject[] GetBodies()
+    public BodyGameObject[] GetBodies()
     {
-        GameObject[] ret = new GameObject[_Bodies.Values.Count];
-        _Bodies.Values.CopyTo(ret, 0);
+        BodyGameObject[] ret = new BodyGameObject[_Bodies.Values.Count];
+        bodiesGameObjects.Values.CopyTo(ret, 0);
         return ret;
     }
 
+    public BodyGameObject GetBody(ulong id)
+    {
+        return bodiesGameObjects[id];
+    }
 
-    private void EmitEventNewBody(GameObject bodyParent, ulong id)
+
+    private void EmitEventNewBody(BodyGameObject newBody)
     {
         foreach (GameObject g in bodyEventListeners)
         {
-            g.SendMessage("Kinect_BodyFound", new BodyGameObject(bodyParent, id), SendMessageOptions.RequireReceiver);
+            g.SendMessage("Kinect_BodyFound", newBody, SendMessageOptions.RequireReceiver);
         }
     }
 
-    private void EmitEventBodyDeleted(ulong id)
+    private void EmitEventBodyLost(ulong id)
     {
         foreach (GameObject g in bodyEventListeners)
         {
-            g.SendMessage("Kinect_BodyDeleted", id, SendMessageOptions.RequireReceiver);
+            g.SendMessage("Kinect_BodyLost", id, SendMessageOptions.RequireReceiver);
         }
     }
 

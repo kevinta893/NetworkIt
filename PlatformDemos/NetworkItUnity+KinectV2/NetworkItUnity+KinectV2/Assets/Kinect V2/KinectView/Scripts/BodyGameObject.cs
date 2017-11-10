@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using Kinect = Windows.Kinect;
 
 
-class BodyGameObject
+public class BodyGameObject
 {
 
     private ulong id;
