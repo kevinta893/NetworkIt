@@ -570,7 +570,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 817f06635659025438ea233adf8ddd93, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  urlAddress: 581.cpsc.ucalgary.ca
+  urlAddress: localhost
   port: 8000
   username: demo_test_username
   eventListeners:
