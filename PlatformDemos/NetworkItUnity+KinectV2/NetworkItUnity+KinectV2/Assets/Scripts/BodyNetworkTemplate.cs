@@ -7,15 +7,15 @@ using NetworkIt;
 
 public class BodyNetworkTemplate : MonoBehaviour {
 
-    private List<BodyGameObject> bodies = new List<BodyGameObject>();
+    public NetworkItClient networkItClient;
 
+    private List<BodyGameObject> bodies = new List<BodyGameObject>();
     private MeshRenderer mesh;
-	// Use this for initialization
+
 	void Start () {
         mesh = GetComponent<MeshRenderer>();
 	}
 	
-	// Update is called once per frame
 	void Update () {
         //TODO Your code here
         if (bodies.Count > 0)
@@ -25,13 +25,18 @@ public class BodyNetworkTemplate : MonoBehaviour {
             GameObject handRight = bodies[0].GetJoint(Windows.Kinect.JointType.HandRight);
             GameObject handTipRight = bodies[0].GetJoint(Windows.Kinect.JointType.HandTipRight);
 
-            float angle = VerticalWristRotation(
+            float wristRotation = VerticalWristRotation(
                 thumbRight.transform.position,
                 handRight.transform.position,
                 handTipRight.transform.position
                 );
-            Debug.Log(angle);
-            this.transform.rotation = Quaternion.Euler(0, angle, 0);
+
+            //send the rotation
+            Message wristRotationMessage = new Message("WristRotation");
+            wristRotationMessage.AddField("angle", "" + wristRotation);
+            wristRotationMessage.DeliverToSelf = true;
+            networkItClient.SendMessage(wristRotationMessage);
+
         }
     }
 
@@ -85,10 +90,11 @@ public class BodyNetworkTemplate : MonoBehaviour {
         //TODO your code here
         Message message = (Message)m;
 
-        int count = 0;
-        int.TryParse(message.GetField("count"), out count);
+        float wristRotation = 0;
+        float.TryParse(message.GetField("angle"), out wristRotation);
 
-        this.transform.rotation = Quaternion.Euler(0, count * 10, 0);
+        this.transform.rotation = Quaternion.Euler(0, wristRotation, 0);
+
     }
 
     public void NetworkIt_Connect(object args)
