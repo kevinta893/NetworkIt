@@ -263,9 +263,9 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 257076398}
-  - component: {fileID: 257076397}
   - component: {fileID: 257076399}
   - component: {fileID: 257076400}
+  - component: {fileID: 257076397}
   m_Layer: 0
   m_Name: DepthView
   m_TagString: Untagged
@@ -281,13 +281,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 257076396}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 383e102cbe3bfb34d94c98ea3c2479b4, type: 3}
+  m_Script: {fileID: 11500000, guid: c595065b1d440f14c86a91c7891cc40f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ViewMode: 1
-  ColorSourceManager: {fileID: 0}
-  DepthSourceManager: {fileID: 0}
-  MultiSourceManager: {fileID: 0}
+  ViewMode: 0
+  kinectManager: {fileID: 924557250}
 --- !u!4 &257076398
 Transform:
   m_ObjectHideFlags: 0
@@ -546,7 +544,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &924557249
 GameObject:
@@ -585,8 +583,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 1777774367}
-  m_RootOrder: 4
+  m_Father: {fileID: 0}
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &934010673
 GameObject:
@@ -780,7 +778,7 @@ Transform:
   m_LocalScale: {x: 2, y: 2, z: 2}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 45, y: 45, z: 0}
 --- !u!1 &1608503454
 GameObject:
@@ -996,7 +994,6 @@ Transform:
   - {fileID: 934010678}
   - {fileID: 1988608401}
   - {fileID: 1608503459}
-  - {fileID: 924557251}
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
