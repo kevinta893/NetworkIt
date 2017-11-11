@@ -72,5 +72,10 @@ public class BodyGameObject
     {
         return joints[jType];
     }
+
+    public GameObject GetBodyParent()
+    {
+        return parent;
+    }
 }
 
