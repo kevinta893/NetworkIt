@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using OpenCvSharp;
 using Windows.Kinect;
-
+using System;
+using System.Runtime.InteropServices;
 
 /// <summary>
 /// Use this script for programming advanced sensor based computer visioning.
@@ -26,7 +27,7 @@ public class KinectManager : MonoBehaviour {
 
     //color data
     private Texture2D _ColorTexture;
-    private byte[] _ColorData;
+    private byte[] _ColorRawData;
 
     //depth data
     private ushort[] _DepthData;
@@ -51,7 +52,7 @@ public class KinectManager : MonoBehaviour {
             ColorWidth = colorFrameDesc.Width;
             ColorHeight = colorFrameDesc.Height;
             _ColorTexture = new Texture2D(colorFrameDesc.Width, colorFrameDesc.Height, TextureFormat.RGBA32, false);
-            _ColorData = new byte[colorFrameDesc.BytesPerPixel * colorFrameDesc.LengthInPixels];
+            _ColorRawData = new byte[colorFrameDesc.BytesPerPixel * colorFrameDesc.LengthInPixels];
 
 
             //depth
@@ -69,7 +70,7 @@ public class KinectManager : MonoBehaviour {
 
             _IRData = new ushort[irFrameDesc.LengthInPixels];
             _IRRawData = new byte[irFrameDesc.LengthInPixels * 4];
-            _IRTexture = new Texture2D(irFrameDesc.Width, irFrameDesc.Height, TextureFormat.BGRA32, false);
+            _IRTexture = new Texture2D(irFrameDesc.Width, irFrameDesc.Height, TextureFormat.RGBA32, false);
 
 
             //body
@@ -87,9 +88,77 @@ public class KinectManager : MonoBehaviour {
             OnApplicationQuit();        //clear and close the kinect stream if possible.
         }
     }
-	
-	// Update is called once per frame
-	void Update () {
+
+
+    void Update () {
+        UpdateKinect();                         //leave here, updates kinect sensor data for Unity
+
+        //TODO, your Computer vision code here
+
+        DemoIRBlobTrack();
+    }
+
+    private void DemoIRBlobTrack()
+    {
+        //get image and convert to threshold image
+        Mat irImage = new Mat(IRWidth, IRHeight, MatType.CV_8UC4, _IRRawData);
+        Mat ir8Bit = new Mat();
+        Cv2.CvtColor(irImage, ir8Bit, ColorConversionCodes.RGBA2GRAY);
+        Cv2.Threshold(ir8Bit, ir8Bit, thresh: 100, maxval: 255, type: ThresholdTypes.Binary);
+
+
+        SimpleBlobDetector.Params detectorParams = new SimpleBlobDetector.Params
+        {
+            //MinDistBetweenBlobs = 10, // 10 pixels between blobs
+            //MinRepeatability = 1,
+
+            //MinThreshold = 100,
+            //MaxThreshold = 255,
+            //ThresholdStep = 5,
+
+            FilterByArea = false,
+            //FilterByArea = true,
+            //MinArea = 0.001f, // 10 pixels squared
+            //MaxArea = 500,
+
+            FilterByCircularity = false,
+            //FilterByCircularity = true,
+            //MinCircularity = 0.001f,
+
+            FilterByConvexity = false,
+            //FilterByConvexity = true,
+            //MinConvexity = 0.001f,
+            //MaxConvexity = 10,
+
+            FilterByInertia = false,
+            //FilterByInertia = true,
+            //MinInertiaRatio = 0.001f,
+
+            FilterByColor = false
+            //FilterByColor = true,
+            //BlobColor = 255 // to extract light blobs
+        };
+
+        SimpleBlobDetector simpleBlobDetector = SimpleBlobDetector.Create(detectorParams);
+        KeyPoint[] blobs = simpleBlobDetector.Detect(ir8Bit);
+        
+        Debug.Log("blobCount" + blobs.Length);
+
+        Mat irImageKeyPoints = new Mat();
+        Cv2.DrawKeypoints(ir8Bit, blobs, irImageKeyPoints, color: Scalar.FromRgb(255, 0, 0),
+                    flags: DrawMatchesFlags.DrawRichKeypoints);
+
+        Mat irImageOut = new Mat(IRWidth, IRHeight, MatType.CV_8UC4);
+        Cv2.CvtColor(irImageKeyPoints, irImageOut, ColorConversionCodes.RGB2RGBA);
+
+        simpleBlobDetector.Dispose();
+        _IRTexture.LoadRawTextureData(ConvertMatToBytes(irImageOut));
+        _IRTexture.Apply();
+    }
+
+
+    void UpdateKinect()
+    {
         if (_Reader != null)
         {
             MultiSourceFrame frame = _Reader.AcquireLatestFrame();
@@ -103,8 +172,8 @@ public class KinectManager : MonoBehaviour {
                     DepthFrame depthFrame = frame.DepthFrameReference.AcquireFrame();
                     if (depthFrame != null)
                     {
-                        colorFrame.CopyConvertedFrameDataToArray(_ColorData, ColorImageFormat.Rgba);
-                        _ColorTexture.LoadRawTextureData(_ColorData);
+                        colorFrame.CopyConvertedFrameDataToArray(_ColorRawData, ColorImageFormat.Rgba);
+                        _ColorTexture.LoadRawTextureData(_ColorRawData);
                         _ColorTexture.Apply();
 
                         depthFrame.CopyFrameDataToArray(_DepthData);
@@ -112,7 +181,6 @@ public class KinectManager : MonoBehaviour {
                         depthFrame.Dispose();
                         depthFrame = null;
                     }
-                    
 
                     colorFrame.Dispose();
                     colorFrame = null;
@@ -143,10 +211,11 @@ public class KinectManager : MonoBehaviour {
                     irFrame = null;
                 }
 
+
+                //body processing
                 BodyFrame bodyFrame = frame.BodyFrameReference.AcquireFrame();
                 if (bodyFrame != null)
                 {
-                    //body processing
                     if (_BodyData == null)
                     {
                         _BodyData = new Body[_Sensor.BodyFrameSource.BodyCount];
@@ -160,10 +229,7 @@ public class KinectManager : MonoBehaviour {
                 frame = null;
             }
         }
-
     }
-
-
 
 
     #region Debug Drawing functions
@@ -299,6 +365,17 @@ public class KinectManager : MonoBehaviour {
     }
     #endregion
 
+    #region Utility Functions
+
+    public static byte[] ConvertMatToBytes(Mat img)
+    {
+        int renderSize = img.Width * img.Height * img.Channels();
+        byte[] ret = new byte[renderSize];
+        Marshal.Copy(img.Data, ret, 0, renderSize);
+        return ret;
+    }
+
+    #endregion
 
     //=================================================
     //public accessor functions
@@ -308,14 +385,27 @@ public class KinectManager : MonoBehaviour {
         return _ColorTexture;
     }
 
+    //TextureFormat.RGBA32, 8-bit 4 channel
+    public byte[] GetColorRawData()
+    {
+        return _ColorRawData;
+    }
+
     public ushort[] GetDepthData()
     {
         return _DepthData;
     }
 
+
     public Texture2D GetInfraredTexture()
     {
         return _IRTexture;
+    }
+
+    //TextureFormat.BGRA32, 8-bit 4 channel
+    public byte[] GetIRRawData()
+    {
+        return _IRRawData;
     }
 
     public Body[] GetBodyData()
