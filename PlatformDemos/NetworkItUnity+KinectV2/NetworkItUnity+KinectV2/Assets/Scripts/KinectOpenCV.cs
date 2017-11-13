@@ -28,7 +28,7 @@ public class KinectOpenCV : MonoBehaviour {
     //color data
     private Texture2D _ColorTexture;
     private byte[] _ColorData;
-    RenderTexture thing;
+
     //depth data
     private ushort[] _DepthData;
 
@@ -93,15 +93,15 @@ public class KinectOpenCV : MonoBehaviour {
 	void Update () {
         if (_Reader != null)
         {
-            var frame = _Reader.AcquireLatestFrame();
+            MultiSourceFrame frame = _Reader.AcquireLatestFrame();
             if (frame != null)
             {
 
                 //color processing with depth
-                var colorFrame = frame.ColorFrameReference.AcquireFrame();
+                ColorFrame colorFrame = frame.ColorFrameReference.AcquireFrame();
                 if (colorFrame != null)
                 {
-                    var depthFrame = frame.DepthFrameReference.AcquireFrame();
+                    DepthFrame depthFrame = frame.DepthFrameReference.AcquireFrame();
                     if (depthFrame != null)
                     {
                         colorFrame.CopyConvertedFrameDataToArray(_ColorData, ColorImageFormat.Rgba);
@@ -113,6 +113,7 @@ public class KinectOpenCV : MonoBehaviour {
                         depthFrame.Dispose();
                         depthFrame = null;
                     }
+                    
 
                     colorFrame.Dispose();
                     colorFrame = null;
@@ -120,13 +121,13 @@ public class KinectOpenCV : MonoBehaviour {
                 }
 
                 //ir processing
-                var irFrame = frame.InfraredFrameReference.AcquireFrame();
+                InfraredFrame irFrame = frame.InfraredFrameReference.AcquireFrame();
                 if (irFrame != null)
                 {
                     irFrame.CopyFrameDataToArray(_IRData);
 
                     int index = 0;
-                    foreach (var ir in _IRData)
+                    foreach (ushort ir in _IRData)
                     {
                         byte intensity = (byte)(ir >> 8);
                         _IRRawData[index++] = intensity;
@@ -143,7 +144,7 @@ public class KinectOpenCV : MonoBehaviour {
                     irFrame = null;
                 }
 
-                var bodyFrame = frame.BodyFrameReference.AcquireFrame();
+                BodyFrame bodyFrame = frame.BodyFrameReference.AcquireFrame();
                 if (bodyFrame != null)
                 {
                     //body processing
@@ -165,7 +166,7 @@ public class KinectOpenCV : MonoBehaviour {
 
 
     //=================================================
-    //Utility function
+    //Utility draw functions, dont forget to call Apply() on the texture when done.
 
 
     /// <summary>
@@ -184,7 +185,6 @@ public class KinectOpenCV : MonoBehaviour {
         {
             for (int j = 0; j < diameter; j++)
             {
-
                 Vector2 drawPt = new Vector2(i, j);
 
                 if ((drawPt - center).sqrMagnitude <= (radius))
@@ -202,8 +202,9 @@ public class KinectOpenCV : MonoBehaviour {
 
     /// <summary>
     /// Draws a line from start to end points. Expects points in the texture's coordinate system
+    /// Source; http://wiki.unity3d.com/index.php?title=TextureDrawLine
     /// </summary>
-    public static void DrawLine(Texture2D tex, Vector2 start, Vector2 end, Color color, int lineWidth)
+    public static void DrawLine(Texture2D tex, Vector2 start, Vector2 end, Color color)
     {
         int x0 = (int) start.x;
         int y0 = (int) start.y;
@@ -258,26 +259,38 @@ public class KinectOpenCV : MonoBehaviour {
     }
 
 
-    public static void DrawRectangle(Texture2D tex, Vector2 topLeft, int width, int height, bool filled, Color color, int lineWidth)
+    /// <summary>
+    /// Draws a rectangle. An option to have it filled.
+    /// </summary>
+    /// <param name="tex"></param>
+    /// <param name="topLeft"></param>
+    /// <param name="width"></param>
+    /// <param name="height"></param>
+    /// <param name="color"></param>
+    /// <param name="filled"></param>
+    public static void DrawRectangle(Texture2D tex, Vector2 topLeft, int width, int height, Color color, bool filled)
     {
         //Easy, draw the 4 sides
-        DrawLine(tex, topLeft, new Vector2(topLeft.x + width, topLeft.y), color, lineWidth);
-        DrawLine(tex, topLeft, new Vector2(topLeft.x, topLeft.y + height), color, lineWidth);
+        DrawLine(tex, topLeft, new Vector2(topLeft.x + width, topLeft.y), color);
+        DrawLine(tex, topLeft, new Vector2(topLeft.x, topLeft.y + height), color);
 
         Vector2 bottomRight = new Vector2(topLeft.x + width, topLeft.y + height);
-        DrawLine(tex, bottomRight, new Vector2(bottomRight.x - width, bottomRight.y), color, lineWidth);
-        DrawLine(tex, bottomRight, new Vector2(bottomRight.x, bottomRight.y - height), color, lineWidth);
+        DrawLine(tex, bottomRight, new Vector2(bottomRight.x - width, bottomRight.y), color);
+        DrawLine(tex, bottomRight, new Vector2(bottomRight.x, bottomRight.y - height), color);
 
 
         //fill the rest of the rectangle
         if (filled)
         {
+            int topLeftX = (int)topLeft.x;
+            int topLeftY = (int)topLeft.y;
+
             //fill
             for (int i = 0; i < width; i++)
             {
                 for (int j = 0; j < height; j++)
                 {
-                    tex.SetPixel(i, j, color);
+                    tex.SetPixel(topLeftX + i, topLeftY + j, color);
                 }
             }
         }
