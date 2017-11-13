@@ -8,8 +8,7 @@ using Windows.Kinect;
 /// <summary>
 /// Use this script for programming advanced sensor based computer visioning.
 /// </summary>
-public class KinectOpenCV : MonoBehaviour {
-
+public class KinectManager : MonoBehaviour {
 
     //Data
     public int ColorWidth { get; private set; }
@@ -39,7 +38,7 @@ public class KinectOpenCV : MonoBehaviour {
 
     //body data
     private Body[] _BodyData = null;
-
+    
     // Use this for initialization
     void Start () {
         _Sensor = KinectSensor.GetDefault();
@@ -165,6 +164,9 @@ public class KinectOpenCV : MonoBehaviour {
     }
 
 
+
+
+    #region Debug Drawing functions
     //=================================================
     //Utility draw functions, dont forget to call Apply() on the texture when done.
 
@@ -295,6 +297,8 @@ public class KinectOpenCV : MonoBehaviour {
             }
         }
     }
+    #endregion
+
 
     //=================================================
     //public accessor functions
@@ -321,7 +325,7 @@ public class KinectOpenCV : MonoBehaviour {
 
 
 
-
+    //Turns off Kinect sensor when application closed
     void OnApplicationQuit()
     {
         if (_Reader != null)

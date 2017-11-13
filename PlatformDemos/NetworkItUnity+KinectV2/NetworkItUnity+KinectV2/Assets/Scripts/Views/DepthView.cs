@@ -12,7 +12,7 @@ public class DepthView : MonoBehaviour
     }
 
     public DepthViewMode ViewMode = DepthViewMode.SeparateSourceReaders;
-    public KinectOpenCV kinectManager;
+    public KinectManager kinectManager;
 
     private KinectSensor _Sensor;
     private CoordinateMapper _Mapper;

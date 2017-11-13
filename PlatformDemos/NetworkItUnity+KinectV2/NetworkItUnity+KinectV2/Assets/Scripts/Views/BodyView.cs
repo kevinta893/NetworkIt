@@ -6,7 +6,7 @@ using Kinect = Windows.Kinect;
 public class BodyView : MonoBehaviour
 {
     public Material BoneMaterial;
-    public KinectOpenCV bodySourceManager;
+    public KinectManager bodySourceManager;
     public GameObject[] bodyEventListeners;
 
     private Dictionary<ulong, GameObject> _Bodies = new Dictionary<ulong, GameObject>();

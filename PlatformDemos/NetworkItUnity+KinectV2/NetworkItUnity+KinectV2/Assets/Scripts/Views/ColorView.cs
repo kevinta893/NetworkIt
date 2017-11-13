@@ -4,7 +4,7 @@ using Windows.Kinect;
 
 public class ColorView : MonoBehaviour
 {
-    public KinectOpenCV colorSource;
+    public KinectManager colorSource;
 
     void Start()
     {

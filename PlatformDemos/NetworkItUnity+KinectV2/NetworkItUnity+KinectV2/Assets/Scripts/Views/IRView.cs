@@ -3,7 +3,7 @@ using System.Collections;
 
 public class IRView : MonoBehaviour
 {
-    public KinectOpenCV infraredSource;
+    public KinectManager infraredSource;
 
     void Start()
     {
