@@ -7,6 +7,8 @@ public class BodyView : MonoBehaviour
 {
     public Material BoneMaterial;
     public KinectManager bodySourceManager;
+    [Tooltip("When a body is detected, render the body in the world. Useful for debugging")]
+    public bool showBody = true;
     public GameObject[] bodyEventListeners;
 
     private Dictionary<ulong, GameObject> _Bodies = new Dictionary<ulong, GameObject>();
@@ -141,19 +143,34 @@ public class BodyView : MonoBehaviour
             }
 
             Transform jointObj = bodyObject.transform.Find(jt.ToString());
-            jointObj.localPosition = GetVector3FromJoint(sourceJoint);
+            jointObj.localPosition = GetVector3FromJoint(sourceJoint);              //always update positions
 
-            LineRenderer lr = jointObj.GetComponent<LineRenderer>();
-            if (targetJoint.HasValue)
+            //draw the body if enabled
+            if (showBody)
             {
-                lr.SetPosition(0, jointObj.localPosition);
-                lr.SetPosition(1, GetVector3FromJoint(targetJoint.Value));
-                lr.SetColors(GetColorForState(sourceJoint.TrackingState), GetColorForState(targetJoint.Value.TrackingState));
+                jointObj.gameObject.GetComponent<MeshRenderer>().enabled = true;
+                LineRenderer lr = jointObj.GetComponent<LineRenderer>();
+                lr.enabled = true;
+                if (targetJoint.HasValue)
+                {
+                    lr.SetPosition(0, jointObj.localPosition);
+                    lr.SetPosition(1, GetVector3FromJoint(targetJoint.Value));
+                    lr.SetColors(GetColorForState(sourceJoint.TrackingState), GetColorForState(targetJoint.Value.TrackingState));
+                }
+                else
+                {
+                    lr.enabled = false;
+                }
             }
             else
             {
+                LineRenderer lr = jointObj.GetComponent<LineRenderer>();
                 lr.enabled = false;
+                jointObj.gameObject.GetComponent<MeshRenderer>().enabled = false;
             }
+
+           
+
         }
     }
 
