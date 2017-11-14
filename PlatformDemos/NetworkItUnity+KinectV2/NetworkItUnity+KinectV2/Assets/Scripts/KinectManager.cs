@@ -5,6 +5,7 @@ using OpenCvSharp;
 using Windows.Kinect;
 using System;
 using System.Runtime.InteropServices;
+using System.IO;
 
 /// <summary>
 /// Use this script for programming advanced sensor based computer visioning.
@@ -71,6 +72,7 @@ public class KinectManager : MonoBehaviour {
             _IRData = new ushort[irFrameDesc.LengthInPixels];
             _IRRawData = new byte[irFrameDesc.LengthInPixels * 4];
             _IRTexture = new Texture2D(irFrameDesc.Width, irFrameDesc.Height, TextureFormat.RGBA32, false);
+            Debug.Log(IRWidth + "  " + IRHeight);
 
 
             //body
@@ -95,18 +97,21 @@ public class KinectManager : MonoBehaviour {
 
         //TODO, your Computer vision code here
 
+
+        //demo code, comment out or remove as necessary
         DemoIRBlobTrack();
     }
+
 
     private void DemoIRBlobTrack()
     {
         //get image and convert to threshold image
-        Mat irImage = new Mat(IRWidth, IRHeight, MatType.CV_8UC4, _IRRawData);
+        Mat irImage = new Mat(IRHeight, IRWidth, MatType.CV_8UC4, _IRRawData);              //rows=height, cols=width
         Mat ir8Bit = new Mat();
         Cv2.CvtColor(irImage, ir8Bit, ColorConversionCodes.RGBA2GRAY);
-        Cv2.Threshold(ir8Bit, ir8Bit, thresh: 100, maxval: 255, type: ThresholdTypes.Binary);
+        Cv2.Threshold(ir8Bit, ir8Bit, thresh: 200, maxval: 255, type: ThresholdTypes.Binary);
 
-
+        //Find blobs
         SimpleBlobDetector.Params detectorParams = new SimpleBlobDetector.Params
         {
             //MinDistBetweenBlobs = 10, // 10 pixels between blobs
@@ -141,17 +146,19 @@ public class KinectManager : MonoBehaviour {
 
         SimpleBlobDetector simpleBlobDetector = SimpleBlobDetector.Create(detectorParams);
         KeyPoint[] blobs = simpleBlobDetector.Detect(ir8Bit);
-        
-        Debug.Log("blobCount" + blobs.Length);
 
+
+
+        //convert back to unity texture, add nice debug drawings
         Mat irImageKeyPoints = new Mat();
         Cv2.DrawKeypoints(ir8Bit, blobs, irImageKeyPoints, color: Scalar.FromRgb(255, 0, 0),
                     flags: DrawMatchesFlags.DrawRichKeypoints);
 
+        //Convert back to RGBA32
         Mat irImageOut = new Mat(IRWidth, IRHeight, MatType.CV_8UC4);
-        Cv2.CvtColor(irImageKeyPoints, irImageOut, ColorConversionCodes.RGB2RGBA);
+        Cv2.CvtColor(irImageKeyPoints, irImageOut, ColorConversionCodes.BGR2RGBA);
 
-        simpleBlobDetector.Dispose();
+        //load onto texture
         _IRTexture.LoadRawTextureData(ConvertMatToBytes(irImageOut));
         _IRTexture.Apply();
     }
