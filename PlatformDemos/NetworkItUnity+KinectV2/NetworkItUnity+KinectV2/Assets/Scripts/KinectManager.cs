@@ -98,11 +98,91 @@ public class KinectManager : MonoBehaviour {
         //TODO, your Computer vision code here
 
 
+
         //demo code, comment out or remove as necessary
         //Demo code and many more samples for OpenCVSharp can be found at: https://github.com/VahidN/OpenCVSharp-Samples
-        DemoIRBlobTrack();
-        DemoFaceTrack();
+        //DemoIRBlobTrack();
+        //DemoFaceTrack();
     }
+
+
+    void UpdateKinect()
+    {
+        if (_Reader != null)
+        {
+            MultiSourceFrame frame = _Reader.AcquireLatestFrame();
+            if (frame != null)
+            {
+
+                //color processing with depth
+                ColorFrame colorFrame = frame.ColorFrameReference.AcquireFrame();
+                if (colorFrame != null)
+                {
+                    DepthFrame depthFrame = frame.DepthFrameReference.AcquireFrame();
+                    if (depthFrame != null)
+                    {
+                        colorFrame.CopyConvertedFrameDataToArray(_ColorRawData, ColorImageFormat.Rgba);
+                        _ColorTexture.LoadRawTextureData(_ColorRawData);
+                        _ColorTexture.Apply();
+
+                        depthFrame.CopyFrameDataToArray(_DepthData);
+
+                        depthFrame.Dispose();
+                        depthFrame = null;
+                    }
+
+                    colorFrame.Dispose();
+                    colorFrame = null;
+
+                }
+
+                //ir processing
+                InfraredFrame irFrame = frame.InfraredFrameReference.AcquireFrame();
+                if (irFrame != null)
+                {
+                    irFrame.CopyFrameDataToArray(_IRData);
+
+                    int index = 0;
+                    foreach (ushort ir in _IRData)
+                    {
+                        byte intensity = (byte)(ir >> 8);
+                        _IRRawData[index++] = intensity;
+                        _IRRawData[index++] = intensity;
+                        _IRRawData[index++] = intensity;
+                        _IRRawData[index++] = 255; // Alpha
+                    }
+
+                    //load raw data
+                    _IRTexture.LoadRawTextureData(_IRRawData);
+                    _IRTexture.Apply();
+
+                    irFrame.Dispose();
+                    irFrame = null;
+                }
+
+
+                //body processing
+                BodyFrame bodyFrame = frame.BodyFrameReference.AcquireFrame();
+                if (bodyFrame != null)
+                {
+                    if (_BodyData == null)
+                    {
+                        _BodyData = new Body[_Sensor.BodyFrameSource.BodyCount];
+                    }
+                    bodyFrame.GetAndRefreshBodyData(_BodyData);
+
+                    bodyFrame.Dispose();
+                    bodyFrame = null;
+
+                }
+                frame = null;
+            }
+        }
+    }
+
+
+    #region Demo code for OpenCV
+
 
     private CascadeClassifier cascade = new CascadeClassifier(@"Assets\OpenCVSharp-v3.2\Data\haarcascade_frontalface_alt.xml");
     private CascadeClassifier nestedCascade = new CascadeClassifier(@"Assets\OpenCVSharp-v3.2\Data\haarcascade_eye_tree_eyeglasses.xml");
@@ -122,15 +202,15 @@ public class KinectManager : MonoBehaviour {
                minSize: new Size(30, 30)
                );
 
-        
-        for (int i =0; i < faces.Length; i++)
+
+        for (int i = 0; i < faces.Length; i++)
         {
             OpenCvSharp.Rect faceRect = faces[i];
 
             //outline overall face in image
             var rndColor = Scalar.FromRgb(
-                UnityEngine.Random.Range(0, 255), 
-                UnityEngine.Random.Range(0, 255), 
+                UnityEngine.Random.Range(0, 255),
+                UnityEngine.Random.Range(0, 255),
                 UnityEngine.Random.Range(0, 255)
                 );
             Cv2.Rectangle(colorImage, faceRect, rndColor, 3);
@@ -231,83 +311,8 @@ public class KinectManager : MonoBehaviour {
         _IRTexture.LoadRawTextureData(ConvertMatToBytes(irImageOut));
         _IRTexture.Apply();
     }
-
-
-    void UpdateKinect()
-    {
-        if (_Reader != null)
-        {
-            MultiSourceFrame frame = _Reader.AcquireLatestFrame();
-            if (frame != null)
-            {
-
-                //color processing with depth
-                ColorFrame colorFrame = frame.ColorFrameReference.AcquireFrame();
-                if (colorFrame != null)
-                {
-                    DepthFrame depthFrame = frame.DepthFrameReference.AcquireFrame();
-                    if (depthFrame != null)
-                    {
-                        colorFrame.CopyConvertedFrameDataToArray(_ColorRawData, ColorImageFormat.Rgba);
-                        _ColorTexture.LoadRawTextureData(_ColorRawData);
-                        _ColorTexture.Apply();
-
-                        depthFrame.CopyFrameDataToArray(_DepthData);
-
-                        depthFrame.Dispose();
-                        depthFrame = null;
-                    }
-
-                    colorFrame.Dispose();
-                    colorFrame = null;
-
-                }
-
-                //ir processing
-                InfraredFrame irFrame = frame.InfraredFrameReference.AcquireFrame();
-                if (irFrame != null)
-                {
-                    irFrame.CopyFrameDataToArray(_IRData);
-
-                    int index = 0;
-                    foreach (ushort ir in _IRData)
-                    {
-                        byte intensity = (byte)(ir >> 8);
-                        _IRRawData[index++] = intensity;
-                        _IRRawData[index++] = intensity;
-                        _IRRawData[index++] = intensity;
-                        _IRRawData[index++] = 255; // Alpha
-                    }
-
-                    //load raw data
-                    _IRTexture.LoadRawTextureData(_IRRawData);
-                    _IRTexture.Apply();
-
-                    irFrame.Dispose();
-                    irFrame = null;
-                }
-
-
-                //body processing
-                BodyFrame bodyFrame = frame.BodyFrameReference.AcquireFrame();
-                if (bodyFrame != null)
-                {
-                    if (_BodyData == null)
-                    {
-                        _BodyData = new Body[_Sensor.BodyFrameSource.BodyCount];
-                    }
-                    bodyFrame.GetAndRefreshBodyData(_BodyData);
-
-                    bodyFrame.Dispose();
-                    bodyFrame = null;
-
-                }
-                frame = null;
-            }
-        }
-    }
-
-
+    #endregion
+    
     #region Debug Drawing functions
     //=================================================
     //Utility draw functions, dont forget to call Apply() on the texture when done.
