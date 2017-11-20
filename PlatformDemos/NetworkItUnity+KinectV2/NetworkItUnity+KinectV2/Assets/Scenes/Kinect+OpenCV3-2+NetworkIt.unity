@@ -234,8 +234,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   kinectManager: {fileID: 924557250}
-  colorPlane: {fileID: 0}
-  irPlane: {fileID: 0}
+  irPlane: {fileID: 1608503459}
   markerPrefab: {fileID: 1287058654466908, guid: c85cb56143f6cd04fb47f302c22179da,
     type: 2}
 --- !u!4 &498301571
@@ -427,13 +426,14 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 942028993}
+  - component: {fileID: 942028994}
   m_Layer: 0
   m_Name: FaceTrackerDemo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &942028993
 Transform:
   m_ObjectHideFlags: 0
@@ -447,6 +447,18 @@ Transform:
   m_Father: {fileID: 1631760806}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &942028994
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 942028992}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c730c3a3136a755478c1b90d5c0ac132, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  kinectManager: {fileID: 924557250}
 --- !u!1 &1135097202
 GameObject:
   m_ObjectHideFlags: 0
