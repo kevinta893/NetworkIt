@@ -101,7 +101,7 @@ public class KinectManager : MonoBehaviour {
 
         //demo code, comment out or remove as necessary
         //Demo code and many more samples for OpenCVSharp can be found at: https://github.com/VahidN/OpenCVSharp-Samples
-        //DemoIRBlobTrack();
+        DemoIRBlobTrack();
         //DemoFaceTrack();
     }
 
@@ -305,7 +305,7 @@ public class KinectManager : MonoBehaviour {
 
         //Convert back to RGBA32
         Mat irImageOut = new Mat(IRWidth, IRHeight, MatType.CV_8UC4);
-        Cv2.CvtColor(irImageKeyPoints, irImageOut, ColorConversionCodes.BGR2RGBA);
+        Cv2.CvtColor(irImageKeyPoints, irImageOut, ColorConversionCodes.BGR2RGBA);      //OpenCV is weird and has it in BGR format
 
         //load onto texture
         _IRTexture.LoadRawTextureData(ConvertMatToBytes(irImageOut));
@@ -483,7 +483,7 @@ public class KinectManager : MonoBehaviour {
         return _IRTexture;
     }
 
-    //TextureFormat.BGRA32, 8-bit 4 channel
+    //TextureFormat.RGBA32, 8-bit 4 channel
     public byte[] GetIRRawData()
     {
         return _IRRawData;
