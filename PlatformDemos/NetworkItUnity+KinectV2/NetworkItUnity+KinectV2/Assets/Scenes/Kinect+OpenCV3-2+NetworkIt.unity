@@ -239,6 +239,8 @@ MonoBehaviour:
   markerPrefab: {fileID: 1287058654466908, guid: c85cb56143f6cd04fb47f302c22179da,
     type: 2}
   overrideIRTexture: 0
+  irOffset: {x: 0, y: 0, z: 0}
+  colorOffset: {x: 3.2, y: 0, z: 0}
 --- !u!4 &498301571
 Transform:
   m_ObjectHideFlags: 0
