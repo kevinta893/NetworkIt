@@ -60,8 +60,13 @@ public static class KinectCVUtilities {
         worldCoord.x -= planeWidth / 2;
         worldCoord.y -= planeHeight / 2;
 
+        //now apply the rotation of the plane
+        Vector3 worldPt = new Vector3(worldCoord.x, worldCoord.y, plane.position.z);
+        worldPt -= plane.position;
+        worldPt = plane.rotation * worldPt;
+        worldPt += plane.position;
 
-        return new Vector3(worldCoord.x, worldCoord.y, plane.position.z);
+        return worldPt;
     }
 
 
