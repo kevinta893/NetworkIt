@@ -70,6 +70,28 @@ public static class KinectCVUtilities {
     }
 
 
+    /// <summary>
+    /// Gets an angle between 3 points that form a connection:  p1---p2---p3
+    /// Such that the vector v = p3-p2 defines the angle around p1
+    /// </summary>
+    /// <param name="p1">A position in space</param>
+    /// <param name="p2">A position in space</param>
+    /// <param name="p3">A position in space</param>
+    /// <returns></returns>
+    public static float VerticalWristRotation(Vector3 p1, Vector3 p2, Vector3 p3)
+    {
+        Vector3 a = p2 - p1;
+        Vector3 b = p2 - p3;
+        a.Normalize();
+        b.Normalize();
+        Vector3 thetaVector = Vector3.ProjectOnPlane(b, a);
+        thetaVector.Normalize();
+
+        Vector3 rightOnPlane = Vector3.ProjectOnPlane(Vector3.right, a);
+        return Vector3.SignedAngle(rightOnPlane, thetaVector, Vector3.up);
+    }
+
+
     #region Debug Drawing functions
     //=================================================
     //Utility draw functions, dont forget to call Apply() on the texture when done.

@@ -27,10 +27,10 @@ public class BodyNetworkTemplate : MonoBehaviour {
             GameObject handRight = bodies[0].GetJoint(Windows.Kinect.JointType.HandRight);
             GameObject handTipRight = bodies[0].GetJoint(Windows.Kinect.JointType.HandTipRight);
 
-            float wristRotation = VerticalWristRotation(
-                thumbRight.transform.localPosition,
+            float wristRotation = KinectCVUtilities.VerticalWristRotation(
+                handTipRight.transform.localPosition,
                 handRight.transform.localPosition,
-                handTipRight.transform.localPosition
+                thumbRight.transform.localPosition
                 );
 
             //send the rotation
@@ -42,25 +42,7 @@ public class BodyNetworkTemplate : MonoBehaviour {
         }
     }
 
-    /// <summary>
-    /// Gets an angle between 3 points that form a connection:  p1---p2---p3
-    /// Such that the vector v = p3-p2 defines the angle around p1
-    /// </summary>
-    /// <param name="p1">A position in space</param>
-    /// <param name="p2">A position in space</param>
-    /// <param name="p3">A position in space</param>
-    /// <returns></returns>
-    float VerticalWristRotation(Vector3 p1, Vector3 p2, Vector3 p3)
-    {
-        Vector3 a = p2 - p3;
-        Vector3 b = p2 - p1;
-        a.Normalize();
-        b.Normalize();
-        Vector3 thetaVector = Vector3.ProjectOnPlane(b, a);
-        thetaVector.Normalize();
 
-        return Vector3.SignedAngle(Vector3.right, thetaVector, Vector3.up);
-    }
 
 
     void Kinect_BodyFound(object args)
