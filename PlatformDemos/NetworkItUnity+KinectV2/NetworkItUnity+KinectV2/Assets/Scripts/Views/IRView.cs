@@ -17,6 +17,6 @@ public class IRView : MonoBehaviour
             return;
         }
 
-        gameObject.GetComponent<Renderer>().material.mainTexture = infraredSource.GetIRTexture();
+        gameObject.GetComponent<Renderer>().material.mainTexture = infraredSource.IRTexture;
     }
 }

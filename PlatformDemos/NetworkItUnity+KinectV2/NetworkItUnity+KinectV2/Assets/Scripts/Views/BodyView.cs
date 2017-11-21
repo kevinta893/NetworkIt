@@ -49,7 +49,7 @@ public class BodyView : MonoBehaviour
     void Update()
     {
 
-        Kinect.Body[] data = bodySourceManager.GetBodyData();
+        Kinect.Body[] data = bodySourceManager.BodyData;
         if (data == null)
         {
             return;

@@ -43,9 +43,10 @@ public class KinectManager : MonoBehaviour {
 
     //body data
     private Body[] _BodyData = null;
-    
+
     // Use this for initialization
-    void Start () {
+    void Start() {
+
         _Sensor = KinectSensor.GetDefault();
         if (_Sensor != null)
         {
@@ -95,7 +96,7 @@ public class KinectManager : MonoBehaviour {
     }
 
 
-    void Update () {
+    void Update() {
         UpdateKinect();                         //leave here, updates kinect sensor data for Unity
 
     }
@@ -177,47 +178,76 @@ public class KinectManager : MonoBehaviour {
 
 
 
+
+
+
+    #region Public accessor functions
+
+    public KinectSensor Sensor
+    {
+        get
+        {
+            return this._Sensor;
+        }
+    }
+
+
+    public Texture2D ColorTexture
+    {
+        get
+        {
+            return this._ColorTexture;
+        }
+    }
+
+
+    //TextureFormat.RGBA32, 8-bit 4 channel
+    public byte[] ColorRawData
+    {
+        get
+        {
+            return this._ColorRawData;
+        }
+    }
+
     
-
-
-    //=================================================
-    //public accessor functions
-
-    public Texture2D GetColorTexture()
+    public ushort[] DepthData
     {
-        return _ColorTexture;
+        get
+        {
+            return this._DepthData;
+        }
+    }
+
+
+    public Texture2D IRTexture
+    {
+        get
+        {
+            return this._IRTexture;
+        }
     }
 
     //TextureFormat.RGBA32, 8-bit 4 channel
-    public byte[] GetColorRawData()
+    public byte[] IRRawData
     {
-        return _ColorRawData;
+        get
+        {
+            return this._IRRawData;
+        }
     }
 
-    public ushort[] GetDepthData()
+    public Body[] BodyData
     {
-        return _DepthData;
+        get
+        {
+            return this._BodyData;
+        }
     }
 
+    #endregion
 
-    public Texture2D GetIRTexture()
-    {
-        return _IRTexture;
-    }
-
-    //TextureFormat.RGBA32, 8-bit 4 channel
-    public byte[] GetIRRawData()
-    {
-        return _IRRawData;
-    }
-
-    public Body[] GetBodyData()
-    {
-        return _BodyData;
-    }
-
-
-
+    //==========================
     //Turns off Kinect sensor when application closed
     void OnApplicationQuit()
     {

@@ -31,7 +31,7 @@ public class FaceTrackerOpenCVDemo : MonoBehaviour {
         int ColorWidth = kinectManager.ColorWidth;
         int ColorHeight = kinectManager.ColorHeight;
 
-        Mat colorImage = new Mat(kinectManager.ColorHeight, ColorWidth, MatType.CV_8UC4, kinectManager.GetColorRawData());              //rows=height, cols=width
+        Mat colorImage = new Mat(kinectManager.ColorHeight, ColorWidth, MatType.CV_8UC4, kinectManager.ColorRawData);              //rows=height, cols=width
         Mat grayImage = new Mat();
         Cv2.CvtColor(colorImage, grayImage, ColorConversionCodes.RGBA2GRAY);
         Cv2.EqualizeHist(grayImage, grayImage);
@@ -90,7 +90,7 @@ public class FaceTrackerOpenCVDemo : MonoBehaviour {
 
         //load onto texture
         byte[] rawTextureBytes = KinectCVUtilities.ConvertMatToBytes(colorImage);
-        kinectManager.GetColorTexture().LoadRawTextureData(rawTextureBytes);
-        kinectManager.GetColorTexture().Apply();
+        kinectManager.ColorTexture.LoadRawTextureData(rawTextureBytes);
+        kinectManager.ColorTexture.Apply();
     }
 }

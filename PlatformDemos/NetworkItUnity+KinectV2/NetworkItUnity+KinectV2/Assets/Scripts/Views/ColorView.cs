@@ -18,6 +18,6 @@ public class ColorView : MonoBehaviour
             return;
         }
 
-        gameObject.GetComponent<Renderer>().material.mainTexture = colorSource.GetColorTexture();
+        gameObject.GetComponent<Renderer>().material.mainTexture = colorSource.ColorTexture;
     }
 }

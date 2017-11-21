@@ -38,7 +38,7 @@ public class BlobTrackerDemo : MonoBehaviour {
         int IRHeight = kinectManager.IRHeight;
 
         //get image and convert to threshold image
-        Mat irImage = new Mat(IRHeight, IRWidth, MatType.CV_8UC4, kinectManager.GetIRRawData());              //rows=height, cols=width
+        Mat irImage = new Mat(IRHeight, IRWidth, MatType.CV_8UC4, kinectManager.IRRawData);              //rows=height, cols=width
         Mat ir8Bit = new Mat();
         Cv2.CvtColor(irImage, ir8Bit, ColorConversionCodes.RGBA2GRAY);
         Cv2.Threshold(ir8Bit, ir8Bit, thresh: 200, maxval: 255, type: ThresholdTypes.Binary);
@@ -101,8 +101,8 @@ public class BlobTrackerDemo : MonoBehaviour {
 
         //load onto texture
         byte[] rawTextureData = KinectCVUtilities.ConvertMatToBytes(irImageOut);
-        kinectManager.GetIRTexture().LoadRawTextureData(rawTextureData);
-        kinectManager.GetIRTexture().Apply();
+        kinectManager.IRTexture.LoadRawTextureData(rawTextureData);
+        kinectManager.IRTexture.Apply();
     }
 
 }

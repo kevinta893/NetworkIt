@@ -25,13 +25,15 @@ public static class KinectCVUtilities {
     /// <summary>
     /// Transforms a pixel point from a 2D cartesian grid to a point defined by a 3D plane
     /// </summary>
-    /// <param name="irPoint"></param>
+    /// <param name="plane">The 3D plane to transform the point to (assumes center of model is origin)</param>
+    /// <param name="texSize">The size of the texture for point that it is referring to</param>
+    /// <param name="pt">The 2D pixel point to transform</param>
     /// <returns></returns>
-    public static Vector3 TransformTextureToUnity(Transform plane, Vector2 texSize, Vector2 irPoint)
+    public static Vector3 TransformTextureToUnity(Transform plane, Vector2 texSize, Vector2 pt)
     {
         Vector2 worldCoord = new Vector2();
-        worldCoord.x = irPoint.x;
-        worldCoord.y = irPoint.y;
+        worldCoord.x = pt.x;
+        worldCoord.y = pt.y;
 
 
         Vector2 planePos = new Vector2(plane.position.x, plane.position.y);

@@ -125,16 +125,16 @@ public class DepthView : MonoBehaviour
 
         if (ViewMode == DepthViewMode.SeparateSourceReaders)
         {
-            gameObject.GetComponent<Renderer>().material.mainTexture = kinectManager.GetColorTexture();
-            RefreshData(kinectManager.GetDepthData(),
+            gameObject.GetComponent<Renderer>().material.mainTexture = kinectManager.ColorTexture;
+            RefreshData(kinectManager.DepthData,
                 kinectManager.ColorWidth,
                 kinectManager.ColorHeight);
         }
         else
         {
-            gameObject.GetComponent<Renderer>().material.mainTexture = kinectManager.GetColorTexture();
+            gameObject.GetComponent<Renderer>().material.mainTexture = kinectManager.ColorTexture;
 
-            RefreshData(kinectManager.GetDepthData(),
+            RefreshData(kinectManager.DepthData,
                         kinectManager.ColorWidth,
                         kinectManager.ColorHeight);
         }
