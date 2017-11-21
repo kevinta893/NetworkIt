@@ -22,6 +22,47 @@ public static class KinectCVUtilities {
     }
 
 
+    /// <summary>
+    /// Transforms a pixel point from a 2D cartesian grid to a point defined by a 3D plane
+    /// </summary>
+    /// <param name="irPoint"></param>
+    /// <returns></returns>
+    public static Vector3 TransformTextureToUnity(Transform plane, Vector2 texSize, Vector2 irPoint)
+    {
+        Vector2 worldCoord = new Vector2();
+        worldCoord.x = irPoint.x;
+        worldCoord.y = irPoint.y;
+
+
+        Vector2 planePos = new Vector2(plane.position.x, plane.position.y);
+
+        float irWidth = texSize.x;
+        float irHeight = texSize.y;
+
+        float planeWidth = plane.localScale.x;
+        float planeHeight = plane.localScale.y;
+
+
+
+        //scale the local pixel system to the unity world system.
+        Vector2 scaleTransform = new Vector2(planeWidth / irWidth, planeHeight / irHeight);
+        worldCoord = Vector2.Scale(worldCoord, scaleTransform);
+
+        //invert the y since y0 starts from bottom up
+        worldCoord.y = planeHeight - worldCoord.y;
+
+        //transform to real world, the pixel point is in the unity world coord system
+        worldCoord += planePos;
+
+        //convert to plane's coordinate system, plane's have their origins (world position) start at the center of the object
+        worldCoord.x -= planeWidth / 2;
+        worldCoord.y -= planeHeight / 2;
+
+
+        return new Vector3(worldCoord.x, worldCoord.y, plane.position.z);
+    }
+
+
     #region Debug Drawing functions
     //=================================================
     //Utility draw functions, dont forget to call Apply() on the texture when done.

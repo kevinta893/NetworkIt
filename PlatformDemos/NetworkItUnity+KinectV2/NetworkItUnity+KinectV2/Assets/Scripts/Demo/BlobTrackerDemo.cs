@@ -85,7 +85,8 @@ public class BlobTrackerDemo : MonoBehaviour {
             
             Vector2 blobPt = new Vector2(kp.Pt.X, kp.Pt.Y);
             Debug.Log(blobPt);
-            theTrack.transform.position = TransformIRToUnity(blobPt);
+            Vector2 irDimensions = new Vector2(kinectManager.IRWidth, kinectManager.IRHeight);
+            theTrack.transform.position = KinectCVUtilities.TransformTextureToUnity(irPlane, irDimensions, blobPt);
         }
 
 
@@ -104,38 +105,4 @@ public class BlobTrackerDemo : MonoBehaviour {
         kinectManager.GetIRTexture().Apply();
     }
 
-    private Vector3 TransformIRToUnity(Vector2 irPoint)
-    {
-        Vector2 worldCoord = new Vector2();
-        worldCoord.x = irPoint.x;
-        worldCoord.y = irPoint.y;
-
-
-        Vector2 planePos = new Vector2(irPlane.transform.position.x, irPlane.transform.position.y);
-
-        float irWidth = kinectManager.IRWidth;
-        float irHeight = kinectManager.IRHeight;
-
-        float planeWidth = irPlane.localScale.x;
-        float planeHeight = irPlane.localScale.y;
-
-
-
-        //scale the local pixel system to the unity world system.
-        Vector2 scaleTransform = new Vector2(planeWidth / irWidth, planeHeight / irHeight);
-        worldCoord = Vector2.Scale(worldCoord, scaleTransform);
-
-        //invert the y since y0 starts from bottom up
-        worldCoord.y = planeHeight - worldCoord.y;
-
-        //transform to real world, the pixel point is in the unity world coord system
-        worldCoord += planePos;
-
-        //convert to plane's coordinate system, plane's have their origins (world position) start at the center of the object
-        worldCoord.x -= planeWidth / 2;
-        worldCoord.y -= planeHeight / 2;
-
-
-        return new Vector3(worldCoord.x, worldCoord.y, irPlane.transform.position.z);
-    }
 }
