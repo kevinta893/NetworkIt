@@ -61,3 +61,6 @@ Some potential errors:
 * Microsoft's KinectForWindows_UnityPro_2.0.1410
 * [shimat/opencvsharp](https://github.com/shimat/opencvsharp)
 * Demo code derived from: [VahidN/OpenCVSharp-Samples](https://github.com/VahidN/OpenCVSharp-Samples)
+
+### License
+An alternate license has been used to comply with OpenCVSharp's license to distribute the required DLLs. See License.txt in this folder. This license is specifically only for this project .
