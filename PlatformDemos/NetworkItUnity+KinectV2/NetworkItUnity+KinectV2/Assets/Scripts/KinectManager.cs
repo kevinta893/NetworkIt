@@ -219,6 +219,18 @@ public class KinectManager : MonoBehaviour {
         }
     }
 
+    //Expects a point in the depth/ir space
+    public ushort GetDepth(Vector2 pt)
+    {
+        int index = (int) ((pt.y * DepthWidth) + pt.x);
+        return _DepthData[index];
+    }
+
+    //expects a point in the depth/irspace
+    public ushort GetDepth(int x, int y)
+    {
+        return _DepthData[(y * DepthWidth) + x];
+    }
 
     public Texture2D IRTexture
     {
