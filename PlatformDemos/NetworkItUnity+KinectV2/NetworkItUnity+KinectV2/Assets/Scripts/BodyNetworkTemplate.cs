@@ -18,7 +18,9 @@ public class BodyNetworkTemplate : MonoBehaviour {
 
     }
 
-    void Update () {
+
+    //wait for KinectManager to completely update first
+    void LateUpdate () {
         //TODO Your code here
         if (bodies.Count > 0)
         {

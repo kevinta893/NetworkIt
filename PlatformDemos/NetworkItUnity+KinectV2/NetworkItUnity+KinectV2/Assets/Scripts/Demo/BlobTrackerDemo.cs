@@ -109,7 +109,6 @@ public class BlobTrackerDemo : MonoBehaviour {
             depthPt.Y = blobPt.y;
             double depth = GetAvg(kinectManager.DepthData, (int) depthPt.X, (int) depthPt.Y, kinectManager.DepthWidth, kinectManager.DepthHeight);
             ColorSpacePoint colorMappedPt = kinectManager.Sensor.CoordinateMapper.MapDepthPointToColorSpace(depthPt, (ushort) depth);
-            Debug.Log(kinectManager.GetDepth((int)depthPt.X, (int)depthPt.Y));
 
             Vector2 colorDimensions = new Vector2(kinectManager.ColorWidth, kinectManager.ColorHeight);
             Vector2 colorPt = new Vector2(colorMappedPt.X, colorMappedPt.Y);    

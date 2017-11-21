@@ -393,7 +393,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 817f06635659025438ea233adf8ddd93, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  urlAddress: http://581.cpsc.ucalgary.ca
+  urlAddress: localhost
   port: 8000
   username: demo_test_username
   eventListeners:
@@ -690,6 +690,11 @@ Prefab:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 114967751337479558, guid: 59b000a80e6d5e2499f2880299f6ad4f,
+        type: 2}
+      propertyPath: bodyEventListeners.Array.size
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4618990424034976, guid: 59b000a80e6d5e2499f2880299f6ad4f, type: 2}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -748,6 +753,11 @@ Prefab:
       propertyPath: irPlane
       value: 
       objectReference: {fileID: 1608503459}
+    - target: {fileID: 114967751337479558, guid: 59b000a80e6d5e2499f2880299f6ad4f,
+        type: 2}
+      propertyPath: bodyEventListeners.Array.data[1]
+      value: 
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 59b000a80e6d5e2499f2880299f6ad4f, type: 2}
   m_IsPrefabParent: 0
