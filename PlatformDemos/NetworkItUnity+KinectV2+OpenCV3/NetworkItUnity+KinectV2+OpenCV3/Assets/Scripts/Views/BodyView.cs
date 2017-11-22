@@ -5,7 +5,8 @@ using Kinect = Windows.Kinect;
 
 public class BodyView : MonoBehaviour
 {
-    public Material BoneMaterial;
+    public GameObject jointPrefab;
+    public Material boneMaterial;
     public KinectManager bodySourceManager;
     [Tooltip("When a body is detected, render the body in the world. Useful for debugging")]
     public bool showBody = true;
@@ -114,14 +115,13 @@ public class BodyView : MonoBehaviour
 
         for (Kinect.JointType jt = Kinect.JointType.SpineBase; jt <= Kinect.JointType.ThumbRight; jt++)
         {
-            GameObject jointObj = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            GameObject jointObj = Instantiate(jointPrefab);
 
             LineRenderer lr = jointObj.AddComponent<LineRenderer>();
             lr.SetVertexCount(2);
-            lr.material = BoneMaterial;
+            lr.material = boneMaterial;
             lr.SetWidth(0.05f, 0.05f);
 
-            jointObj.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f);
             jointObj.name = jt.ToString();
             jointObj.transform.parent = body.transform;
 

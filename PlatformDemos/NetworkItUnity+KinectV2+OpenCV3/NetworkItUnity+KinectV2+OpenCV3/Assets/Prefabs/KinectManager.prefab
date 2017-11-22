@@ -63,7 +63,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c2b464ec9d88fbd49ac43b876174c12a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  BoneMaterial: {fileID: 2100000, guid: ed25d3d3d79a8e44ca9ebbc4bc11bb49, type: 2}
+  jointPrefab: {fileID: 1808423847647034, guid: 80980829f3946c8409c192eba2d676cc,
+    type: 2}
+  boneMaterial: {fileID: 2100000, guid: ed25d3d3d79a8e44ca9ebbc4bc11bb49, type: 2}
   bodySourceManager: {fileID: 114728483559989782}
+  showBody: 1
   bodyEventListeners:
   - {fileID: 0}

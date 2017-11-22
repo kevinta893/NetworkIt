@@ -644,11 +644,6 @@ Prefab:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 114967751337479558, guid: 59b000a80e6d5e2499f2880299f6ad4f,
-        type: 2}
-      propertyPath: bodyEventListeners.Array.size
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 4618990424034976, guid: 59b000a80e6d5e2499f2880299f6ad4f, type: 2}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -686,32 +681,6 @@ Prefab:
       propertyPath: bodyEventListeners.Array.data[0]
       value: 
       objectReference: {fileID: 1135097202}
-    - target: {fileID: 114967751337479558, guid: 59b000a80e6d5e2499f2880299f6ad4f,
-        type: 2}
-      propertyPath: drawBody
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 114728483559989782, guid: 59b000a80e6d5e2499f2880299f6ad4f,
-        type: 2}
-      propertyPath: markerPrefab
-      value: 
-      objectReference: {fileID: 1287058654466908, guid: c85cb56143f6cd04fb47f302c22179da,
-        type: 2}
-    - target: {fileID: 114728483559989782, guid: 59b000a80e6d5e2499f2880299f6ad4f,
-        type: 2}
-      propertyPath: colorPlane
-      value: 
-      objectReference: {fileID: 934010678}
-    - target: {fileID: 114728483559989782, guid: 59b000a80e6d5e2499f2880299f6ad4f,
-        type: 2}
-      propertyPath: irPlane
-      value: 
-      objectReference: {fileID: 1608503459}
-    - target: {fileID: 114967751337479558, guid: 59b000a80e6d5e2499f2880299f6ad4f,
-        type: 2}
-      propertyPath: bodyEventListeners.Array.data[1]
-      value: 
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 59b000a80e6d5e2499f2880299f6ad4f, type: 2}
   m_IsPrefabParent: 0
