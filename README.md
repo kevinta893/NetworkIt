@@ -10,7 +10,7 @@ Download the latest [release](https://github.com/kevinta893/NetworkIt/releases) 
 
 Current supported platforms:
 * Windows WPF 
-* Java 7+
+* Java 7+ (including Processing 3.3)
 * ~~Windows 8 & 8.1 Phones~~
 * Unity (Windows, Mac, Linux), (Android)
 * Python 2.7 (Raspberry Pi Compatiable)
