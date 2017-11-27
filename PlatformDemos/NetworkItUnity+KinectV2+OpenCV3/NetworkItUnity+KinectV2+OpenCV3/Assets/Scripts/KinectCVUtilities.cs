@@ -124,8 +124,6 @@ public static class KinectCVUtilities {
 
         }
 
-
-        tex.Apply();
     }
 
     /// <summary>
