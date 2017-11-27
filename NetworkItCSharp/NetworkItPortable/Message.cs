@@ -1,18 +1,40 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace NetworkIt
 {
     public class Message
     {
-        private string name;
+        private string subject;
+        private bool deliverToSelf = false;
         private List<Field> fields = new List<Field>();
 
-        public string Name
+        public string Subject
         {
             get
             {
-                return this.name;
+                return this.subject;
+            }
+            set
+            {
+                this.subject = value;
+            }
+        }
+
+
+        /// <summary>
+        /// When true, allows the sender to also recieve the same message activating the same message event
+        /// Default is false
+        /// </summary>
+        public bool DeliverToSelf
+        {
+            get
+            {
+                return this.deliverToSelf;
+            }
+            set
+            {
+                this.deliverToSelf = value;
             }
         }
 
@@ -24,31 +46,41 @@ namespace NetworkIt
             }
         }
 
-        public Message(string messageName)
+        public Message(string subject)
         {
-            this.name = messageName;
+            this.subject = subject;
         }
 
-        public void AddField<T>(string name, T value)
-        {
-            Type type = value.GetType();
-          //  Field f = new Field(name, value.ToString(), type.ToString());
-            Field f = new Field(name, value.ToString());
 
+        public void AddField(string key, string value)
+        {
+            Field f = new Field(key, value);
             this.fields.Add(f);
         }
 
-        public string GetField(string name)
+
+        public string GetField(string key)
         {
-            foreach(Field f in this.fields)
+            foreach (Field f in this.fields)
             {
-                if(f.Name == name)
+                if (f.key.Equals(key))
                 {
-                    return f.Value;
+                    return f.value;
                 }
             }
+
             return null;
         }
 
+        public override string ToString()
+        {
+            string ret = JsonConvert.SerializeObject(new
+            {
+                subject = this.subject,
+                fields = this.fields
+            });
+
+            return ret;
+        }
     }
 }

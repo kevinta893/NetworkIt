@@ -1,10 +1,12 @@
 ﻿using System;
 using SocketIOClient.WinRT;
 using System.Diagnostics;
-
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace NetworkIt
 {
+
     public class NetworkItMessageEventArgs : EventArgs
     {
         public Message ReceivedMessage { get; set; }
@@ -17,21 +19,17 @@ namespace NetworkIt
 
     public class Client
     {
-        private string username = "null";
-        private string ipAddress = "581.cpsc.ucalgary.ca";
+        private string username = "demo_test_username";
+        private string url = "http://localhost";
         private int port = 8000;
-        private string address;
         private SocketIOClient.WinRT.Client client;
 
-        public string IPAddress
+        #region Fields
+        public string URL
         {
             get
             {
-                return this.ipAddress;
-            }
-            set
-            {
-                this.ipAddress = value;
+                return this.url;
             }
         }
 
@@ -41,10 +39,6 @@ namespace NetworkIt
             {
                 return this.port;
             }
-            set
-            {
-                this.port = value;
-            }
         }
 
         public string Username
@@ -53,77 +47,99 @@ namespace NetworkIt
             {
                 return this.username;
             }
-            set
-            {
-                this.username = value;
-            }
         }
 
-        public async void StartConnection()
+        #endregion
+
+
+        public void StartConnection()
         {
-            this.client = new SocketIOClient.WinRT.Client(this.address);
-            this.client.Error += OnError;
-            this.client.Message += OnMessage;
+            //ensure only one client is open at a time
+            if (this.client != null)
+            {
+                Debug.WriteLine("Already connected!");
+                return;
+            }
+
+
+            this.client = new SocketIOClient.WinRT.Client(URL + ":" + port);
 
             this.client.On("connect", (fn) =>
             {
-                System.Diagnostics.Debug.WriteLine("Connection Successful");
+                Debug.WriteLine("Connection Successful");
 
-                this.client.Emit("ClientConnect", new
+                this.client.Emit("client_connect", JObject.FromObject(new
                 {
-                    this.username
-                });
+                    username = this.username,
+                    platform = "WPF .NET"
+
+                }));
 
                 RaiseConnected(new EventArgs());
 
             });
-            await this.client.ConnectAsync();
+
+            this.client.On("message", (data) =>
+            {
+                Message recv = ((JObject)data).ToObject<Message>();
+                Debug.WriteLine("Message Recieved: " + data.ToString());
+                RaiseMessageReceived(new NetworkItMessageEventArgs(recv));
+            });
+
+            this.client.On("error", (e) =>
+            {
+                Debug.WriteLine("Error!");
+                RaiseError((Exception)e);
+            });
+
+            this.client.On("disconnect", (fn) =>
+            {
+                Debug.WriteLine("Client Disconnected");
+                RaiseDisconnected();
+            });
+
+
+        }
+
+
+        public void CloseConnection()
+        {
+            this.client.Close();
         }
 
         public void SendMessage(Message message)
         {
-            this.client.Emit("message",
-                new
-                {
-                    username = this.username,
-                    messageName = message.Name,
-                    fields = message.Fields
-                });
-        }
-
-        void OnMessage(object sender, MessageEventArgs e)
-        {
-            if (e.Message.Event == "message")
+            this.client.Emit("message", JObject.FromObject(new
             {
-                 Message myMessage = e.Message.Json.GetFirstArgAs<Message>();
-                 RaiseMessageReceived(new NetworkItMessageEventArgs(myMessage));
-            }
+                username = this.username,
+                deliverToSelf = message.DeliverToSelf,
+                subject = message.Subject,
+                fields = message.Fields
+            }));
         }
 
-        void OnError(object sender, ErrorEventArgs e)
-        {
-            Debug.WriteLine("ERROR! :(");
-            Debug.WriteLine(e.Exception);
-            RaiseError(new EventArgs());
-        }
 
-        #region Custom Events 
+        #region Custom Events
 
         public event EventHandler<EventArgs> Connected;
 
         private void RaiseConnected(EventArgs e)
         {
+            //event args e is usually empty
             if (Connected != null)
             {
-                Connected(this, e);
+                Connected(this, new EventArgs());
             }
         }
 
-        public event EventHandler<EventArgs> Error;
+        public event EventHandler<Exception> Error;
 
-        private void RaiseError(EventArgs e)
+        private void RaiseError(Exception e)
         {
-            if(Error != null)
+            Debug.WriteLine("Error! :(");
+            Debug.WriteLine(e.StackTrace);
+
+            if (Error != null)
             {
                 Error(this, e);
             }
@@ -133,28 +149,62 @@ namespace NetworkIt
 
         private void RaiseMessageReceived(NetworkItMessageEventArgs e)
         {
-            if(MessageReceived != null)
+            if (MessageReceived != null)
             {
                 MessageReceived(this, e);
             }
         }
 
-        #endregion
+        public event EventHandler<EventArgs> Disconnected;
 
-        public Client()
+        private void RaiseDisconnected()
         {
-            this.address = "http://" + ipAddress + ":" + port;
-            StartConnection();
+            //event args e is usually empty
+            if (Disconnected != null)
+            {
+                Disconnected(this, new EventArgs());
+            }
         }
 
-        public Client(string username, string ipAddress, int port)
+
+
+        #endregion
+
+
+        /// <summary>
+        /// Use the default client settings
+        /// </summary>
+        public Client()
+        {
+            this.Initialize(this.username, this.url, this.port);
+        }
+
+        /// <summary>
+        /// Connect client to the server using specified settings
+        /// </summary>
+        /// <param name="username"></param>
+        /// <param name="ipAddress">Must include the http protocol "http://"</param>
+        /// <param name="port"></param>
+        public Client(string username, string url, int port)
+        {
+            this.Initialize(username, url, port);
+        }
+
+        private void Initialize(string username, string url, int port)
         {
             this.username = username;
-            this.ipAddress = ipAddress;
             this.port = port;
-            this.address = "http://" + ipAddress + ":" + port;
-            StartConnection();
+
+            if (url.IndexOf("http://") != 0)
+            {
+                this.url = "http://" + url;
+            }
+            else
+            {
+                this.url = url;
+            }
         }
 
     }
 }
+
