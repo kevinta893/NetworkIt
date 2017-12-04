@@ -7,7 +7,7 @@ Simply drag the .unitypackage into your project and you're mostly ready to go. Y
 You will need to setup the following for Unity 5.6.3f1 in the player settings:
 
 Player settings:
-* *Resolution and Presentation > Run In Background* should be set to true
+* *Resolution and Presentation > Run In Background* should be set to **true**
 * *File > Build Settings... > Player Settings... > Other Settings > Configuration> API Compatibility Level* should be set to **.NET 2.0**
 
 ## How to use
