@@ -1,6 +1,15 @@
 # NetworkIt Unity
 The unity port of the Networkit Library. Additional classes have been added in Unity to support the program paradigm there. The supported Unity version for this library is Unity 2017. The libraries used are .NET 3.5.
 
+## Installation
+Simply drag the .unitypackage into your project and you're mostly ready to go. You will need to configure your build settings.
+
+You will need to setup the following for Unity 5.6.3f1 in the player settings:
+
+Player settings:
+* *Resolution and Presentation > Run In Background* should be set to true
+* *File > Build Settings... > Player Settings... > Other Settings > Configuration> API Compatibility Level* should be set to **.NET 2.0**
+
 ## How to use
 The unity package contains the usual libraries for Socket.io support and the NetworkIt package. The difference is that we have a NetworkItClient class which can be used as a MonoBehaviour.
 
@@ -49,15 +58,6 @@ m.AddField("num2", "" + 4);
 m.AddField("count", "" +  messageCount++);
 networkInterface.SendMessage(m);
 ```
-
-## Installation
-Simply drag the .unitypackage into your project and you're mostly ready to go. You will need to configure your build settings.
-
-You will need to setup the following for Unity 5.6.3f1 in the player settings:
-
-Player settings:
-* *Resolution and Presentation > Run In Background* should be set to true
-* *File > Build Settings... > Player Settings... > Other Settings > Configuration> API Compatibility Level* should be set to **.NET 2.0**
 
 
 ## Libraries used
