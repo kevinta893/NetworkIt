@@ -3,6 +3,15 @@
 A template project that has NetworkIt combined with Microsoft Kinect V2 and OpenCV 3 (using OpenCVSharp). Requires Unity 2017 or higher.
 This special version of NetworkIt has modifications to the compiler options to avoid name collisions with the libraries found in Kinect V2. Thus requires the use of a *mcs.rsp* file to allow the use of ```extern alias```. 
 
+## Installation
+Simply drag the .unitypackage into your project and you're mostly ready to go. You will need to configure your build settings.
+
+You will need to setup the following for Unity 5.6.3f1 in the player settings:
+
+Player settings:
+* *Resolution and Presentation > Run In Background* should be set to **true**
+* *File > Build Settings... > Player Settings... > Other Settings > Configuration> API Compatibility Level* should be set to **.NET 2.0**
+
 ## How to Use
 See the Assets/Scene/Kinect+OpenCV+NetworkIt scene on how to use. The KinectManager manages information being passed by the Windows DLLs and Unity. KinectView contains gameobjects that translate information by the KinectManagers into graphical elements.
 
