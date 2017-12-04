@@ -4,7 +4,7 @@ The unity port of the Networkit Library. Additional classes have been added in U
 ## Installation
 Simply drag the .unitypackage into your project and you're mostly ready to go. You will need to configure your build settings.
 
-You will need to setup the following for Unity 5.6.3f1 in the player settings:
+You will need to setup the following for Unity in the player settings:
 
 Player settings:
 * *Resolution and Presentation > Run In Background* should be set to **true**
